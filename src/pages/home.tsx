@@ -24,7 +24,7 @@ import { MAP_CENTER } from "@/utils/constants";
 export default function Home() {
   const [routes, setRoutes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     loadRoutes();
@@ -108,6 +108,26 @@ export default function Home() {
             <div className="text-left">
               <h1 className="text-4xl font-bold text-white">{t("home.title", "Flight Route Planner")}</h1>
               <p className="text-white/70 text-lg mt-1">{t("home.subtitle", "Manage and create your flight routes")}</p>
+            </div>
+            <div className="ml-6 flex items-center gap-2">
+              {[
+                { code: "en", label: "EN" },
+                { code: "es", label: "ES" },
+                { code: "ca", label: "CA" },
+              ].map((lng) => {
+                const active = (i18n.language || "").startsWith(lng.code);
+                return (
+                  <Button
+                    key={lng.code}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => i18n.changeLanguage(lng.code)}
+                    className={`${active ? "bg-white/20 text-white" : "text-white/70 hover:bg-white/10"} rounded-lg px-3 py-2`}
+                  >
+                    {lng.label}
+                  </Button>
+                );
+              })}
             </div>
           </div>
         </motion.div>
