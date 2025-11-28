@@ -16,6 +16,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createPageUrl } from "../utils";
 import { Link } from "react-router-dom";
 import { routeStorage } from "../utils/storage";
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { MAP_CENTER } from "@/utils/constants";
 
 export default function Home() {
   const [routes, setRoutes] = useState([]);
@@ -59,17 +62,38 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1e3a8a] via-[#7c3aed] to-[#2563eb] animate-gradient-shift relative overflow-hidden">
-      <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Static Map Background */}
+      <div className="absolute inset-0 z-0">
+        <MapContainer
+          center={[MAP_CENTER.lat, MAP_CENTER.lng]}
+          zoom={MAP_CENTER.zoom}
+          className="w-full h-full"
+          zoomControl={false}
+          dragging={false}
+          touchZoom={false}
+          doubleClickZoom={false}
+          scrollWheelZoom={false}
+          boxZoom={false}
+          keyboard={false}
+        >
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            className="map-tiles-light-blue"
+          />
+        </MapContainer>
+      </div>
+
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-br from-[#d7e9f7]/70 via-[#dce8f2]/60 to-[#e7f1fd]/70"></div>
 
       <style>{`
-        @keyframes gradient-shift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
+      .map-tiles-light-blue {
+          filter: hue-rotate(190deg) saturate(0.3) brightness(1.1);
         }
-        .animate-gradient-shift {
-          background-size: 200% 200%;
-          animation: gradient-shift 15s ease infinite;
+        .leaflet-container {
+          background: #e8f4fc;
         }
       `}</style>
 
@@ -172,9 +196,7 @@ export default function Home() {
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
-                    <Link
-                      to={createPageUrl(`tracker?routeId=${route.id}`)}
-                    >
+                    <Link to={createPageUrl(`tracker?routeId=${route.id}`)}>
                       <Button
                         className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm"
                         disabled={
@@ -185,9 +207,7 @@ export default function Home() {
                         Start Flight
                       </Button>
                     </Link>
-                    <Link
-                      to={createPageUrl(`planner?routeId=${route.id}`)}
-                    >
+                    <Link to={createPageUrl(`planner?routeId=${route.id}`)}>
                       <Button
                         variant="outline"
                         className="w-full bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60 text-sm"
