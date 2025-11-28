@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CloudSun, Loader2, Calendar, Clock } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Button } from "../components/ui/button";
 import WeatherCard from "../molecules/WeatherCard";
 
 const OPENWEATHER_API_KEY = "YOUR_API_KEY"; // Users need to get free key from openweathermap.org

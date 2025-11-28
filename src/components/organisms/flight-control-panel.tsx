@@ -1,7 +1,7 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Navigation, Trash2, Edit3, MousePointer, Download, Upload, Eye, EyeOff } from "lucide-react";
 import GradientIcon from "../atoms/GradientIcon";
 import GlassCard from "../atoms/GlassCard";
