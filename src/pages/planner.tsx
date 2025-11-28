@@ -558,8 +558,8 @@ export default function FlightPlanner() {
       {/* Map Container */}
       <div className="absolute inset-0 z-0">
         <MapContainer
-          center={[41.5209, 2.105]}
-          zoom={10}
+          center={[MAP_CENTER.lat, MAP_CENTER.lng]}
+          zoom={MAP_CENTER.zoom}
           className="w-full h-full"
           zoomControl={false}
         >
