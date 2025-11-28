@@ -18,11 +18,13 @@ import { createPageUrl } from "../utils";
 import { Link } from "react-router-dom";
 import { routeStorage } from "../utils/storage";
 import MapView from "../components/organisms/map-view";
+import { useTranslation } from "react-i18next";
 import { MAP_CENTER } from "@/utils/constants";
 
 export default function Home() {
   const [routes, setRoutes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadRoutes();
@@ -104,12 +106,8 @@ export default function Home() {
               <Plane className="w-10 h-10 text-white" />
             </div>
             <div className="text-left">
-              <h1 className="text-4xl font-bold text-white">
-                Flight Route Planner
-              </h1>
-              <p className="text-white/70 text-lg mt-1">
-                Manage and create your flight routes
-              </p>
+              <h1 className="text-4xl font-bold text-white">{t("home.title", "Flight Route Planner")}</h1>
+              <p className="text-white/70 text-lg mt-1">{t("home.subtitle", "Manage and create your flight routes")}</p>
             </div>
           </div>
         </motion.div>
@@ -126,16 +124,16 @@ export default function Home() {
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search routes..."
+              placeholder={t("home.search_placeholder", "Search routes...")}
               className="pl-12 bg-slate-900/60 backdrop-blur-xl border-white/30 text-white placeholder:text-white/50 h-14 text-lg rounded-2xl"
             />
           </div>
-          <Button
+            <Button
             onClick={createNewRoute}
             className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white h-14 px-8 text-lg rounded-2xl shadow-xl"
           >
             <Plus className="w-5 h-5 mr-2" />
-            Create New Route
+            {t("home.create", "Create New Route")}
           </Button>
         </motion.div>
 
@@ -174,12 +172,12 @@ export default function Home() {
                 <Plane className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-3">
-                {searchQuery ? "No routes found" : "No routes yet"}
+                {searchQuery ? t("home.no_routes_found", "No routes found") : t("home.no_routes_yet", "No routes yet")}
               </h3>
               <p className="text-white/70 mb-6 max-w-md">
                 {searchQuery
-                  ? "Try adjusting your search query"
-                  : "Create your first flight route to get started"}
+                  ? t("home.try_adjust_search", "Try adjusting your search query")
+                  : t("home.create_first_desc", "Create your first flight route to get started")}
               </p>
               {!searchQuery && (
                 <Button
@@ -187,7 +185,7 @@ export default function Home() {
                   className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
                 >
                   <Plus className="w-5 h-5 mr-2" />
-                  Create First Route
+                  {t("home.create_first", "Create First Route")}
                 </Button>
               )}
             </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import MapView from "../components/organisms/map-view";
 import L from "leaflet";
 import { Button } from "../components/ui/button";
@@ -25,6 +26,7 @@ import GlassCard from "../components/atoms/glass-card";
 import { routeStorage } from "../utils/storage";
 import TrackingControlPanel from "../components/organisms/tracking-control-panel";
 import { calculateDistance as geoCalculateDistance, calculateBearing as geoCalculateBearing } from "../utils/geo";
+import { MapContainer } from "react-leaflet";
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -74,6 +76,7 @@ const upcomingWaypointIcon = new L.DivIcon({
 // MapController removed; centering handled by `MapView` component
 
 export default function FlightTracking() {
+  const { t } = useTranslation();
   const [route, setRoute] = useState(null);
   const [isTracking, setIsTracking] = useState(false);
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -217,16 +220,10 @@ export default function FlightTracking() {
       <div className="min-h-screen bg-gradient-to-br from-[#1e3a8a] via-[#7c3aed] to-[#2563eb] flex items-center justify-center">
         <Card className="bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-3xl p-12 text-center">
           <Plane className="w-16 h-16 text-white mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">
-            No Route Selected
-          </h2>
-          <p className="text-white/70 mb-6">
-            Please select a route to start tracking
-          </p>
+          <h2 className="text-2xl font-bold text-white mb-2">{t("tracking.no_route.title", "No Route Selected")}</h2>
+          <p className="text-white/70 mb-6">{t("tracking.no_route.desc", "Please select a route to start tracking")}</p>
           <Link to={createPageUrl("home")}>
-            <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600">
-              Go to Routes
-            </Button>
+            <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600">{t("tracking.go_to_routes", "Go to Routes")}</Button>
           </Link>
         </Card>
       </div>

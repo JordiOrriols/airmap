@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import MapView from "../components/organisms/map-view";
 import L from "leaflet";
 import { Button } from "../components/ui/button";
@@ -89,6 +90,8 @@ export default function FlightPlanner() {
     }
   }, []);
 
+  const { t } = useTranslation();
+
   // Auto-save route when data changes
   useEffect(() => {
     if (routeId) {
@@ -157,12 +160,12 @@ export default function FlightPlanner() {
     reader.onload = (e) => {
       try {
         const importedData = JSON.parse(e.target.result);
-        setRouteName(importedData.name || "Imported Route");
+        setRouteName(importedData.name || t("route.imported_name", "Imported Route"));
         setWaypoints(importedData.waypoints || []);
         setCruiseSpeed(importedData.cruiseSpeed || 120);
         setSpeedUnit(importedData.speedUnit || "knots");
       } catch (error) {
-        alert("Error importing route. Please check the file format.");
+        alert(t("planner.import_error", "Error importing route. Please check the file format."));
       }
     };
     reader.readAsText(file);
@@ -282,7 +285,7 @@ export default function FlightPlanner() {
         id: "weather",
         component: (
           <CollapsiblePanel
-            title="Weather Forecast"
+            title={t("planner.route_control.weather_title", "Weather Forecast")}
             icon={CloudSun}
             gradient="from-blue-500 to-cyan-500"
             defaultCollapsed={true}
@@ -296,7 +299,7 @@ export default function FlightPlanner() {
         component:
           waypoints.length > 1 ? (
             <CollapsiblePanel
-              title="Route Information"
+              title={t("planner.route_info.title", "Route Information")}
               icon={Route}
               gradient="from-emerald-500 to-teal-500"
             >
@@ -347,9 +350,9 @@ export default function FlightPlanner() {
         </Link>
         <GradientIcon icon={Plane} size="md" />
         <div className="flex-1">
-          <h1 className="text-xl font-bold text-white">Flight Route Planner</h1>
+          <h1 className="text-xl font-bold text-white">{t("planner.header.title", "Flight Route Planner")}</h1>
           <p className="text-xs text-white/70">
-            {isEditMode ? "Click to add waypoints" : "Drag to reposition"}
+            {isEditMode ? t("planner.header.mode_edit", "Click to add waypoints") : t("planner.header.mode_move", "Drag to reposition")}
           </p>
         </div>
         {saved && (

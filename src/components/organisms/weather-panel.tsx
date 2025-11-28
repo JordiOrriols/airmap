@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import WeatherCard from "../molecules/weather-card";
+import { useTranslation } from "react-i18next";
 
 const OPENWEATHER_API_KEY = "YOUR_API_KEY"; // Users need to get free key from openweathermap.org
 
@@ -16,6 +17,7 @@ export default function WeatherPanel({
   forecastMode = false,
   compact = false,
 }) {
+  const { t } = useTranslation();
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -147,9 +149,9 @@ export default function WeatherPanel({
         value: index,
         label:
           index === 0
-            ? "Today"
+            ? t("date.today", "Today")
             : index === 1
-            ? "Tomorrow"
+            ? t("date.tomorrow", "Tomorrow")
             : date.toLocaleDateString("en-US", {
                 weekday: "short",
                 month: "short",
@@ -189,7 +191,7 @@ export default function WeatherPanel({
             <div>
               <label className="text-xs text-white/80 mb-1 block flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
-                Select Day
+                  {t("weather.select_day", "Select Day")}
               </label>
               <Select
                 value={selectedDay.toString()}
@@ -211,7 +213,7 @@ export default function WeatherPanel({
             <div>
               <label className="text-xs text-white/80 mb-1 block flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                Select Hour
+                  {t("weather.select_hour", "Select Hour")}
               </label>
               <Select value={selectedHour} onValueChange={setSelectedHour}>
                 <SelectTrigger className="bg-slate-800/60 border-white/30 text-white">
@@ -232,7 +234,7 @@ export default function WeatherPanel({
         {loading && (
           <div className="flex items-center justify-center gap-2 text-white py-8">
             <Loader2 className="w-6 h-6 animate-spin" />
-            <span>Loading weather data...</span>
+              <span>{t("weather.loading_data", "Loading weather data...")}</span>
           </div>
         )}
 
@@ -240,8 +242,8 @@ export default function WeatherPanel({
 
         {!loading && !weather && (
           <div className="text-center text-white/70 py-8">
-            <p>Weather data unavailable</p>
-            <p className="text-xs mt-2">Check API key configuration</p>
+              <p>{t("weather.no_data", "Weather data unavailable")}</p>
+              <p className="text-xs mt-2">{t("weather.check_api", "Check API key configuration")}</p>
           </div>
         )}
       </div>

@@ -6,6 +6,7 @@ import "./lib/i18n";
 import { ErrorBoundary } from "react-error-boundary";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
+import { useTranslation } from "react-i18next";
 
 const router = createBrowserRouter([
   {
@@ -26,10 +27,14 @@ const router = createBrowserRouter([
   },
 ]);
 
-export default () => (
-  <Suspense fallback="loading">
-    <ErrorBoundary fallback={<div>Something went wrong</div>}>
-      <RouterProvider router={router} />,
-    </ErrorBoundary>
-  </Suspense>
-);
+export default function App() {
+  const { t } = useTranslation();
+
+  return (
+    <Suspense fallback={t("app.loading", "loading")}>
+      <ErrorBoundary fallback={<div>{t("app.error", "Something went wrong")}</div>}>
+        <RouterProvider router={router} />,
+      </ErrorBoundary>
+    </Suspense>
+  );
+}
