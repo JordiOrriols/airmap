@@ -34,7 +34,7 @@ export const en: Locale = {
     "planner.route_info.title": "Route Information",
     "planner.import_error": "Error importing route. Please check the file format.",
     "route.imported_name": "Imported Route",
-    "planner.route_info.waypoints": "{count} waypoints",
+    "planner.route_info.waypoints": "{{count}} waypoints",
 
     // Route card
     "route.start_flight": "Start Flight",
