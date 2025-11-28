@@ -1,7 +1,7 @@
 import React from "react";
 import { MapPin } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import WaypointCard from "../molecules/WaypointCard";
+import WaypointCard from "../molecules/waypoint-card";
 
 export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
   if (waypoints.length === 0) return null;

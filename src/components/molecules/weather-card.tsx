@@ -1,6 +1,6 @@
 import React from "react";
 import { Wind, Droplets, Thermometer, Eye, Cloud } from "lucide-react";
-import WeatherIcon from "../atoms/WeatherIcon";
+import WeatherIcon from "../atoms/weather-icon";
 
 export default function WeatherCard({ weather, compact = false }) {
   if (!weather) {

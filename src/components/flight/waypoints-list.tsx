@@ -1,7 +1,6 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, X, GripVertical } from "lucide-react";
-import { Button } from "../components/ui/button";
+import { Button } from "../ui/button";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function WaypointList({ waypoints, onRemove, onReorder }) {
@@ -27,13 +26,19 @@ export default function WaypointList({ waypoints, onRemove, onReorder }) {
               className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar"
             >
               {waypoints.map((wp, index) => (
-                <Draggable key={`waypoint-${index}`} draggableId={`waypoint-${index}`} index={index}>
+                <Draggable
+                  key={`waypoint-${index}`}
+                  draggableId={`waypoint-${index}`}
+                  index={index}
+                >
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       className={`bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3 flex items-center justify-between transition-all ${
-                        snapshot.isDragging ? 'shadow-2xl scale-105 bg-slate-700/70' : 'hover:bg-slate-700/60'
+                        snapshot.isDragging
+                          ? "shadow-2xl scale-105 bg-slate-700/70"
+                          : "hover:bg-slate-700/60"
                       }`}
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -47,7 +52,9 @@ export default function WaypointList({ waypoints, onRemove, onReorder }) {
                           {index + 1}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-white font-medium text-sm truncate">{wp.name}</p>
+                          <p className="text-white font-medium text-sm truncate">
+                            {wp.name}
+                          </p>
                           <p className="text-white/70 text-xs">
                             {wp.lat.toFixed(4)}°, {wp.lng.toFixed(4)}°
                           </p>

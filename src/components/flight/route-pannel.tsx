@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Navigation, Clock, Route, TrendingUp } from "lucide-react";
-import { Card } from "../components/ui/card";
 
 export default function RoutePanel({ waypoints, routeSegments, totalDistance, totalTime, cruiseSpeed, speedUnit }) {
   const formatTime = (minutes) => {

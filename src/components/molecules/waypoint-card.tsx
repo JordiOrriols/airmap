@@ -1,7 +1,6 @@
 import React from "react";
-import { Button } from "../components/ui/button";
+import { Button } from "../ui/button";
 import { X, GripVertical } from "lucide-react";
-import GradientIcon from "../atoms/GradientIcon";
 
 export default function WaypointCard({
   waypoint,

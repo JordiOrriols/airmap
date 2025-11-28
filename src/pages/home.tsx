@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
-import { Plus, Plane, MapPin, Clock, Edit, Trash2, Search, Navigation } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Card } from "../components/ui/card";
+import {
+  Plus,
+  Plane,
+  MapPin,
+  Clock,
+  Edit,
+  Trash2,
+  Search,
+  Navigation,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPageUrl } from "../utils";
 import { Link } from "react-router-dom";
-import { routeStorage } from "../components/utils/routeStorage";
+import { routeStorage } from "../utils/storage";
 
 export default function Home() {
   const [routes, setRoutes] = useState([]);
@@ -23,32 +32,38 @@ export default function Home() {
 
   const createNewRoute = () => {
     const newRoute = routeStorage.createNewRoute();
-    window.location.href = createPageUrl(`FlightPlanner?routeId=${newRoute.id}`);
+    window.location.href = createPageUrl(
+      `FlightPlanner?routeId=${newRoute.id}`
+    );
   };
 
   const deleteRoute = (routeId, e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (confirm("Are you sure you want to delete this route?")) {
       routeStorage.deleteRoute(routeId);
       loadRoutes();
     }
   };
 
-  const filteredRoutes = routes.filter(route =>
+  const filteredRoutes = routes.filter((route) =>
     route.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return (
+      date.toLocaleDateString() +
+      " " +
+      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    );
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1e3a8a] via-[#7c3aed] to-[#2563eb] animate-gradient-shift relative overflow-hidden">
       <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
-      
+
       <style>{`
         @keyframes gradient-shift {
           0%, 100% { background-position: 0% 50%; }
@@ -72,8 +87,12 @@ export default function Home() {
               <Plane className="w-10 h-10 text-white" />
             </div>
             <div className="text-left">
-              <h1 className="text-4xl font-bold text-white">Flight Route Planner</h1>
-              <p className="text-white/70 text-lg mt-1">Manage and create your flight routes</p>
+              <h1 className="text-4xl font-bold text-white">
+                Flight Route Planner
+              </h1>
+              <p className="text-white/70 text-lg mt-1">
+                Manage and create your flight routes
+              </p>
             </div>
           </div>
         </motion.div>
@@ -115,66 +134,72 @@ export default function Home() {
                 transition={{ delay: index * 0.05 }}
               >
                 <Card className="bg-slate-900/70 backdrop-blur-xl border border-white/30 rounded-3xl p-6 hover:bg-slate-800/70 hover:scale-105 transition-all duration-300 shadow-xl group">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
-                          {route.name}
-                        </h3>
-                        <p className="text-white/60 text-sm">
-                          Updated: {formatDate(route.updated)}
-                        </p>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                        {route.name}
+                      </h3>
+                      <p className="text-white/60 text-sm">
+                        Updated: {formatDate(route.updated)}
+                      </p>
+                    </div>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={(e) => deleteRoute(route.id, e)}
+                      className="text-white/60 hover:text-red-400 hover:bg-red-500/20 rounded-xl"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-white/80">
+                      <div className="bg-gradient-to-br from-pink-500 to-purple-500 p-2 rounded-xl">
+                        <MapPin className="w-4 h-4 text-white" />
                       </div>
+                      <span className="text-sm">
+                        {route.waypoints?.length || 0} waypoints
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3 text-white/80">
+                      <div className="bg-gradient-to-br from-cyan-500 to-blue-500 p-2 rounded-xl">
+                        <Clock className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-sm">
+                        {route.cruiseSpeed} {route.speedUnit}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
+                    <Link
+                      to={createPageUrl(`FlightTracking?routeId=${route.id}`)}
+                    >
                       <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={(e) => deleteRoute(route.id, e)}
-                        className="text-white/60 hover:text-red-400 hover:bg-red-500/20 rounded-xl"
+                        className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm"
+                        disabled={
+                          !route.waypoints || route.waypoints.length === 0
+                        }
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Navigation className="w-4 h-4 mr-2" />
+                        Start Flight
                       </Button>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3 text-white/80">
-                        <div className="bg-gradient-to-br from-pink-500 to-purple-500 p-2 rounded-xl">
-                          <MapPin className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="text-sm">
-                          {route.waypoints?.length || 0} waypoints
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-3 text-white/80">
-                        <div className="bg-gradient-to-br from-cyan-500 to-blue-500 p-2 rounded-xl">
-                          <Clock className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="text-sm">
-                          {route.cruiseSpeed} {route.speedUnit}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
-                      <Link to={createPageUrl(`FlightTracking?routeId=${route.id}`)}>
-                        <Button 
-                          className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm"
-                          disabled={!route.waypoints || route.waypoints.length === 0}
-                        >
-                          <Navigation className="w-4 h-4 mr-2" />
-                          Start Flight
-                        </Button>
-                      </Link>
-                      <Link to={createPageUrl(`FlightPlanner?routeId=${route.id}`)}>
-                        <Button 
-                          variant="outline"
-                          className="w-full bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60 text-sm"
-                        >
-                          <Edit className="w-4 h-4 mr-2" />
-                          Edit Route
-                        </Button>
-                      </Link>
-                    </div>
-                        </Card>
+                    </Link>
+                    <Link
+                      to={createPageUrl(`FlightPlanner?routeId=${route.id}`)}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60 text-sm"
+                      >
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit Route
+                      </Button>
+                    </Link>
+                  </div>
+                </Card>
               </motion.div>
             ))}
           </AnimatePresence>

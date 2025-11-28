@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { CloudSun, Loader2, Calendar, Clock } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Button } from "../components/ui/button";
-import WeatherCard from "../molecules/WeatherCard";
+import { Loader2, Calendar, Clock } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import WeatherCard from "../molecules/weather-card";
 
 const OPENWEATHER_API_KEY = "YOUR_API_KEY"; // Users need to get free key from openweathermap.org
 
-export default function WeatherPanel({ 
-  location = { lat: 41.5209, lng: 2.1050 }, 
+export default function WeatherPanel({
+  location = { lat: 41.5209, lng: 2.105 },
   forecastMode = false,
-  compact = false 
+  compact = false,
 }) {
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
@@ -42,7 +46,7 @@ export default function WeatherPanel({
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`
       );
-      
+
       if (response.ok) {
         const data = await response.json();
         setWeather({
@@ -51,12 +55,15 @@ export default function WeatherPanel({
           condition: data.weather[0].main,
           description: data.weather[0].description,
           windSpeed: convertWindSpeed(data.wind.speed),
-          windGust: data.wind.gust ? convertWindSpeed(data.wind.gust) : convertWindSpeed(data.wind.speed),
+          windGust: data.wind.gust
+            ? convertWindSpeed(data.wind.gust)
+            : convertWindSpeed(data.wind.speed),
           windDirection: data.wind.deg,
           cloudCover: data.clouds.all,
           visibility: Math.round(data.visibility / 1000),
           precipitation: data.rain?.["1h"] || 0,
-          cloudBase: data.clouds.all > 50 ? Math.round(data.clouds.all * 30) : null
+          cloudBase:
+            data.clouds.all > 50 ? Math.round(data.clouds.all * 30) : null,
         });
       }
     } catch (error) {
@@ -72,20 +79,20 @@ export default function WeatherPanel({
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`
       );
-      
+
       if (response.ok) {
         const data = await response.json();
-        
+
         // Group by day
         const grouped = {};
-        data.list.forEach(item => {
+        data.list.forEach((item) => {
           const date = new Date(item.dt * 1000);
-          const dayKey = date.toISOString().split('T')[0];
-          
+          const dayKey = date.toISOString().split("T")[0];
+
           if (!grouped[dayKey]) {
             grouped[dayKey] = [];
           }
-          
+
           grouped[dayKey].push({
             hour: date.getHours(),
             temp: Math.round(item.main.temp),
@@ -93,15 +100,18 @@ export default function WeatherPanel({
             condition: item.weather[0].main,
             description: item.weather[0].description,
             windSpeed: convertWindSpeed(item.wind.speed),
-            windGust: item.wind.gust ? convertWindSpeed(item.wind.gust) : convertWindSpeed(item.wind.speed),
+            windGust: item.wind.gust
+              ? convertWindSpeed(item.wind.gust)
+              : convertWindSpeed(item.wind.speed),
             windDirection: item.wind.deg,
             cloudCover: item.clouds.all,
             visibility: Math.round(item.visibility / 1000),
             precipitation: (item.rain?.["3h"] || 0) + (item.snow?.["3h"] || 0),
-            cloudBase: item.clouds.all > 50 ? Math.round(item.clouds.all * 30) : null
+            cloudBase:
+              item.clouds.all > 50 ? Math.round(item.clouds.all * 30) : null,
           });
         });
-        
+
         setForecast(grouped);
         updateSelectedWeather();
       }
@@ -115,16 +125,18 @@ export default function WeatherPanel({
   const updateSelectedWeather = () => {
     const days = Object.keys(forecast);
     if (days.length === 0) return;
-    
+
     const selectedDayData = forecast[days[selectedDay]];
     if (!selectedDayData) return;
-    
+
     // Find closest hour
     const hourNum = parseInt(selectedHour);
     const closest = selectedDayData.reduce((prev, curr) => {
-      return Math.abs(curr.hour - hourNum) < Math.abs(prev.hour - hourNum) ? curr : prev;
+      return Math.abs(curr.hour - hourNum) < Math.abs(prev.hour - hourNum)
+        ? curr
+        : prev;
     });
-    
+
     setWeather(closest);
   };
 
@@ -133,14 +145,23 @@ export default function WeatherPanel({
       const date = new Date(day);
       return {
         value: index,
-        label: index === 0 ? 'Today' : index === 1 ? 'Tomorrow' : date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+        label:
+          index === 0
+            ? "Today"
+            : index === 1
+            ? "Tomorrow"
+            : date.toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+              }),
       };
     });
   };
 
   const hourOptions = Array.from({ length: 24 }, (_, i) => ({
     value: i.toString(),
-    label: `${i.toString().padStart(2, '0')}:00`
+    label: `${i.toString().padStart(2, "0")}:00`,
   }));
 
   if (compact) {
@@ -152,7 +173,7 @@ export default function WeatherPanel({
             Loading weather...
           </div>
         )}
-        
+
         {!loading && weather && (
           <WeatherCard weather={weather} compact={true} />
         )}
@@ -163,7 +184,6 @@ export default function WeatherPanel({
   return (
     <div className="space-y-4">
       <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4">
-
         {forecastMode && !compact && (
           <div className="mb-4 space-y-3">
             <div>
@@ -171,12 +191,15 @@ export default function WeatherPanel({
                 <Calendar className="w-3 h-3" />
                 Select Day
               </label>
-              <Select value={selectedDay.toString()} onValueChange={(v) => setSelectedDay(parseInt(v))}>
+              <Select
+                value={selectedDay.toString()}
+                onValueChange={(v) => setSelectedDay(parseInt(v))}
+              >
                 <SelectTrigger className="bg-slate-800/60 border-white/30 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {getDayOptions().map(opt => (
+                  {getDayOptions().map((opt) => (
                     <SelectItem key={opt.value} value={opt.value.toString()}>
                       {opt.label}
                     </SelectItem>
@@ -195,7 +218,7 @@ export default function WeatherPanel({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
-                  {hourOptions.map(opt => (
+                  {hourOptions.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
                     </SelectItem>
@@ -213,9 +236,7 @@ export default function WeatherPanel({
           </div>
         )}
 
-        {!loading && weather && (
-          <WeatherCard weather={weather} />
-        )}
+        {!loading && weather && <WeatherCard weather={weather} />}
 
         {!loading && !weather && (
           <div className="text-center text-white/70 py-8">

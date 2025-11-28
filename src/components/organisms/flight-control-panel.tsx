@@ -1,10 +1,25 @@
 import React from "react";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Navigation, Trash2, Edit3, MousePointer, Download, Upload, Eye, EyeOff } from "lucide-react";
-import GradientIcon from "../atoms/GradientIcon";
-import GlassCard from "../atoms/GlassCard";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Navigation,
+  Trash2,
+  Edit3,
+  MousePointer,
+  Download,
+  Upload,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import GradientIcon from "../atoms/gradient-icon";
+import GlassCard from "../atoms/glass-card";
 
 export default function FlightControlPanel({
   routeName,
@@ -22,7 +37,7 @@ export default function FlightControlPanel({
   onClear,
   hasWaypoints,
   fileInputRef,
-  children
+  children,
 }) {
   return (
     <GlassCard className="p-6">
@@ -71,9 +86,9 @@ export default function FlightControlPanel({
           <Button
             onClick={toggleEditMode}
             className={`w-full backdrop-blur-sm transition-all duration-300 ${
-              isEditMode 
-                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-emerald-400/30' 
-                : 'bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60'
+              isEditMode
+                ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-emerald-400/30"
+                : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"
             } border`}
           >
             {isEditMode ? (
@@ -94,8 +109,8 @@ export default function FlightControlPanel({
             variant="outline"
             className={`w-full backdrop-blur-sm transition-all duration-300 ${
               showAirspace
-                ? 'bg-blue-500/30 border-blue-400/40 text-white'
-                : 'bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60'
+                ? "bg-blue-500/30 border-blue-400/40 text-white"
+                : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"
             }`}
           >
             {showAirspace ? (
@@ -121,7 +136,7 @@ export default function FlightControlPanel({
               <Download className="w-4 h-4 mr-1" />
               Export
             </Button>
-            
+
             <Button
               onClick={() => fileInputRef.current?.click()}
               variant="outline"
@@ -131,7 +146,7 @@ export default function FlightControlPanel({
               Import
             </Button>
           </div>
-          
+
           <Button
             onClick={onClear}
             variant="outline"
@@ -148,7 +163,7 @@ export default function FlightControlPanel({
           type="file"
           accept=".json"
           onChange={onImport}
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
         />
       </div>
 

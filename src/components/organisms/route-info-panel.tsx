@@ -1,9 +1,8 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { Route } from "lucide-react";
-import GradientIcon from "../atoms/GradientIcon";
-import RouteStatsCard from "../molecules/RouteStatsCard";
-import RouteSegmentCard from "../molecules/RouteSegmentCard";
+import GradientIcon from "../atoms/gradient-icon";
+import RouteStatsCard from "../molecules/route-stats-card";
+import RouteSegmentCard from "../molecules/route-segment-card";
 
 export default function RouteInfoPanel({ 
   waypoints, 

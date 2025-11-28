@@ -35,17 +35,17 @@ import {
   Route,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "../utils/index";
 import { Link } from "react-router-dom";
-import AirspaceLayer from "../components/flight/AirspaceLayer";
-import WaypointListPanel from "../components/organisms/WaypointListPanel";
-import WeatherPanel from "../components/organisms/WeatherPanel";
-import CollapsiblePanel from "../components/molecules/CollapsiblePanel";
-import DraggablePanelContainer from "../components/organisms/DraggablePanelContainer";
-import RouteStatsCard from "../components/molecules/RouteStatsCard";
-import RouteSegmentCard from "../components/molecules/RouteSegmentCard";
-import GradientIcon from "../components/atoms/GradientIcon";
-import { routeStorage } from "../components/utils/routeStorage";
+import AirspaceLayer from "../components/flight/airspace-layer";
+import WaypointListPanel from "../components/organisms/waypoints-list-panel";
+import WeatherPanel from "../components/organisms/weather-panel";
+import CollapsiblePanel from "../components/molecules/collapsible-panel";
+import DraggablePanelContainer from "../components/organisms/draggable-container";
+import RouteStatsCard from "../components/molecules/route-stats-card";
+import RouteSegmentCard from "../components/molecules/route-segment-card";
+import GradientIcon from "../components/atoms/gradient-icon";
+import { routeStorage } from "../utils/storage";
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;

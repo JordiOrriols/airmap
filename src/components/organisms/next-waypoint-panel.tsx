@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { MapPin, Clock, TrendingUp } from "lucide-react";
-import GradientIcon from "../atoms/GradientIcon";
-import GlassCard from "../atoms/GlassCard";
+import GradientIcon from "../atoms/gradient-icon";
+import GlassCard from "../atoms/glass-card";
 
 export default function NextWaypointPanel({ 
   waypoint, 
