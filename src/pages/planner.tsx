@@ -46,6 +46,7 @@ import RouteStatsCard from "../components/molecules/route-stats-card";
 import RouteSegmentCard from "../components/molecules/route-segment-card";
 import GradientIcon from "../components/atoms/gradient-icon";
 import { routeStorage } from "../utils/storage";
+import { MAP_CENTER } from "@/utils/constants";
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
