@@ -357,92 +357,17 @@ export default function FlightTracking() {
         </div>
       </motion.div>
 
-      {/* Control Panel */}
-      <motion.div
-        initial={{ x: -400, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="absolute left-6 top-32 z-10 w-80"
-      >
-        <GlassCard className="p-6 space-y-4">
-          <Button
-            onClick={isTracking ? stopTracking : startTracking}
-            className={`w-full h-14 text-lg ${
-              isTracking
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
-            }`}
-          >
-            {isTracking ? (
-              <>
-                <Pause className="w-5 h-5 mr-2" />
-                Stop Tracking
-              </>
-            ) : (
-              <>
-                <Play className="w-5 h-5 mr-2" />
-                Start Tracking
-              </>
-            )}
-          </Button>
-
-          {/* Current Stats */}
-          <div className="space-y-3">
-            <StatDisplay
-              icon={Navigation}
-              label="Current Heading"
-              value={`${currentHeading.toFixed(0)}°`}
-              iconColor="text-cyan-300"
-            />
-
-            <StatDisplay
-              icon={TrendingUp}
-              label="Ground Speed"
-              value={speed.toFixed(1)}
-              unit="knots"
-              iconColor="text-purple-300"
-            />
-          </div>
-
-          <Button
-            onClick={() => setShowAirspace(!showAirspace)}
-            variant="outline"
-            className={`w-full backdrop-blur-sm transition-all duration-300 ${
-              showAirspace
-                ? "bg-blue-500/30 border-blue-400/40 text-white"
-                : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"
-            }`}
-          >
-            {showAirspace ? (
-              <>
-                <Eye className="w-4 h-4 mr-2" />
-                Airspace
-              </>
-            ) : (
-              <>
-                <EyeOff className="w-4 h-4 mr-2" />
-                Airspace
-              </>
-            )}
-          </Button>
-        </GlassCard>
-
-        {/* Real-time Weather */}
-        {weatherLocation && (
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mt-4"
-          >
-            <WeatherPanel
-              location={weatherLocation}
-              forecastMode={false}
-              compact={false}
-            />
-          </motion.div>
-        )}
-      </motion.div>
+      {/* Control Panel (extracted) */}
+      <TrackingControlPanel
+        isTracking={isTracking}
+        startTracking={startTracking}
+        stopTracking={stopTracking}
+        currentHeading={currentHeading}
+        speed={speed}
+        showAirspace={showAirspace}
+        setShowAirspace={setShowAirspace}
+        weatherLocation={weatherLocation}
+      />
 
       {/* Next Waypoint Panel */}
       <AnimatePresence>
