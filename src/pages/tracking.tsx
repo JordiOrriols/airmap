@@ -262,7 +262,7 @@ export default function FlightTracking() {
           <p className="text-white/70 mb-6">
             Please select a route to start tracking
           </p>
-          <Link to={createPageUrl("Home")}>
+          <Link to={createPageUrl("home")}>
             <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600">
               Go to Routes
             </Button>
@@ -360,7 +360,7 @@ export default function FlightTracking() {
       >
         <div className="bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-2xl px-8 py-4 shadow-2xl">
           <div className="flex items-center gap-4">
-            <Link to={createPageUrl("Home")}>
+            <Link to={createPageUrl("home")}>
               <Button
                 variant="ghost"
                 size="icon"

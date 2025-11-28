@@ -506,7 +506,7 @@ export default function FlightPlanner() {
   const headerComponent = (
     <div className="bg-slate-900/70 backdrop-blur-xl border border-white/30 rounded-2xl p-4 shadow-xl">
       <div className="flex items-center gap-3">
-        <Link to={createPageUrl("Home")}>
+        <Link to={createPageUrl("home")}>
           <Button
             variant="ghost"
             size="icon"

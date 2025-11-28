@@ -32,9 +32,7 @@ export default function Home() {
 
   const createNewRoute = () => {
     const newRoute = routeStorage.createNewRoute();
-    window.location.href = createPageUrl(
-      `FlightPlanner?routeId=${newRoute.id}`
-    );
+    window.location.href = createPageUrl(`planner?routeId=${newRoute.id}`);
   };
 
   const deleteRoute = (routeId, e) => {
@@ -175,7 +173,7 @@ export default function Home() {
 
                   <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
                     <Link
-                      to={createPageUrl(`FlightTracking?routeId=${route.id}`)}
+                      to={createPageUrl(`tracker?routeId=${route.id}`)}
                     >
                       <Button
                         className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm"
@@ -188,7 +186,7 @@ export default function Home() {
                       </Button>
                     </Link>
                     <Link
-                      to={createPageUrl(`FlightPlanner?routeId=${route.id}`)}
+                      to={createPageUrl(`planner?routeId=${route.id}`)}
                     >
                       <Button
                         variant="outline"
