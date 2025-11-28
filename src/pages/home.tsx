@@ -17,8 +17,7 @@ import RouteCard from "../components/molecules/route-card";
 import { createPageUrl } from "../utils";
 import { Link } from "react-router-dom";
 import { routeStorage } from "../utils/storage";
-import { MapContainer, TileLayer } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import MapView from "../components/organisms/map-view";
 import { MAP_CENTER } from "@/utils/constants";
 
 export default function Home() {
@@ -66,24 +65,19 @@ export default function Home() {
     <div className="min-h-screen relative overflow-hidden">
       {/* Static Map Background */}
       <div className="absolute inset-0 z-0">
-        <MapContainer
-          center={[MAP_CENTER.lat, MAP_CENTER.lng]}
+        <MapView
+          center={MAP_CENTER}
           zoom={MAP_CENTER.zoom}
-          className="w-full h-full"
-          zoomControl={false}
-          dragging={false}
-          touchZoom={false}
-          doubleClickZoom={false}
-          scrollWheelZoom={false}
-          boxZoom={false}
-          keyboard={false}
-        >
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            className="map-tiles-light-blue"
-          />
-        </MapContainer>
+          waypoints={[]}
+          currentPosition={null}
+          showAirspace={false}
+          showWaypoints={false}
+          showAircraft={false}
+          showPolyline={false}
+          interactive={false}
+          tileUrl="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          tileAttribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        />
       </div>
 
       {/* Overlay gradient */}

@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Polyline,
-  Marker,
-  Circle,
-  useMap,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import MapView from "../components/organisms/map-view";
 import L from "leaflet";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
@@ -79,15 +71,7 @@ const upcomingWaypointIcon = new L.DivIcon({
   iconAnchor: [12, 12],
 });
 
-function MapController({ center }) {
-  const map = useMap();
-  useEffect(() => {
-    if (center) {
-      map.setView(center, map.getZoom());
-    }
-  }, [center, map]);
-  return null;
-}
+// MapController removed; centering handled by `MapView` component
 
 export default function FlightTracking() {
   const [route, setRoute] = useState(null);
@@ -281,53 +265,27 @@ export default function FlightTracking() {
           className="w-full h-full"
           zoomControl={false}
         >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          />
-          <MapController center={currentPosition} />
-          <AirspaceLayer visible={showAirspace} />
-
-          {/* Route line */}
-          {route.waypoints.length > 1 && (
-            <Polyline
-              positions={route.waypoints.map((wp) => [wp.lat, wp.lng])}
-              color="#a78bfa"
-              weight={3}
-              opacity={0.6}
-              dashArray="10, 10"
-            />
-          )}
-
-          {/* Waypoints */}
-          {route.waypoints.map((wp, index) => (
-            <Marker
-              key={index}
-              position={[wp.lat, wp.lng]}
-              icon={getWaypointIcon(index)}
-            />
-          ))}
-
-          {/* Current position */}
-          {currentPosition && (
-            <>
-              <Marker
-                position={[currentPosition.lat, currentPosition.lng]}
-                icon={aircraftIcon(currentHeading)}
-              />
-              <Circle
-                center={[currentPosition.lat, currentPosition.lng]}
-                radius={50}
-                pathOptions={{
-                  color: "#3b82f6",
-                  fillColor: "#3b82f6",
-                  fillOpacity: 0.2,
-                }}
-              />
-            </>
-          )}
         </MapContainer>
       </div>
+
+      <MapView
+        center={mapCenter}
+        zoom={13}
+        waypoints={route.waypoints}
+        currentPosition={currentPosition}
+        currentHeading={currentHeading}
+        showAirspace={showAirspace}
+        showWaypoints={true}
+        showAircraft={true}
+        showPolyline={route.waypoints.length > 1}
+        interactive={true}
+        // For tracking the icons, we reuse existing icon creators if available
+        waypointIcon={upcomingWaypointIcon}
+        passedWaypointIcon={passedWaypointIcon}
+        activeWaypointIcon={activeWaypointIcon}
+        aircraftIcon={aircraftIcon}
+      />
+      
 
       {/* Header */}
       <motion.div

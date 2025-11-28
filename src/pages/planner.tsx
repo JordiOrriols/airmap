@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Polyline,
-  Marker,
-  useMapEvents,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import MapView from "../components/organisms/map-view";
 import L from "leaflet";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -59,24 +52,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-// Custom waypoint icon
+// Custom waypoint icon (kept for passing to MapView)
 const waypointIcon = new L.DivIcon({
   className: "custom-waypoint-marker",
   html: `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>`,
   iconSize: [24, 24],
   iconAnchor: [12, 12],
 });
-
-function MapClickHandler({ onMapClick, isEditMode }) {
-  useMapEvents({
-    click: (e) => {
-      if (isEditMode) {
-        onMapClick(e.latlng);
-      }
-    },
-  });
-  return null;
-}
 
 export default function FlightPlanner() {
   const [routeId, setRouteId] = useState(null);
@@ -404,49 +386,21 @@ export default function FlightPlanner() {
       `}</style>
 
       {/* Map Container */}
-      <div className="absolute inset-0 z-0">
-        <MapContainer
-          center={[MAP_CENTER.lat, MAP_CENTER.lng]}
-          zoom={MAP_CENTER.zoom}
-          className="w-full h-full"
-          zoomControl={false}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          />
-          <MapClickHandler
-            onMapClick={handleMapClick}
-            isEditMode={isEditMode}
-          />
-          <AirspaceLayer visible={showAirspace} />
-
-          {waypoints.map((wp, index) => (
-            <Marker
-              key={index}
-              position={[wp.lat, wp.lng]}
-              icon={waypointIcon}
-              draggable={!isEditMode}
-              eventHandlers={{
-                dragend: (e) => {
-                  const { lat, lng } = e.target.getLatLng();
-                  updateWaypointPosition(index, lat, lng);
-                },
-              }}
-            />
-          ))}
-
-          {waypoints.length > 1 && (
-            <Polyline
-              positions={waypoints.map((wp) => [wp.lat, wp.lng])}
-              color="#a78bfa"
-              weight={3}
-              opacity={0.8}
-              dashArray="10, 10"
-            />
-          )}
-        </MapContainer>
-      </div>
+      <MapView
+        center={MAP_CENTER}
+        zoom={MAP_CENTER.zoom}
+        waypoints={waypoints}
+        currentPosition={null}
+        showAirspace={showAirspace}
+        showWaypoints={true}
+        showAircraft={false}
+        showPolyline={waypoints.length > 1}
+        interactive={true}
+        allowMapClick={isEditMode}
+        onMapClick={(latlng) => handleMapClick(latlng)}
+        onMarkerDrag={(index, lat, lng) => updateWaypointPosition(index, lat, lng)}
+        waypointIcon={waypointIcon}
+      />
 
       {/* Draggable Panel Container */}
       <DraggablePanelContainer
