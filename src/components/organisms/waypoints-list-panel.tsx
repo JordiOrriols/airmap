@@ -2,6 +2,7 @@ import React from "react";
 import { MapPin } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import WaypointCard from "../molecules/waypoint-card";
+import ScrollContainer from "../atoms/scroll-container";
 
 export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
   if (waypoints.length === 0) return null;
@@ -20,32 +21,32 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="waypoints">
           {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar"
-            >
-              {waypoints.map((wp, index) => (
-                <Draggable key={`waypoint-${index}`} draggableId={`waypoint-${index}`} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      className={snapshot.isDragging ? 'shadow-2xl scale-105' : ''}
-                    >
-                      <WaypointCard
-                        waypoint={wp}
-                        index={index}
-                        onRemove={onRemove}
-                        draggable={true}
-                        dragHandleProps={provided.dragHandleProps}
-                        draggableProps={provided.draggableProps}
-                        innerRef={provided.innerRef}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
+            <ScrollContainer className="space-y-2 max-h-64 overflow-y-auto" style={{}}>
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {waypoints.map((wp, index) => (
+                  <Draggable key={`waypoint-${index}`} draggableId={`waypoint-${index}`} index={index}>
+                    {(provided, snapshot) => (
+                      <div className={snapshot.isDragging ? 'shadow-2xl scale-105' : ''}>
+                        <WaypointCard
+                          waypoint={wp}
+                          index={index}
+                          onRemove={onRemove}
+                          draggable={true}
+                          dragHandleProps={provided.dragHandleProps}
+                          draggableProps={provided.draggableProps}
+                          innerRef={provided.innerRef}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+
+                {provided.placeholder}
+              </div>
+            </ScrollContainer>
           )}
         </Droppable>
       </DragDropContext>

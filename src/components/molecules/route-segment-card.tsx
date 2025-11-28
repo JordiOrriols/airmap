@@ -1,6 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Navigation, Clock, TrendingUp } from "lucide-react";
+import InfoTile from "../atoms/info-tile";
+import Badge from "../atoms/badge";
 
 export default function RouteSegmentCard({ segment, index, formatTime }) {
   return (
@@ -12,9 +14,7 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
       <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4 hover:bg-slate-700/60 transition-all duration-300">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-violet-500 to-purple-500 w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm">
-              {index + 1}
-            </div>
+            <Badge size="md" gradient="from-violet-500 to-purple-500">{index + 1}</Badge>
             <div>
               <p className="text-white font-semibold">{segment.from}</p>
               <p className="text-white/60 text-sm flex items-center gap-1">
@@ -25,29 +25,23 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
         </div>
 
         <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-white/30">
-          <div>
-            <div className="flex items-center gap-1 mb-1">
-              <Navigation className="w-3 h-3 text-cyan-300" style={{ transform: `rotate(${segment.bearing}deg)` }} />
-              <span className="text-xs text-white/80">Heading</span>
-            </div>
-            <p className="text-white font-bold">{segment.bearing}°</p>
-          </div>
+          <InfoTile
+            title="Heading"
+            icon={<Navigation className="w-3 h-3 text-cyan-300" style={{ transform: `rotate(${segment.bearing}deg)` }} />}
+            value={<>{segment.bearing}°</>}
+          />
 
-          <div>
-            <div className="flex items-center gap-1 mb-1">
-              <TrendingUp className="w-3 h-3 text-emerald-300" />
-              <span className="text-xs text-white/80">Distance</span>
-            </div>
-            <p className="text-white font-bold">{segment.distance} NM</p>
-          </div>
+          <InfoTile
+            title="Distance"
+            icon={<TrendingUp className="w-3 h-3 text-emerald-300" />}
+            value={<>{segment.distance} NM</>}
+          />
 
-          <div>
-            <div className="flex items-center gap-1 mb-1">
-              <Clock className="w-3 h-3 text-purple-300" />
-              <span className="text-xs text-white/80">Time</span>
-            </div>
-            <p className="text-white font-bold">{formatTime(parseFloat(segment.time))}</p>
-          </div>
+          <InfoTile
+            title="Time"
+            icon={<Clock className="w-3 h-3 text-purple-300" />}
+            value={<>{formatTime(parseFloat(segment.time))}</>}
+          />
         </div>
       </div>
     </motion.div>
