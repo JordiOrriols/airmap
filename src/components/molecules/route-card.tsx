@@ -8,7 +8,13 @@ import CardHeader from "./card-header";
 import StatGrid from "./stat-grid";
 import Badge from "../atoms/badge";
 
-export default function RouteCard({ route, index, onDelete, startHref, editHref }) {
+export default function RouteCard({
+  route,
+  index,
+  onDelete,
+  startHref,
+  editHref,
+}) {
   const { t } = useTranslation();
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -22,8 +28,14 @@ export default function RouteCard({ route, index, onDelete, startHref, editHref 
   return (
     <Card className="bg-slate-900/70 backdrop-blur-xl border border-white/30 rounded-3xl p-6 hover:bg-slate-800/70 hover:scale-105 transition-all duration-300 shadow-xl group">
       <CardHeader
-      title={<span className="group-hover:text-cyan-300 transition-colors">{route.name}</span>}
-      subtitle={<span>{t("route.updated", { date: formatDate(route.updated) })}</span>}
+        title={
+          <span className="group-hover:text-cyan-300 transition-colors">
+            {route.name}
+          </span>
+        }
+        subtitle={
+          <span>{t("route.updated", { date: formatDate(route.updated) })}</span>
+        }
         actions={
           <Button
             size="icon"
@@ -41,20 +53,26 @@ export default function RouteCard({ route, index, onDelete, startHref, editHref 
           <Badge className="p-2" gradient="from-pink-500 to-purple-500">
             <MapPin className="w-4 h-4 text-white" />
           </Badge>
-          <span className="text-sm">{t("planner.route_info.waypoints", { count: route.waypoints?.length || 0 })}</span>
+          <span className="text-sm">
+            {t("planner.route_info.waypoints", {
+              count: route.waypoints?.length || 0,
+            })}
+          </span>
         </div>
 
-        <StatGrid
-          items={[
-            { title: t("stat.speed", "Speed"), icon: <Clock className="w-4 h-4 text-white" />, value: <>{route.cruiseSpeed} {route.speedUnit}</> },
-          ]}
-          columns={2}
-        />
+        <div className="flex items-center gap-3 text-white/80">
+          <Badge className="p-2" gradient="from-cyan-500 to-blue-500">
+            <Clock className="w-4 h-4 text-white" />
+          </Badge>
+          <span className="text-sm">
+            {route.cruiseSpeed} {route.speedUnit}
+          </span>
+        </div>
       </div>
 
       <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
         <Link to={startHref}>
-            <Button
+          <Button
             className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm mb-2"
             disabled={!route.waypoints || route.waypoints.length === 0}
           >

@@ -15,7 +15,7 @@ export default function WaypointCard({
     <div
       ref={innerRef}
       {...draggableProps}
-      className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3 flex items-center justify-between transition-all hover:bg-slate-700/60"
+      className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3 flex items-center justify-between transition-all hover:bg-slate-700/60 mb-2"
     >
       <div className="flex items-center gap-3 flex-1 min-w-0">
         {draggable && (
