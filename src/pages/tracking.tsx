@@ -111,7 +111,7 @@ export default function FlightTracking() {
 
   const startTracking = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
+      alert(t("tracking.geolocation_unsupported", "Geolocation is not supported by your browser"));
       return;
     }
 
@@ -176,7 +176,12 @@ export default function FlightTracking() {
       },
       (error) => {
         console.error("Error getting location:", error);
-        alert("Unable to get your location. Please check your permissions.");
+        alert(
+          t(
+            "tracking.unable_get_location",
+            "Unable to get your location. Please check your permissions."
+          )
+        );
       },
       {
         enableHighAccuracy: true,
@@ -305,7 +310,9 @@ export default function FlightTracking() {
             <div>
               <h1 className="text-2xl font-bold text-white">{route.name}</h1>
               <p className="text-sm text-white/70">
-                {isTracking ? "Flight in progress" : "Ready to start"}
+                {isTracking
+                  ? t("tracking.status.in_progress", "Flight in progress")
+                  : t("tracking.status.ready", "Ready to start")}
               </p>
             </div>
           </div>
