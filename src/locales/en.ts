@@ -17,6 +17,7 @@ export const en: Locale = {
 
     "planner.route_control.title": "Route Control",
     "planner.route_control.route_name": "Route Name",
+    "planner.route_control.route_name_placeholder": "Enter route name...",
     "planner.route_control.cruise_speed": "Cruise Speed",
     "planner.route_control.edit_mode_on": "Edit Mode: ON",
     "planner.route_control.move_mode_on": "Move Mode: ON",
@@ -25,6 +26,10 @@ export const en: Locale = {
     "planner.route_control.export": "Export",
     "planner.route_control.import": "Import",
     "planner.route_control.clear": "Clear Route",
+
+    // Units
+    "unit.knots": "Knots",
+    "unit.kmh": "Km/h",
 
     "planner.route_info.title": "Route Information",
     "planner.import_error": "Error importing route. Please check the file format.",

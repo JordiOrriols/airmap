@@ -3,6 +3,8 @@ import { initReactI18next } from "react-i18next";
 
 import LanguageDetector from "i18next-browser-languagedetector";
 import { en } from "../locales/en";
+import { es } from "../locales/es";
+import { ca } from "../locales/ca";
 
 i18n
   .use(LanguageDetector)
@@ -13,6 +15,8 @@ i18n
   .init({
     resources: {
       en: en,
+      es: es,
+      ca: ca,
     },
 
     lng: "en",

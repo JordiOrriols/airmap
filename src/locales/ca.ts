@@ -17,6 +17,7 @@ export const ca: Locale = {
 
     "planner.route_control.title": "Control de ruta",
     "planner.route_control.route_name": "Nom de la ruta",
+    "planner.route_control.route_name_placeholder": "Introdueix el nom de la ruta...",
     "planner.route_control.cruise_speed": "Velocitat de creuer",
     "planner.route_control.edit_mode_on": "Mode edició: ON",
     "planner.route_control.move_mode_on": "Mode moure: ON",
@@ -60,6 +61,8 @@ export const ca: Locale = {
 
     // Units
     "unit.nm": "MN",
+    "unit.knots": " Nusos",
+    "unit.kmh": "Km/h",
 
     // Route stats
     "route_stats.total_distance": "Distància total",

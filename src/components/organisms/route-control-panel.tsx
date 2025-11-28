@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import WaypointListPanel from "./waypoints-list-panel";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   routeName: string;
@@ -45,16 +46,17 @@ export default function RouteControlPanel({
   reorderWaypoints,
   fileInputRef,
 }: Props) {
+  const { t } = useTranslation();
   return (
-    <CollapsiblePanel title="Route Control" icon={Navigation} gradient="from-cyan-500 to-blue-500">
+    <CollapsiblePanel title={t("planner.route_control.title", "Route Control")} icon={Navigation} gradient="from-cyan-500 to-blue-500">
       <div className="space-y-4">
         <div>
-          <label className="text-sm font-medium text-white/90 mb-2 block">Route Name</label>
-          <Input value={routeName} onChange={(e) => setRouteName(e.target.value)} placeholder="Enter route name..." className="bg-slate-800/60 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm" />
+          <label className="text-sm font-medium text-white/90 mb-2 block">{t("planner.route_control.route_name", "Route Name")}</label>
+          <Input value={routeName} onChange={(e) => setRouteName(e.target.value)} placeholder={t("planner.route_control.route_name_placeholder", "Enter route name...")} className="bg-slate-800/60 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm" />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-white/90 mb-2 block">Cruise Speed</label>
+          <label className="text-sm font-medium text-white/90 mb-2 block">{t("planner.route_control.cruise_speed", "Cruise Speed")}</label>
           <div className="flex gap-2">
             <Input type="number" value={cruiseSpeed} onChange={(e) => setCruiseSpeed(Number(e.target.value))} className="bg-slate-800/60 border-white/30 text-white placeholder:text-white/40 backdrop-blur-sm flex-1" />
             <Select value={speedUnit} onValueChange={setSpeedUnit}>
@@ -62,8 +64,8 @@ export default function RouteControlPanel({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="knots">Knots</SelectItem>
-                <SelectItem value="kmh">Km/h</SelectItem>
+                <SelectItem value="knots">{t("unit.knots", "Knots")}</SelectItem>
+                <SelectItem value="kmh">{t("unit.kmh", "Km/h")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -71,26 +73,26 @@ export default function RouteControlPanel({
 
         <div className="pt-4 space-y-3">
           <Button onClick={toggleEditMode} className={`w-full backdrop-blur-sm transition-all duration-300 ${isEditMode ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-emerald-400/30" : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"} border`}>
-            {isEditMode ? (<><Edit3 className="w-4 h-4 mr-2"/>Edit Mode: ON</>) : (<><MousePointer className="w-4 h-4 mr-2"/>Move Mode: ON</>)}
+            {isEditMode ? (<><Edit3 className="w-4 h-4 mr-2"/>{t("planner.route_control.edit_mode_on", "Edit Mode: ON")}</>) : (<><MousePointer className="w-4 h-4 mr-2"/>{t("planner.route_control.move_mode_on", "Move Mode: ON")}</>) }
           </Button>
 
           <Button onClick={() => setShowAirspace(!showAirspace)} variant="outline" className={`w-full backdrop-blur-sm transition-all duration-300 ${showAirspace ? "bg-blue-500/30 border-blue-400/40 text-white" : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"}`}>
-            {showAirspace ? (<><Eye className="w-4 h-4 mr-2"/>Airspace: ON</>) : (<><EyeOff className="w-4 h-4 mr-2"/>Airspace: OFF</>)}
+            {showAirspace ? (<><Eye className="w-4 h-4 mr-2"/>{t("planner.route_control.airspace_on", "Airspace: ON")}</>) : (<><EyeOff className="w-4 h-4 mr-2"/>{t("planner.route_control.airspace_off", "Airspace: OFF")}</>) }
           </Button>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
           <Button onClick={exportRoute} variant="outline" className="bg-slate-800/60 border-white/30 text-white hover:bg-blue-500/30 hover:border-blue-400/40 backdrop-blur-sm transition-all" disabled={waypoints.length === 0}>
-            <Download className="w-4 h-4 mr-1"/>Export
+            <Download className="w-4 h-4 mr-1"/>{t("planner.route_control.export", "Export")}
           </Button>
 
           <Button onClick={() => fileInputRef.current?.click()} variant="outline" className="bg-slate-800/60 border-white/30 text-white hover:bg-purple-500/30 hover:border-purple-400/40 backdrop-blur-sm transition-all">
-            <Upload className="w-4 h-4 mr-1"/>Import
+            <Upload className="w-4 h-4 mr-1"/>{t("planner.route_control.import", "Import")}
           </Button>
         </div>
 
         <Button onClick={clearRoute} variant="outline" className="w-full bg-slate-800/60 border-white/30 text-white hover:bg-red-500/30 hover:border-red-400/40 backdrop-blur-sm transition-all" disabled={waypoints.length === 0}>
-          <Trash2 className="w-4 h-4 mr-2"/>Clear Route
+          <Trash2 className="w-4 h-4 mr-2"/>{t("planner.route_control.clear", "Clear Route")}
         </Button>
 
         <input ref={fileInputRef} type="file" accept=".json" onChange={importRoute} style={{ display: "none" }} />

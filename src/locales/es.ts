@@ -17,6 +17,7 @@ export const es: Locale = {
 
     "planner.route_control.title": "Control de ruta",
     "planner.route_control.route_name": "Nombre de la ruta",
+    "planner.route_control.route_name_placeholder": "Introduce el nombre de la ruta...",
     "planner.route_control.cruise_speed": "Velocidad de crucero",
     "planner.route_control.edit_mode_on": "Modo edición: ON",
     "planner.route_control.move_mode_on": "Modo mover: ON",
@@ -60,6 +61,8 @@ export const es: Locale = {
 
     // Units
     "unit.nm": "MN",
+    "unit.knots": "Nudos",
+    "unit.kmh": "Km/h",
 
     // Route stats
     "route_stats.total_distance": "Distancia total",
