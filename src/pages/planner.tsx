@@ -47,6 +47,8 @@ import RouteSegmentCard from "../components/molecules/route-segment-card";
 import GradientIcon from "../components/atoms/gradient-icon";
 import { routeStorage } from "../utils/storage";
 import { MAP_CENTER } from "@/utils/constants";
+import RouteControlPanel from "../components/organisms/route-control-panel";
+import { calculateBearing as geoCalculateBearing, calculateDistance as geoCalculateDistance, speedToKnots } from "../utils/geo";
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -227,56 +229,14 @@ export default function FlightPlanner() {
     setWaypoints(result);
   };
 
-  // Convert speed to knots for calculations
-  const getSpeedInKnots = () => {
-    if (speedUnit === "kmh") {
-      return cruiseSpeed / 1.852; // Convert km/h to knots
-    }
-    return cruiseSpeed;
-  };
-
-  // Calculate bearing between two points
-  const calculateBearing = (lat1, lon1, lat2, lon2) => {
-    const toRad = (deg) => (deg * Math.PI) / 180;
-    const toDeg = (rad) => (rad * 180) / Math.PI;
-
-    const φ1 = toRad(lat1);
-    const φ2 = toRad(lat2);
-    const Δλ = toRad(lon2 - lon1);
-
-    const y = Math.sin(Δλ) * Math.cos(φ2);
-    const x =
-      Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
-    const θ = Math.atan2(y, x);
-    const bearing = (toDeg(θ) + 360) % 360;
-
-    return bearing;
-  };
-
-  // Calculate distance between two points (Haversine formula)
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const toRad = (deg) => (deg * Math.PI) / 180;
-    const R = 3440.065; // Radius of Earth in nautical miles
-
-    const φ1 = toRad(lat1);
-    const φ2 = toRad(lat2);
-    const Δφ = toRad(lat2 - lat1);
-    const Δλ = toRad(lon2 - lon1);
-
-    const a =
-      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c; // Distance in nautical miles
-  };
+  // Geospatial helpers moved to `src/utils/geo.ts` (imported above)
 
   // Calculate route segments with bearing and distance
   const routeSegments = waypoints.slice(0, -1).map((wp, index) => {
     const nextWp = waypoints[index + 1];
-    const bearing = calculateBearing(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
-    const distance = calculateDistance(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
-    const speedInKnots = getSpeedInKnots();
+    const bearing = geoCalculateBearing(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
+    const distance = geoCalculateDistance(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
+    const speedInKnots = speedToKnots(cruiseSpeed, speedUnit);
 
     return {
       from: wp.name,
@@ -315,138 +275,25 @@ export default function FlightPlanner() {
       routeControl: {
         id: "routeControl",
         component: (
-          <CollapsiblePanel
-            title="Route Control"
-            icon={Navigation}
-            gradient="from-cyan-500 to-blue-500"
-          >
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-white/90 mb-2 block">
-                  Route Name
-                </label>
-                <Input
-                  value={routeName}
-                  onChange={(e) => setRouteName(e.target.value)}
-                  placeholder="Enter route name..."
-                  className="bg-slate-800/60 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-white/90 mb-2 block">
-                  Cruise Speed
-                </label>
-                <div className="flex gap-2">
-                  <Input
-                    type="number"
-                    value={cruiseSpeed}
-                    onChange={(e) => setCruiseSpeed(Number(e.target.value))}
-                    className="bg-slate-800/60 border-white/30 text-white placeholder:text-white/40 backdrop-blur-sm flex-1"
-                  />
-                  <Select value={speedUnit} onValueChange={setSpeedUnit}>
-                    <SelectTrigger className="w-24 bg-slate-800/60 border-white/30 text-white backdrop-blur-sm">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="knots">Knots</SelectItem>
-                      <SelectItem value="kmh">Km/h</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="pt-4 space-y-3">
-                <Button
-                  onClick={toggleEditMode}
-                  className={`w-full backdrop-blur-sm transition-all duration-300 ${
-                    isEditMode
-                      ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-emerald-400/30"
-                      : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"
-                  } border`}
-                >
-                  {isEditMode ? (
-                    <>
-                      <Edit3 className="w-4 h-4 mr-2" />
-                      Edit Mode: ON
-                    </>
-                  ) : (
-                    <>
-                      <MousePointer className="w-4 h-4 mr-2" />
-                      Move Mode: ON
-                    </>
-                  )}
-                </Button>
-
-                <Button
-                  onClick={() => setShowAirspace(!showAirspace)}
-                  variant="outline"
-                  className={`w-full backdrop-blur-sm transition-all duration-300 ${
-                    showAirspace
-                      ? "bg-blue-500/30 border-blue-400/40 text-white"
-                      : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"
-                  }`}
-                >
-                  {showAirspace ? (
-                    <>
-                      <Eye className="w-4 h-4 mr-2" />
-                      Airspace: ON
-                    </>
-                  ) : (
-                    <>
-                      <EyeOff className="w-4 h-4 mr-2" />
-                      Airspace: OFF
-                    </>
-                  )}
-                </Button>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <Button
-                    onClick={exportRoute}
-                    variant="outline"
-                    className="bg-slate-800/60 border-white/30 text-white hover:bg-blue-500/30 hover:border-blue-400/40 backdrop-blur-sm transition-all"
-                    disabled={waypoints.length === 0}
-                  >
-                    <Download className="w-4 h-4 mr-1" />
-                    Export
-                  </Button>
-
-                  <Button
-                    onClick={() => fileInputRef.current?.click()}
-                    variant="outline"
-                    className="bg-slate-800/60 border-white/30 text-white hover:bg-purple-500/30 hover:border-purple-400/40 backdrop-blur-sm transition-all"
-                  >
-                    <Upload className="w-4 h-4 mr-1" />
-                    Import
-                  </Button>
-                </div>
-
-                <Button
-                  onClick={clearRoute}
-                  variant="outline"
-                  className="w-full bg-slate-800/60 border-white/30 text-white hover:bg-red-500/30 hover:border-red-400/40 backdrop-blur-sm transition-all"
-                  disabled={waypoints.length === 0}
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Clear Route
-                </Button>
-              </div>
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".json"
-                onChange={importRoute}
-                style={{ display: "none" }}
-              />
-
-              <WaypointListPanel
-                waypoints={waypoints}
-                onRemove={removeWaypoint}
-                onReorder={reorderWaypoints}
-              />
-            </div>
-          </CollapsiblePanel>
+          <RouteControlPanel
+            routeName={routeName}
+            setRouteName={setRouteName}
+            cruiseSpeed={cruiseSpeed}
+            setCruiseSpeed={setCruiseSpeed}
+            speedUnit={speedUnit}
+            setSpeedUnit={setSpeedUnit}
+            isEditMode={isEditMode}
+            toggleEditMode={toggleEditMode}
+            showAirspace={showAirspace}
+            setShowAirspace={setShowAirspace}
+            exportRoute={exportRoute}
+            importRoute={importRoute}
+            clearRoute={clearRoute}
+            waypoints={waypoints}
+            removeWaypoint={removeWaypoint}
+            reorderWaypoints={reorderWaypoints}
+            fileInputRef={fileInputRef}
+          />
         ),
       },
       weather: {
