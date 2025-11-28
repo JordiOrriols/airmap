@@ -607,32 +607,6 @@ export default function FlightPlanner() {
         onPanelsChange={handlePanelsChange}
         headerComponent={headerComponent}
       />
-
-      {/* Instructions overlay (when no waypoints) */}
-      <AnimatePresence>
-        {waypoints.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none"
-          >
-            <div className="bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-8 shadow-2xl">
-              <div className="text-center">
-                <div className="bg-gradient-to-r from-pink-500 to-purple-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Edit3 className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  Get Started
-                </h3>
-                <p className="text-white/70 max-w-md">
-                  Edit Mode is active - Click on the map to add waypoints
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
