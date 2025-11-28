@@ -35,7 +35,6 @@ import AirspaceLayer from "../components/flight/airspace-layer";
 import WaypointListPanel from "../components/organisms/waypoints-list-panel";
 import WeatherPanel from "../components/organisms/weather-panel";
 import CollapsiblePanel from "../components/molecules/collapsible-panel";
-import DraggablePanelContainer from "../components/organisms/draggable-container";
 import RouteStatsCard from "../components/molecules/route-stats-card";
 import RouteSegmentCard from "../components/molecules/route-segment-card";
 import GradientIcon from "../components/atoms/gradient-icon";
@@ -75,8 +74,6 @@ export default function FlightPlanner() {
     lat: 41.5209,
     lng: 2.105,
   });
-  const [leftPanels, setLeftPanels] = useState(["routeControl", "weather"]);
-  const [rightPanels, setRightPanels] = useState(["routeInfo"]);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -247,14 +244,6 @@ export default function FlightPlanner() {
     return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
   };
 
-  const handlePanelsChange = (newLeft, newRight) => {
-    // Extract IDs from panel objects
-    const leftIds = newLeft.map((panel) => panel.id);
-    const rightIds = newRight.map((panel) => panel.id);
-    setLeftPanels(leftIds);
-    setRightPanels(rightIds);
-  };
-
   const getPanelComponents = () => {
     const panels = {
       routeControl: {
@@ -329,12 +318,6 @@ export default function FlightPlanner() {
   };
 
   const allPanels = getPanelComponents();
-  const leftPanelComponents = leftPanels
-    .map((id) => allPanels[id])
-    .filter((p) => p?.component);
-  const rightPanelComponents = rightPanels
-    .map((id) => allPanels[id])
-    .filter((p) => p?.component);
 
   const headerComponent = (
     <div className="bg-slate-900/70 backdrop-blur-xl border border-white/30 rounded-2xl p-4 shadow-xl">
@@ -405,13 +388,20 @@ export default function FlightPlanner() {
         waypointIcon={waypointIcon}
       />
 
-      {/* Draggable Panel Container */}
-      <DraggablePanelContainer
-        leftPanels={leftPanelComponents}
-        rightPanels={rightPanelComponents}
-        onPanelsChange={handlePanelsChange}
-        headerComponent={headerComponent}
-      />
+      {/* Simple left sidebar with collapsible panels */}
+      <div className="absolute left-6 top-24 z-20 w-80 space-y-4">
+        {headerComponent}
+        <div className="space-y-4">
+          {/* Route Control */}
+          {allPanels.routeControl?.component}
+
+          {/* Weather */}
+          {allPanels.weather?.component}
+
+          {/* Route Info */}
+          {allPanels.routeInfo?.component}
+        </div>
+      </div>
     </div>
   );
 }
