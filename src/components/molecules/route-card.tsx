@@ -55,7 +55,7 @@ export default function RouteCard({ route, index, onDelete, startHref, editHref 
       <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
         <Link to={startHref}>
             <Button
-            className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm"
+            className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm mb-2"
             disabled={!route.waypoints || route.waypoints.length === 0}
           >
             <Navigation className="w-4 h-4 mr-2" />
