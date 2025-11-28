@@ -74,6 +74,22 @@ export const ca: Locale = {
     "stat.heading": "Rumb",
     "stat.distance": "Distància",
     "stat.time": "Temps",
+    "stat.speed": "Velocitat",
+    "stat.ground_speed": "Velocitat terra",
+
+    // Waypoints
+    "waypoints.title": "Punts de ruta",
+
+    // Airspace
+    "airspace.loading": "Carregant espais aeris...",
+    "airspace.class": "Classe",
+    "airspace.lower_limit": "Límit inferior",
+    "airspace.upper_limit": "Límit superior",
+    "airspace.country": "País",
+    "airspace.na": "N/A",
+
+    // Errors
+    "error.something_wrong": "Alguna cosa ha anat malament",
 
     // Weather
     "weather.no_data": "No hi ha dades meteorològiques disponibles",

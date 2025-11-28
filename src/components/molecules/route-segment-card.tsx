@@ -2,9 +2,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Navigation, Clock, TrendingUp } from "lucide-react";
 import InfoTile from "../atoms/info-tile";
+import { useTranslation } from "react-i18next";
 import Badge from "../atoms/badge";
 
 export default function RouteSegmentCard({ segment, index, formatTime }) {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -26,19 +28,19 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
 
         <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-white/30">
           <InfoTile
-            title="Heading"
+            title={t("stat.heading", "Heading")}
             icon={<Navigation className="w-3 h-3 text-cyan-300" style={{ transform: `rotate(${segment.bearing}deg)` }} />}
             value={<>{segment.bearing}°</>}
           />
 
           <InfoTile
-            title="Distance"
+            title={t("stat.distance", "Distance")}
             icon={<TrendingUp className="w-3 h-3 text-emerald-300" />}
-            value={<>{segment.distance} NM</>}
+            value={<>{segment.distance} {t("unit.nm", "NM")}</>}
           />
 
           <InfoTile
-            title="Time"
+            title={t("stat.time", "Time")}
             icon={<Clock className="w-3 h-3 text-purple-300" />}
             value={<>{formatTime(parseFloat(segment.time))}</>}
           />

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Polygon, Popup, useMap } from "react-leaflet";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const OPENAIP_API_KEY = import.meta.env.VITE_OPENAIP_API_KEY;
 
 export default function AirspaceLayer({ visible = true }) {
+  const { t } = useTranslation();
   const [airspaces, setAirspaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const map = useMap();
@@ -103,7 +105,7 @@ export default function AirspaceLayer({ visible = true }) {
   };
 
   const formatAltitude = (limit) => {
-    if (!limit) return "N/A";
+    if (!limit) return t("airspace.na", "N/A");
 
     if (limit.unit === "F") {
       return `${limit.value} ft`;
@@ -134,8 +136,8 @@ export default function AirspaceLayer({ visible = true }) {
             gap: "8px",
           }}
         >
-          <Loader2 className="w-4 h-4 animate-spin" />
-          Loading airspaces...
+            <Loader2 className="w-4 h-4 animate-spin" />
+            {t("airspace.loading", "Loading airspaces...")}
         </div>
       )}
 
@@ -171,19 +173,19 @@ export default function AirspaceLayer({ visible = true }) {
                 </h3>
                 <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
                   <div style={{ marginBottom: "4px" }}>
-                    <strong>Class:</strong> {airspace.type}
+                    <strong>{t("airspace.class", "Class")}:</strong> {airspace.type}
                   </div>
                   <div style={{ marginBottom: "4px" }}>
-                    <strong>Lower Limit:</strong>{" "}
+                    <strong>{t("airspace.lower_limit", "Lower Limit")}:</strong>{" "}
                     {formatAltitude(airspace.lowerLimit)}
                   </div>
                   <div style={{ marginBottom: "4px" }}>
-                    <strong>Upper Limit:</strong>{" "}
+                    <strong>{t("airspace.upper_limit", "Upper Limit")}:</strong>{" "}
                     {formatAltitude(airspace.upperLimit)}
                   </div>
                   {airspace.country && (
                     <div style={{ marginBottom: "4px" }}>
-                      <strong>Country:</strong> {airspace.country}
+                      <strong>{t("airspace.country", "Country")}:</strong> {airspace.country}
                     </div>
                   )}
                   {airspace.activity && (

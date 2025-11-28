@@ -3,12 +3,14 @@ import { Wind, Droplets, Thermometer, Eye, Cloud } from "lucide-react";
 import WeatherIcon from "../atoms/weather-icon";
 import InfoTile from "../atoms/info-tile";
 import Badge from "../atoms/badge";
+import { useTranslation } from "react-i18next";
 
 export default function WeatherCard({ weather, compact = false }) {
+  const { t } = useTranslation();
   if (!weather) {
     return (
       <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4">
-        <p className="text-white/70 text-sm">No weather data available</p>
+        <p className="text-white/70 text-sm">{t("weather.no_data", "No weather data available")}</p>
       </div>
     );
   }
@@ -54,21 +56,21 @@ export default function WeatherCard({ weather, compact = false }) {
 
       <div className="grid grid-cols-2 gap-3">
         <InfoTile
-          title="Wind"
+          title={t("weather.wind", "Wind")}
           icon={<Wind className="w-4 h-4 text-cyan-300" />}
           value={<>{weather.windSpeed} kt</>}
         />
 
         {weather.windGust > weather.windSpeed && (
           <InfoTile
-            title="Gusts"
+            title={t("weather.gusts", "Gusts")}
             icon={<Wind className="w-4 h-4 text-orange-300" />}
             value={<>{weather.windGust} kt</>}
           />
         )}
 
         <InfoTile
-          title="Clouds"
+          title={t("weather.clouds", "Clouds")}
           icon={<Cloud className="w-4 h-4 text-gray-300" />}
           value={<>
             {weather.cloudCover}%
@@ -79,21 +81,21 @@ export default function WeatherCard({ weather, compact = false }) {
         />
 
         <InfoTile
-          title="Visibility"
+          title={t("weather.visibility", "Visibility")}
           icon={<Eye className="w-4 h-4 text-blue-300" />}
           value={<>{weather.visibility} km</>}
         />
 
         {weather.precipitation > 0 && (
           <InfoTile
-            title="Precipitation"
+            title={t("weather.rain", "Precipitation")}
             icon={<Droplets className="w-4 h-4 text-blue-400" />}
             value={<>{weather.precipitation} mm</>}
           />
         )}
 
         <InfoTile
-          title="Feels Like"
+          title={t("weather.feels_like", "Feels Like")}
           icon={<Thermometer className="w-4 h-4 text-red-300" />}
           value={<>{weather.feelsLike}°C</>}
         />

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ErrorBoundary } from "react-error-boundary";
+import { useTranslation } from "react-i18next";
 
 export default function CollapsiblePanel({
   title,
@@ -11,9 +12,10 @@ export default function CollapsiblePanel({
   defaultCollapsed = false,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+  const { t } = useTranslation();
 
   return (
-    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+    <ErrorBoundary fallback={<div>{t("error.something_wrong", "Something went wrong")}</div>}>
       <div className="bg-slate-900/70 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden">
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}

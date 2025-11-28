@@ -76,6 +76,22 @@ export const en: Locale = {
     "stat.heading": "Heading",
     "stat.distance": "Distance",
     "stat.time": "Time",
+    "stat.speed": "Speed",
+    "stat.ground_speed": "Ground Speed",
+
+    // Waypoints
+    "waypoints.title": "Waypoints",
+
+    // Airspace
+    "airspace.loading": "Loading airspaces...",
+    "airspace.class": "Class",
+    "airspace.lower_limit": "Lower Limit",
+    "airspace.upper_limit": "Upper Limit",
+    "airspace.country": "Country",
+    "airspace.na": "N/A",
+
+    // Errors
+    "error.something_wrong": "Something went wrong",
 
     // Weather
     "weather.no_data": "No weather data available",

@@ -74,6 +74,22 @@ export const es: Locale = {
     "stat.heading": "Rumbo",
     "stat.distance": "Distancia",
     "stat.time": "Tiempo",
+    "stat.speed": "Velocidad",
+    "stat.ground_speed": "Velocidad suelo",
+
+    // Waypoints
+    "waypoints.title": "Puntos de ruta",
+
+    // Airspace
+    "airspace.loading": "Cargando espacios aéreos...",
+    "airspace.class": "Clase",
+    "airspace.lower_limit": "Límite inferior",
+    "airspace.upper_limit": "Límite superior",
+    "airspace.country": "País",
+    "airspace.na": "N/A",
+
+    // Errors
+    "error.something_wrong": "Algo salió mal",
 
     // Weather
     "weather.no_data": "No hay datos meteorológicos disponibles",

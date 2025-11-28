@@ -3,8 +3,10 @@ import { MapPin } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import WaypointCard from "../molecules/waypoint-card";
 import ScrollContainer from "../atoms/scroll-container";
+import { useTranslation } from "react-i18next";
 
 export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
+  const { t } = useTranslation();
   if (waypoints.length === 0) return null;
 
   const handleDragEnd = (result) => {
@@ -16,7 +18,7 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
     <div className="mt-6 pt-6 border-t border-white/30">
       <h3 className="text-sm font-semibold text-white/90 mb-3 flex items-center gap-2">
         <MapPin className="w-4 h-4" />
-        Waypoints ({waypoints.length})
+        {t("waypoints.title", "Waypoints")} ({waypoints.length})
       </h3>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="waypoints">

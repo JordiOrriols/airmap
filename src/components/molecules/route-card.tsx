@@ -46,7 +46,7 @@ export default function RouteCard({ route, index, onDelete, startHref, editHref 
 
         <StatGrid
           items={[
-            { title: "Speed", icon: <Clock className="w-4 h-4 text-white" />, value: <>{route.cruiseSpeed} {route.speedUnit}</> },
+            { title: t("stat.speed", "Speed"), icon: <Clock className="w-4 h-4 text-white" />, value: <>{route.cruiseSpeed} {route.speedUnit}</> },
           ]}
           columns={2}
         />
