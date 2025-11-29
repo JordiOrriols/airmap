@@ -13,17 +13,17 @@ export const routeStorage = {
 
   getRoute: (routeId) => {
     const routes = routeStorage.getAllRoutes();
-    return routes.find(r => r.id === routeId);
+    return routes.find((r) => r.id === routeId);
   },
 
   saveRoute: (routeData) => {
     try {
       const routes = routeStorage.getAllRoutes();
-      const routeIndex = routes.findIndex(r => r.id === routeData.id);
-      
+      const routeIndex = routes.findIndex((r) => r.id === routeData.id);
+
       const routeToSave = {
         ...routeData,
-        updated: new Date().toISOString()
+        updated: new Date().toISOString(),
       };
 
       if (routeIndex >= 0) {
@@ -44,7 +44,7 @@ export const routeStorage = {
   deleteRoute: (routeId) => {
     try {
       const routes = routeStorage.getAllRoutes();
-      const updatedRoutes = routes.filter(r => r.id !== routeId);
+      const updatedRoutes = routes.filter((r) => r.id !== routeId);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRoutes));
       return true;
     } catch (error) {
@@ -61,10 +61,10 @@ export const routeStorage = {
       cruiseSpeed: 120,
       speedUnit: "knots",
       created: new Date().toISOString(),
-      updated: new Date().toISOString()
+      updated: new Date().toISOString(),
     };
-    
+
     routeStorage.saveRoute(newRoute);
     return newRoute;
-  }
+  },
 };

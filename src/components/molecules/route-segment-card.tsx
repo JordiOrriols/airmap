@@ -16,7 +16,9 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
       <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4 hover:bg-slate-700/60 transition-all duration-300">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <Badge size="md" gradient="from-violet-500 to-purple-500">{index + 1}</Badge>
+            <Badge size="md" gradient="from-violet-500 to-purple-500">
+              {index + 1}
+            </Badge>
             <div>
               <p className="text-white font-semibold">{segment.from}</p>
               <p className="text-white/60 text-sm flex items-center gap-1">
@@ -29,14 +31,23 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
         <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-white/30">
           <InfoTile
             title={t("stat.heading", "Heading")}
-            icon={<Navigation className="w-3 h-3 text-cyan-300" style={{ transform: `rotate(${segment.bearing}deg)` }} />}
+            icon={
+              <Navigation
+                className="w-3 h-3 text-cyan-300"
+                style={{ transform: `rotate(${segment.bearing}deg)` }}
+              />
+            }
             value={<>{segment.bearing}°</>}
           />
 
           <InfoTile
             title={t("stat.distance", "Distance")}
             icon={<TrendingUp className="w-3 h-3 text-emerald-300" />}
-            value={<>{segment.distance} {t("unit.nm", "NM")}</>}
+            value={
+              <>
+                {segment.distance} {t("unit.nm", "NM")}
+              </>
+            }
           />
 
           <InfoTile

@@ -17,7 +17,8 @@ export const ca: Locale = {
 
     "planner.route_control.title": "Control de ruta",
     "planner.route_control.route_name": "Nom de la ruta",
-    "planner.route_control.route_name_placeholder": "Introdueix el nom de la ruta...",
+    "planner.route_control.route_name_placeholder":
+      "Introdueix el nom de la ruta...",
     "planner.route_control.cruise_speed": "Velocitat de creuer",
     "planner.route_control.edit_mode_on": "Mode edició: ON",
     "planner.route_control.move_mode_on": "Mode moure: ON",
@@ -28,7 +29,8 @@ export const ca: Locale = {
     "planner.route_control.clear": "Netejar ruta",
 
     "planner.route_info.title": "Informació de la ruta",
-    "planner.import_error": "Error en importar la ruta. Revisa el format del fitxer.",
+    "planner.import_error":
+      "Error en importar la ruta. Revisa el format del fitxer.",
     "route.imported_name": "Ruta importada",
     "planner.route_info.waypoints": "{count} punts de ruta",
 
@@ -43,8 +45,10 @@ export const ca: Locale = {
     "tracking.go_to_routes": "Anar a rutes",
     "tracking.start_tracking": "Iniciar seguiment",
     "tracking.stop_tracking": "Aturar seguiment",
-    "tracking.geolocation_unsupported": "La geolocalització no és compatible amb el teu navegador",
-    "tracking.unable_get_location": "No s'ha pogut obtenir la teva ubicació. Revisa els permisos.",
+    "tracking.geolocation_unsupported":
+      "La geolocalització no és compatible amb el teu navegador",
+    "tracking.unable_get_location":
+      "No s'ha pogut obtenir la teva ubicació. Revisa els permisos.",
     "tracking.status.in_progress": "Vol en curs",
     "tracking.status.ready": "Preparat per començar",
     "tracking.flight_complete.title": "Vol completat!",
@@ -118,6 +122,6 @@ export const ca: Locale = {
     // Generic
     "action.ok": "OK",
     "action.cancel": "Cancel·lar",
-    "label.progress": "Progrés"
+    "label.progress": "Progrés",
   },
 };

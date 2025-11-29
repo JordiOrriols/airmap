@@ -7,13 +7,13 @@ import GlassCard from "../atoms/glass-card";
 import InfoTile from "../atoms/info-tile";
 import Badge from "../atoms/badge";
 
-export default function NextWaypointPanel({ 
-  waypoint, 
-  currentIndex, 
-  totalWaypoints, 
-  distanceToNext, 
+export default function NextWaypointPanel({
+  waypoint,
+  currentIndex,
+  totalWaypoints,
+  distanceToNext,
   etaToNext,
-  formatTime 
+  formatTime,
 }) {
   const { t } = useTranslation();
   return (
@@ -26,7 +26,9 @@ export default function NextWaypointPanel({
       <GlassCard className="p-6">
         <div className="flex items-center gap-3 mb-4">
           <GradientIcon icon={MapPin} gradient="from-orange-500 to-red-500" />
-          <h2 className="text-xl font-bold text-white">{t("next_waypoint.title", "Next Waypoint")}</h2>
+          <h2 className="text-xl font-bold text-white">
+            {t("next_waypoint.title", "Next Waypoint")}
+          </h2>
         </div>
 
         <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-5">
@@ -36,32 +38,50 @@ export default function NextWaypointPanel({
                 {waypoint.name}
               </h3>
               <p className="text-sm text-white/60">
-                {t("next_waypoint.waypoint_of", { index: currentIndex + 1, total: totalWaypoints })}
+                {t("next_waypoint.waypoint_of", {
+                  index: currentIndex + 1,
+                  total: totalWaypoints,
+                })}
               </p>
             </div>
-            <Badge size="lg" gradient="from-orange-500 to-red-500">{currentIndex + 1}</Badge>
+            <Badge size="lg" gradient="from-orange-500 to-red-500">
+              {currentIndex + 1}
+            </Badge>
           </div>
 
           <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/30">
             <InfoTile
               title={t("next_waypoint.distance", "Distance")}
               icon={<TrendingUp className="w-3 h-3 text-cyan-300" />}
-              value={<span className="text-xl font-bold text-white">{distanceToNext.toFixed(1)} {t("unit.nm", "NM")}</span>}
+              value={
+                <span className="text-xl font-bold text-white">
+                  {distanceToNext.toFixed(1)} {t("unit.nm", "NM")}
+                </span>
+              }
             />
 
             <InfoTile
               title={t("next_waypoint.eta", "ETA")}
               icon={<Clock className="w-3 h-3 text-purple-300" />}
-              value={<span className="text-xl font-bold text-white">{formatTime(etaToNext)}</span>}
+              value={
+                <span className="text-xl font-bold text-white">
+                  {formatTime(etaToNext)}
+                </span>
+              }
             />
           </div>
         </div>
 
         {/* Progress */}
         <div className="mt-4">
-            <div className="flex justify-between text-sm text-white/70 mb-2">
+          <div className="flex justify-between text-sm text-white/70 mb-2">
             <span>{t("next_waypoint.progress", "Progress")}</span>
-            <span>{t("next_waypoint.waypoints_status", { current: currentIndex, total: totalWaypoints })}</span>
+            <span>
+              {t("next_waypoint.waypoints_status", {
+                current: currentIndex,
+                total: totalWaypoints,
+              })}
+            </span>
           </div>
           <div className="w-full bg-slate-800/60 rounded-full h-3 overflow-hidden border border-white/30">
             <div

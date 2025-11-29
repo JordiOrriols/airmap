@@ -46,7 +46,7 @@ export default function WeatherPanel({
     setLoading(true);
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`,
       );
 
       if (response.ok) {
@@ -79,7 +79,7 @@ export default function WeatherPanel({
     setLoading(true);
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`,
       );
 
       if (response.ok) {
@@ -151,12 +151,12 @@ export default function WeatherPanel({
           index === 0
             ? t("date.today", "Today")
             : index === 1
-            ? t("date.tomorrow", "Tomorrow")
-            : date.toLocaleDateString("en-US", {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-              }),
+              ? t("date.tomorrow", "Tomorrow")
+              : date.toLocaleDateString("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                }),
       };
     });
   };
@@ -191,7 +191,7 @@ export default function WeatherPanel({
             <div>
               <label className="text-xs text-white/80 mb-1 block flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
-                  {t("weather.select_day", "Select Day")}
+                {t("weather.select_day", "Select Day")}
               </label>
               <Select
                 value={selectedDay.toString()}
@@ -213,7 +213,7 @@ export default function WeatherPanel({
             <div>
               <label className="text-xs text-white/80 mb-1 block flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                  {t("weather.select_hour", "Select Hour")}
+                {t("weather.select_hour", "Select Hour")}
               </label>
               <Select value={selectedHour} onValueChange={setSelectedHour}>
                 <SelectTrigger className="bg-slate-800/60 border-white/30 text-white">
@@ -234,7 +234,7 @@ export default function WeatherPanel({
         {loading && (
           <div className="flex items-center justify-center gap-2 text-white py-8">
             <Loader2 className="w-6 h-6 animate-spin" />
-              <span>{t("weather.loading_data", "Loading weather data...")}</span>
+            <span>{t("weather.loading_data", "Loading weather data...")}</span>
           </div>
         )}
 
@@ -242,8 +242,10 @@ export default function WeatherPanel({
 
         {!loading && !weather && (
           <div className="text-center text-white/70 py-8">
-              <p>{t("weather.no_data", "Weather data unavailable")}</p>
-              <p className="text-xs mt-2">{t("weather.check_api", "Check API key configuration")}</p>
+            <p>{t("weather.no_data", "Weather data unavailable")}</p>
+            <p className="text-xs mt-2">
+              {t("weather.check_api", "Check API key configuration")}
+            </p>
           </div>
         )}
       </div>

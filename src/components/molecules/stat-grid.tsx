@@ -15,12 +15,22 @@ type StatGridProps = {
   className?: string;
 };
 
-export default function StatGrid({ items, columns = 2, className = "" }: StatGridProps) {
+export default function StatGrid({
+  items,
+  columns = 2,
+  className = "",
+}: StatGridProps) {
   const cols = `grid-cols-${columns}`;
   return (
     <div className={`grid ${cols} gap-3 ${className}`}>
       {items.map((it, idx) => (
-        <InfoTile key={it.key ?? idx} title={it.title} icon={it.icon} value={it.value} className={it.className} />
+        <InfoTile
+          key={it.key ?? idx}
+          title={it.title}
+          icon={it.icon}
+          value={it.value}
+          className={it.className}
+        />
       ))}
     </div>
   );

@@ -1,11 +1,11 @@
 import React from "react";
 
-export default function StatDisplay({ 
-  icon: Icon, 
-  label, 
-  value, 
+export default function StatDisplay({
+  icon: Icon,
+  label,
+  value,
   unit,
-  iconColor = "text-cyan-300"
+  iconColor = "text-cyan-300",
 }) {
   return (
     <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4">

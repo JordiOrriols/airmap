@@ -1,7 +1,12 @@
 export const toRad = (deg: number) => (deg * Math.PI) / 180;
 export const toDeg = (rad: number) => (rad * 180) / Math.PI;
 
-export function calculateBearing(lat1: number, lon1: number, lat2: number, lon2: number) {
+export function calculateBearing(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+) {
   const φ1 = toRad(lat1);
   const φ2 = toRad(lat2);
   const Δλ = toRad(lon2 - lon1);
@@ -12,7 +17,12 @@ export function calculateBearing(lat1: number, lon1: number, lat2: number, lon2:
   return (toDeg(θ) + 360) % 360;
 }
 
-export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+export function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+) {
   const R = 3440.065; // nautical miles
   const φ1 = toRad(lat1);
   const φ2 = toRad(lat2);

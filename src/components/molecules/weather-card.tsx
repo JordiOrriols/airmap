@@ -10,7 +10,9 @@ export default function WeatherCard({ weather, compact = false }) {
   if (!weather) {
     return (
       <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4">
-        <p className="text-white/70 text-sm">{t("weather.no_data", "No weather data available")}</p>
+        <p className="text-white/70 text-sm">
+          {t("weather.no_data", "No weather data available")}
+        </p>
       </div>
     );
   }
@@ -72,12 +74,16 @@ export default function WeatherCard({ weather, compact = false }) {
         <InfoTile
           title={t("weather.clouds", "Clouds")}
           icon={<Cloud className="w-4 h-4 text-gray-300" />}
-          value={<>
-            {weather.cloudCover}%
-            {weather.cloudBase && (
-              <span className="text-white/60 text-xs block">{weather.cloudBase} ft</span>
-            )}
-          </>}
+          value={
+            <>
+              {weather.cloudCover}%
+              {weather.cloudBase && (
+                <span className="text-white/60 text-xs block">
+                  {weather.cloudBase} ft
+                </span>
+              )}
+            </>
+          }
         />
 
         <InfoTile

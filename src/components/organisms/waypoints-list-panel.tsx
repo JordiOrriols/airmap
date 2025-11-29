@@ -23,15 +23,23 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="waypoints">
           {(provided) => (
-            <ScrollContainer className="space-y-2 max-h-64 overflow-y-auto" style={{}}>
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
+            <ScrollContainer
+              className="space-y-2 max-h-64 overflow-y-auto"
+              style={{}}
+            >
+              <div {...provided.droppableProps} ref={provided.innerRef}>
                 {waypoints.map((wp, index) => (
-                  <Draggable key={`waypoint-${index}`} draggableId={`waypoint-${index}`} index={index}>
+                  <Draggable
+                    key={`waypoint-${index}`}
+                    draggableId={`waypoint-${index}`}
+                    index={index}
+                  >
                     {(provided, snapshot) => (
-                      <div className={snapshot.isDragging ? 'shadow-2xl scale-105' : ''}>
+                      <div
+                        className={
+                          snapshot.isDragging ? "shadow-2xl scale-105" : ""
+                        }
+                      >
                         <WaypointCard
                           waypoint={wp}
                           index={index}

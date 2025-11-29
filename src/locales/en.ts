@@ -32,7 +32,8 @@ export const en: Locale = {
     "unit.kmh": "Km/h",
 
     "planner.route_info.title": "Route Information",
-    "planner.import_error": "Error importing route. Please check the file format.",
+    "planner.import_error":
+      "Error importing route. Please check the file format.",
     "route.imported_name": "Imported Route",
     "planner.route_info.waypoints": "{{count}} waypoints",
 
@@ -47,8 +48,10 @@ export const en: Locale = {
     "tracking.go_to_routes": "Go to Routes",
     "tracking.start_tracking": "Start Tracking",
     "tracking.stop_tracking": "Stop Tracking",
-    "tracking.geolocation_unsupported": "Geolocation is not supported by your browser",
-    "tracking.unable_get_location": "Unable to get your location. Please check your permissions.",
+    "tracking.geolocation_unsupported":
+      "Geolocation is not supported by your browser",
+    "tracking.unable_get_location":
+      "Unable to get your location. Please check your permissions.",
     "tracking.status.in_progress": "Flight in progress",
     "tracking.status.ready": "Ready to start",
     "tracking.flight_complete.title": "Flight Complete!",
@@ -120,6 +123,6 @@ export const en: Locale = {
     // Generic
     "action.ok": "OK",
     "action.cancel": "Cancel",
-    "label.progress": "Progress"
+    "label.progress": "Progress",
   },
 };

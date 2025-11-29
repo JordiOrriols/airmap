@@ -162,7 +162,7 @@ export default function FlightPlanner() {
       try {
         const importedData = JSON.parse(e.target.result);
         setRouteName(
-          importedData.name || t("route.imported_name", "Imported Route")
+          importedData.name || t("route.imported_name", "Imported Route"),
         );
         setWaypoints(importedData.waypoints || []);
         setCruiseSpeed(importedData.cruiseSpeed || 120);
@@ -171,8 +171,8 @@ export default function FlightPlanner() {
         alert(
           t(
             "planner.import_error",
-            "Error importing route. Please check the file format."
-          )
+            "Error importing route. Please check the file format.",
+          ),
         );
       }
     };
@@ -228,7 +228,7 @@ export default function FlightPlanner() {
       wp.lat,
       wp.lng,
       nextWp.lat,
-      nextWp.lng
+      nextWp.lng,
     );
     const speedInKnots = speedToKnots(cruiseSpeed, speedUnit);
 
@@ -243,11 +243,11 @@ export default function FlightPlanner() {
 
   const totalDistance = routeSegments.reduce(
     (sum, seg) => sum + parseFloat(seg.distance),
-    0
+    0,
   );
   const totalTime = routeSegments.reduce(
     (sum, seg) => sum + parseFloat(seg.time),
-    0
+    0,
   );
 
   const formatTime = (minutes) => {

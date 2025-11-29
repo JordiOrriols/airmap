@@ -6,7 +6,11 @@ type ScrollContainerProps = {
   children?: React.ReactNode;
 };
 
-export default function ScrollContainer({ className = "", style, children }: ScrollContainerProps) {
+export default function ScrollContainer({
+  className = "",
+  style,
+  children,
+}: ScrollContainerProps) {
   return (
     <div className={`custom-scrollbar ${className}`} style={style}>
       {children}

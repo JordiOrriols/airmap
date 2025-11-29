@@ -8,7 +8,13 @@ type CardHeaderProps = {
   className?: string;
 };
 
-export default function CardHeader({ title, subtitle, meta, actions, className = "" }: CardHeaderProps) {
+export default function CardHeader({
+  title,
+  subtitle,
+  meta,
+  actions,
+  className = "",
+}: CardHeaderProps) {
   return (
     <div className={`flex items-start justify-between mb-4 ${className}`}>
       <div className="flex-1">

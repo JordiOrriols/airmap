@@ -15,7 +15,9 @@ export default function CollapsiblePanel({
   const { t } = useTranslation();
 
   return (
-    <ErrorBoundary fallback={<div>{t("error.something_wrong", "Something went wrong")}</div>}>
+    <ErrorBoundary
+      fallback={<div>{t("error.something_wrong", "Something went wrong")}</div>}
+    >
       <div className="bg-slate-900/70 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden">
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}

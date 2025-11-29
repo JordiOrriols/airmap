@@ -51,7 +51,7 @@ export default function Home() {
   };
 
   const filteredRoutes = routes.filter((route) =>
-    route.name.toLowerCase().includes(searchQuery.toLowerCase())
+    route.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const formatDate = (dateString) => {
@@ -106,8 +106,12 @@ export default function Home() {
               <Plane className="w-10 h-10 text-white" />
             </div>
             <div className="text-left">
-              <h1 className="text-4xl font-bold text-white">{t("home.title", "Flight Route Planner")}</h1>
-              <p className="text-white/70 text-lg mt-1">{t("home.subtitle", "Manage and create your flight routes")}</p>
+              <h1 className="text-4xl font-bold text-white">
+                {t("home.title", "Flight Route Planner")}
+              </h1>
+              <p className="text-white/70 text-lg mt-1">
+                {t("home.subtitle", "Manage and create your flight routes")}
+              </p>
             </div>
             <div className="ml-6 flex items-center gap-2">
               {[
@@ -148,7 +152,7 @@ export default function Home() {
               className="pl-12 bg-slate-900/60 backdrop-blur-xl border-white/30 text-white placeholder:text-white/50 h-14 text-lg rounded-2xl"
             />
           </div>
-            <Button
+          <Button
             onClick={createNewRoute}
             className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white h-14 px-8 text-lg rounded-2xl shadow-xl"
           >
@@ -192,12 +196,20 @@ export default function Home() {
                 <Plane className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-3">
-                {searchQuery ? t("home.no_routes_found", "No routes found") : t("home.no_routes_yet", "No routes yet")}
+                {searchQuery
+                  ? t("home.no_routes_found", "No routes found")
+                  : t("home.no_routes_yet", "No routes yet")}
               </h3>
               <p className="text-white/70 mb-6 max-w-md">
                 {searchQuery
-                  ? t("home.try_adjust_search", "Try adjusting your search query")
-                  : t("home.create_first_desc", "Create your first flight route to get started")}
+                  ? t(
+                      "home.try_adjust_search",
+                      "Try adjusting your search query",
+                    )
+                  : t(
+                      "home.create_first_desc",
+                      "Create your first flight route to get started",
+                    )}
               </p>
               {!searchQuery && (
                 <Button

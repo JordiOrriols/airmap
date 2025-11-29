@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { MapContainer, TileLayer, Polyline, Marker, Circle, useMapEvents, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Polyline,
+  Marker,
+  Circle,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import AirspaceLayer from "../flight/airspace-layer";
@@ -29,10 +37,17 @@ type MapViewProps = {
   tileAttribution?: string;
 };
 
-function MapClickHandler({ allowMapClick, onMapClick }: { allowMapClick?: boolean; onMapClick?: (latlng: LatLng) => void }) {
+function MapClickHandler({
+  allowMapClick,
+  onMapClick,
+}: {
+  allowMapClick?: boolean;
+  onMapClick?: (latlng: LatLng) => void;
+}) {
   useMapEvents({
     click: (e) => {
-      if (allowMapClick && onMapClick) onMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
+      if (allowMapClick && onMapClick)
+        onMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
     },
   });
   return null;
@@ -114,7 +129,10 @@ export default function MapView({
       >
         <TileLayer url={tileUrl} attribution={tileAttribution} />
 
-        <MapClickHandler allowMapClick={allowMapClick} onMapClick={onMapClick} />
+        <MapClickHandler
+          allowMapClick={allowMapClick}
+          onMapClick={onMapClick}
+        />
         <MapController center={currentPosition || center} />
 
         {showAirspace && <AirspaceLayer visible={true} />}
@@ -138,13 +156,30 @@ export default function MapView({
           ))}
 
         {showPolyline && waypoints.length > 1 && (
-          <Polyline positions={waypoints.map((w) => [w.lat, w.lng])} color="#a78bfa" weight={3} opacity={0.8} dashArray="10, 10" />
+          <Polyline
+            positions={waypoints.map((w) => [w.lat, w.lng])}
+            color="#a78bfa"
+            weight={3}
+            opacity={0.8}
+            dashArray="10, 10"
+          />
         )}
 
         {showAircraft && currentPosition && (
           <>
-            <Marker position={[currentPosition.lat, currentPosition.lng]} icon={(aircraftIcon || defaultAircraftIcon)(currentHeading)} />
-            <Circle center={[currentPosition.lat, currentPosition.lng]} radius={50} pathOptions={{ color: "#3b82f6", fillColor: "#3b82f6", fillOpacity: 0.2 }} />
+            <Marker
+              position={[currentPosition.lat, currentPosition.lng]}
+              icon={(aircraftIcon || defaultAircraftIcon)(currentHeading)}
+            />
+            <Circle
+              center={[currentPosition.lat, currentPosition.lng]}
+              radius={50}
+              pathOptions={{
+                color: "#3b82f6",
+                fillColor: "#3b82f6",
+                fillOpacity: 0.2,
+              }}
+            />
           </>
         )}
       </MapContainer>

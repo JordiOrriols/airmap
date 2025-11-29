@@ -25,7 +25,10 @@ import GradientIcon from "../components/atoms/gradient-icon";
 import GlassCard from "../components/atoms/glass-card";
 import { routeStorage } from "../utils/storage";
 import TrackingControlPanel from "../components/organisms/tracking-control-panel";
-import { calculateDistance as geoCalculateDistance, calculateBearing as geoCalculateBearing } from "../utils/geo";
+import {
+  calculateDistance as geoCalculateDistance,
+  calculateBearing as geoCalculateBearing,
+} from "../utils/geo";
 import { MapContainer } from "react-leaflet";
 
 // Fix for default marker icon
@@ -111,7 +114,12 @@ export default function FlightTracking() {
 
   const startTracking = () => {
     if (!navigator.geolocation) {
-      alert(t("tracking.geolocation_unsupported", "Geolocation is not supported by your browser"));
+      alert(
+        t(
+          "tracking.geolocation_unsupported",
+          "Geolocation is not supported by your browser",
+        ),
+      );
       return;
     }
 
@@ -136,7 +144,7 @@ export default function FlightTracking() {
             lastPositionRef.current.lat,
             lastPositionRef.current.lng,
             latitude,
-            longitude
+            longitude,
           );
           setCurrentHeading(heading || calculatedHeading);
         } else if (heading) {
@@ -156,7 +164,7 @@ export default function FlightTracking() {
             latitude,
             longitude,
             nextWaypoint.lat,
-            nextWaypoint.lng
+            nextWaypoint.lng,
           );
           setDistanceToNext(distance);
 
@@ -179,15 +187,15 @@ export default function FlightTracking() {
         alert(
           t(
             "tracking.unable_get_location",
-            "Unable to get your location. Please check your permissions."
-          )
+            "Unable to get your location. Please check your permissions.",
+          ),
         );
       },
       {
         enableHighAccuracy: true,
         maximumAge: 0,
         timeout: 5000,
-      }
+      },
     );
   };
 
@@ -225,10 +233,19 @@ export default function FlightTracking() {
       <div className="min-h-screen bg-gradient-to-br from-[#1e3a8a] via-[#7c3aed] to-[#2563eb] flex items-center justify-center">
         <Card className="bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-3xl p-12 text-center">
           <Plane className="w-16 h-16 text-white mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">{t("tracking.no_route.title", "No Route Selected")}</h2>
-          <p className="text-white/70 mb-6">{t("tracking.no_route.desc", "Please select a route to start tracking")}</p>
+          <h2 className="text-2xl font-bold text-white mb-2">
+            {t("tracking.no_route.title", "No Route Selected")}
+          </h2>
+          <p className="text-white/70 mb-6">
+            {t(
+              "tracking.no_route.desc",
+              "Please select a route to start tracking",
+            )}
+          </p>
           <Link to={createPageUrl("home")}>
-            <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600">{t("tracking.go_to_routes", "Go to Routes")}</Button>
+            <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600">
+              {t("tracking.go_to_routes", "Go to Routes")}
+            </Button>
           </Link>
         </Card>
       </div>
@@ -266,8 +283,7 @@ export default function FlightTracking() {
           zoom={13}
           className="w-full h-full"
           zoomControl={false}
-        >
-        </MapContainer>
+        ></MapContainer>
       </div>
 
       <MapView
@@ -287,7 +303,6 @@ export default function FlightTracking() {
         activeWaypointIcon={activeWaypointIcon}
         aircraftIcon={aircraftIcon}
       />
-      
 
       {/* Header */}
       <motion.div
