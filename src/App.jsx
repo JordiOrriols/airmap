@@ -33,7 +33,7 @@ export default function App() {
   return (
     <Suspense fallback={t("app.loading", "loading")}>
       <ErrorBoundary fallback={<div>{t("app.error", "Something went wrong")}</div>}>
-        <RouterProvider router={router} />,
+        <RouterProvider router={router} />
       </ErrorBoundary>
     </Suspense>
   );

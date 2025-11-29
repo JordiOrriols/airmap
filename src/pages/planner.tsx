@@ -41,7 +41,12 @@ import GradientIcon from "../components/atoms/gradient-icon";
 import { routeStorage } from "../utils/storage";
 import { MAP_CENTER } from "@/utils/constants";
 import RouteControlPanel from "../components/organisms/route-control-panel";
-import { calculateBearing as geoCalculateBearing, calculateDistance as geoCalculateDistance, speedToKnots } from "../utils/geo";
+import {
+  calculateBearing as geoCalculateBearing,
+  calculateDistance as geoCalculateDistance,
+  speedToKnots,
+} from "../utils/geo";
+import ScrollContainer from "@/components/atoms/scroll-container";
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -66,10 +71,9 @@ export default function FlightPlanner() {
   const [cruiseSpeed, setCruiseSpeed] = useState(120); // Default cruise speed
   const [speedUnit, setSpeedUnit] = useState("knots"); // "knots" or "kmh"
   const [routeName, setRouteName] = useState("");
-  const [showRoutePanel, setShowRoutePanel] = useState(false);
   const [isEditMode, setIsEditMode] = useState(true); // Start in edit mode
   const [saved, setSaved] = useState(false);
-  const [showAirspace, setShowAirspace] = useState(true);
+  const [showAirspace, setShowAirspace] = useState(false);
   const [weatherLocation, setWeatherLocation] = useState({
     lat: 41.5209,
     lng: 2.105,
@@ -157,12 +161,19 @@ export default function FlightPlanner() {
     reader.onload = (e) => {
       try {
         const importedData = JSON.parse(e.target.result);
-        setRouteName(importedData.name || t("route.imported_name", "Imported Route"));
+        setRouteName(
+          importedData.name || t("route.imported_name", "Imported Route")
+        );
         setWaypoints(importedData.waypoints || []);
         setCruiseSpeed(importedData.cruiseSpeed || 120);
         setSpeedUnit(importedData.speedUnit || "knots");
       } catch (error) {
-        alert(t("planner.import_error", "Error importing route. Please check the file format."));
+        alert(
+          t(
+            "planner.import_error",
+            "Error importing route. Please check the file format."
+          )
+        );
       }
     };
     reader.readAsText(file);
@@ -176,9 +187,6 @@ export default function FlightPlanner() {
     };
     setWaypoints([...waypoints, newWaypoint]);
     setWeatherLocation({ lat: latlng.lat, lng: latlng.lng });
-    if (waypoints.length === 0) {
-      setShowRoutePanel(true);
-    }
   };
 
   const removeWaypoint = (index) => {
@@ -187,7 +195,6 @@ export default function FlightPlanner() {
 
   const clearRoute = () => {
     setWaypoints([]);
-    setShowRoutePanel(false);
   };
 
   const updateWaypointPosition = (index, newLat, newLng) => {
@@ -217,7 +224,12 @@ export default function FlightPlanner() {
   const routeSegments = waypoints.slice(0, -1).map((wp, index) => {
     const nextWp = waypoints[index + 1];
     const bearing = geoCalculateBearing(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
-    const distance = geoCalculateDistance(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
+    const distance = geoCalculateDistance(
+      wp.lat,
+      wp.lng,
+      nextWp.lat,
+      nextWp.lng
+    );
     const speedInKnots = speedToKnots(cruiseSpeed, speedUnit);
 
     return {
@@ -333,9 +345,13 @@ export default function FlightPlanner() {
         </Link>
         <GradientIcon icon={Plane} size="md" />
         <div className="flex-1">
-          <h1 className="text-xl font-bold text-white">{t("planner.header.title", "Flight Route Planner")}</h1>
+          <h1 className="text-xl font-bold text-white">
+            {t("planner.header.title", "Flight Route Planner")}
+          </h1>
           <p className="text-xs text-white/70">
-            {isEditMode ? t("planner.header.mode_edit", "Click to add waypoints") : t("planner.header.mode_move", "Drag to reposition")}
+            {isEditMode
+              ? t("planner.header.mode_edit", "Click to add waypoints")
+              : t("planner.header.mode_move", "Drag to reposition")}
           </p>
         </div>
         {saved && (
@@ -384,14 +400,16 @@ export default function FlightPlanner() {
         interactive={true}
         allowMapClick={isEditMode}
         onMapClick={(latlng) => handleMapClick(latlng)}
-        onMarkerDrag={(index, lat, lng) => updateWaypointPosition(index, lat, lng)}
+        onMarkerDrag={(index, lat, lng) =>
+          updateWaypointPosition(index, lat, lng)
+        }
         waypointIcon={waypointIcon}
       />
 
       {/* Simple left sidebar with collapsible panels */}
-      <div className="absolute left-6 top-24 z-20 w-80 space-y-4">
+      <div className="absolute left-6 top-24 z-20 w-100 space-y-4">
         {headerComponent}
-        <div className="space-y-4">
+        <ScrollContainer className="space-y-4 overflow-y-auto">
           {/* Route Control */}
           {allPanels.routeControl?.component}
 
@@ -400,7 +418,7 @@ export default function FlightPlanner() {
 
           {/* Route Info */}
           {allPanels.routeInfo?.component}
-        </div>
+        </ScrollContainer>
       </div>
     </div>
   );
