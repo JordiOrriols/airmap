@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { Card } from "../components/ui/card";
-import {
-  Plus,
-  Plane,
-  MapPin,
-  Clock,
-  Edit,
-  Trash2,
-  Search,
-  Navigation,
-} from "lucide-react";
+import { Plus, Plane, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import RouteCard from "../components/molecules/route-card";
 import { createPageUrl } from "../utils";
-import { Link } from "react-router-dom";
 import { routeStorage } from "../utils/storage";
 import MapView from "../components/organisms/map-view";
 import { useTranslation } from "react-i18next";
@@ -51,7 +40,7 @@ export default function Home() {
   };
 
   const filteredRoutes = routes.filter((route) =>
-    route.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    route.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatDate = (dateString) => {
@@ -126,7 +115,11 @@ export default function Home() {
                     variant="ghost"
                     size="sm"
                     onClick={() => i18n.changeLanguage(lng.code)}
-                    className={`${active ? "bg-white/20 text-white" : "text-white/70 hover:bg-white/10"} rounded-lg px-3 py-2`}
+                    className={`${
+                      active
+                        ? "bg-white/20 text-white"
+                        : "text-white/70 hover:bg-white/10"
+                    } rounded-lg px-3 py-2`}
                   >
                     {lng.label}
                   </Button>
@@ -204,11 +197,11 @@ export default function Home() {
                 {searchQuery
                   ? t(
                       "home.try_adjust_search",
-                      "Try adjusting your search query",
+                      "Try adjusting your search query"
                     )
                   : t(
                       "home.create_first_desc",
-                      "Create your first flight route to get started",
+                      "Create your first flight route to get started"
                     )}
               </p>
               {!searchQuery && (

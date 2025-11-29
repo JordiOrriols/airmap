@@ -4,25 +4,12 @@ import MapView from "../components/organisms/map-view";
 import L from "leaflet";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
-import {
-  Navigation,
-  Play,
-  Pause,
-  Home,
-  TrendingUp,
-  Plane,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Navigation, Home, Plane } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPageUrl } from "../utils/index";
 import { Link } from "react-router-dom";
-import AirspaceLayer from "../components/flight/airspace-layer";
 import NextWaypointPanel from "../components/organisms/next-waypoint-panel";
-import WeatherPanel from "../components/organisms/weather-panel";
-import StatDisplay from "../components/atoms/stat-display";
 import GradientIcon from "../components/atoms/gradient-icon";
-import GlassCard from "../components/atoms/glass-card";
 import { routeStorage } from "../utils/storage";
 import TrackingControlPanel from "../components/organisms/tracking-control-panel";
 import {
@@ -117,8 +104,8 @@ export default function FlightTracking() {
       alert(
         t(
           "tracking.geolocation_unsupported",
-          "Geolocation is not supported by your browser",
-        ),
+          "Geolocation is not supported by your browser"
+        )
       );
       return;
     }
@@ -144,7 +131,7 @@ export default function FlightTracking() {
             lastPositionRef.current.lat,
             lastPositionRef.current.lng,
             latitude,
-            longitude,
+            longitude
           );
           setCurrentHeading(heading || calculatedHeading);
         } else if (heading) {
@@ -164,7 +151,7 @@ export default function FlightTracking() {
             latitude,
             longitude,
             nextWaypoint.lat,
-            nextWaypoint.lng,
+            nextWaypoint.lng
           );
           setDistanceToNext(distance);
 
@@ -187,15 +174,15 @@ export default function FlightTracking() {
         alert(
           t(
             "tracking.unable_get_location",
-            "Unable to get your location. Please check your permissions.",
-          ),
+            "Unable to get your location. Please check your permissions."
+          )
         );
       },
       {
         enableHighAccuracy: true,
         maximumAge: 0,
         timeout: 5000,
-      },
+      }
     );
   };
 
@@ -239,7 +226,7 @@ export default function FlightTracking() {
           <p className="text-white/70 mb-6">
             {t(
               "tracking.no_route.desc",
-              "Please select a route to start tracking",
+              "Please select a route to start tracking"
             )}
           </p>
           <Link to={createPageUrl("home")}>

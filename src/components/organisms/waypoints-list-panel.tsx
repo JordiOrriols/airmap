@@ -2,7 +2,6 @@ import React from "react";
 import { MapPin } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import WaypointCard from "../molecules/waypoint-card";
-import ScrollContainer from "../atoms/scroll-container";
 import { useTranslation } from "react-i18next";
 
 export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
@@ -23,10 +22,7 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="waypoints">
           {(provided) => (
-            <ScrollContainer
-              className="space-y-2 max-h-64 overflow-y-auto"
-              style={{}}
-            >
+            <div className="space-y-2">
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 {waypoints.map((wp, index) => (
                   <Draggable
@@ -56,7 +52,7 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
 
                 {provided.placeholder}
               </div>
-            </ScrollContainer>
+            </div>
           )}
         </Droppable>
       </DragDropContext>

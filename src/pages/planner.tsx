@@ -162,7 +162,7 @@ export default function FlightPlanner() {
       try {
         const importedData = JSON.parse(e.target.result);
         setRouteName(
-          importedData.name || t("route.imported_name", "Imported Route"),
+          importedData.name || t("route.imported_name", "Imported Route")
         );
         setWaypoints(importedData.waypoints || []);
         setCruiseSpeed(importedData.cruiseSpeed || 120);
@@ -171,8 +171,8 @@ export default function FlightPlanner() {
         alert(
           t(
             "planner.import_error",
-            "Error importing route. Please check the file format.",
-          ),
+            "Error importing route. Please check the file format."
+          )
         );
       }
     };
@@ -228,7 +228,7 @@ export default function FlightPlanner() {
       wp.lat,
       wp.lng,
       nextWp.lat,
-      nextWp.lng,
+      nextWp.lng
     );
     const speedInKnots = speedToKnots(cruiseSpeed, speedUnit);
 
@@ -243,11 +243,11 @@ export default function FlightPlanner() {
 
   const totalDistance = routeSegments.reduce(
     (sum, seg) => sum + parseFloat(seg.distance),
-    0,
+    0
   );
   const totalTime = routeSegments.reduce(
     (sum, seg) => sum + parseFloat(seg.time),
-    0,
+    0
   );
 
   const formatTime = (minutes) => {
@@ -332,65 +332,64 @@ export default function FlightPlanner() {
       />
 
       {/* Simple left sidebar with collapsible panels */}
-      <div className="absolute left-6 top-6 z-20 w-110 space-y-4">
+      <div className="space-y-4 overflow-y-auto absolute left-0 top-0 bottom-0 p-6 z-20 w-120">
         {headerComponent}
-        <ScrollContainer className="space-y-4 overflow-y-auto">
-          {/* Route Control */}
-          <RouteControlPanel
-            routeName={routeName}
-            setRouteName={setRouteName}
-            cruiseSpeed={cruiseSpeed}
-            setCruiseSpeed={setCruiseSpeed}
-            speedUnit={speedUnit}
-            setSpeedUnit={setSpeedUnit}
-            isEditMode={isEditMode}
-            toggleEditMode={toggleEditMode}
-            showAirspace={showAirspace}
-            setShowAirspace={setShowAirspace}
-            exportRoute={exportRoute}
-            importRoute={importRoute}
-            clearRoute={clearRoute}
-            waypoints={waypoints}
-            removeWaypoint={removeWaypoint}
-            reorderWaypoints={reorderWaypoints}
-            fileInputRef={fileInputRef}
-          />
+        {/* Route Control */}
+        <RouteControlPanel
+          routeName={routeName}
+          setRouteName={setRouteName}
+          cruiseSpeed={cruiseSpeed}
+          setCruiseSpeed={setCruiseSpeed}
+          speedUnit={speedUnit}
+          setSpeedUnit={setSpeedUnit}
+          isEditMode={isEditMode}
+          toggleEditMode={toggleEditMode}
+          showAirspace={showAirspace}
+          setShowAirspace={setShowAirspace}
+          exportRoute={exportRoute}
+          importRoute={importRoute}
+          clearRoute={clearRoute}
+          waypoints={waypoints}
+          removeWaypoint={removeWaypoint}
+          reorderWaypoints={reorderWaypoints}
+          fileInputRef={fileInputRef}
+        />
 
+        <CollapsiblePanel
+          title={t("planner.route_control.weather_title", "Weather Forecast")}
+          icon={CloudSun}
+          gradient="from-blue-500 to-cyan-500"
+          defaultCollapsed={true}
+        >
+          <WeatherPanel location={weatherLocation} forecastMode={true} />
+        </CollapsiblePanel>
+
+        {waypoints.length > 1 ? (
           <CollapsiblePanel
-            title={t("planner.route_control.weather_title", "Weather Forecast")}
-            icon={CloudSun}
-            gradient="from-blue-500 to-cyan-500"
+            title={t("planner.route_info.title", "Route Information")}
+            icon={Route}
+            gradient="from-emerald-500 to-teal-500"
             defaultCollapsed={true}
           >
-            <WeatherPanel location={weatherLocation} forecastMode={true} />
+            <RouteStatsCard
+              totalDistance={totalDistance}
+              totalTime={totalTime}
+              cruiseSpeed={cruiseSpeed}
+              speedUnit={speedUnit}
+              formatTime={formatTime}
+            />
+            <div className="space-y-3 mt-4">
+              {routeSegments.map((segment, index) => (
+                <RouteSegmentCard
+                  key={index}
+                  segment={segment}
+                  index={index}
+                  formatTime={formatTime}
+                />
+              ))}
+            </div>
           </CollapsiblePanel>
-
-          {waypoints.length > 1 ? (
-            <CollapsiblePanel
-              title={t("planner.route_info.title", "Route Information")}
-              icon={Route}
-              gradient="from-emerald-500 to-teal-500"
-            >
-              <RouteStatsCard
-                totalDistance={totalDistance}
-                totalTime={totalTime}
-                cruiseSpeed={cruiseSpeed}
-                speedUnit={speedUnit}
-                formatTime={formatTime}
-              />
-              <div className="space-y-3 mt-4 max-h-96 overflow-y-auto custom-scrollbar">
-                {routeSegments.map((segment, index) => (
-                  <RouteSegmentCard
-                    key={index}
-                    segment={segment}
-                    index={index}
-                    formatTime={formatTime}
-                  />
-                ))}
-              </div>
-            </CollapsiblePanel>
-          ) : null}
-        </ScrollContainer>
+        ) : null}
       </div>
     </div>
   );

@@ -78,8 +78,6 @@ export default function MapView({
   onMapClick,
   onMarkerDrag,
   waypointIcon,
-  passedWaypointIcon,
-  activeWaypointIcon,
   upcomingWaypointIcon,
   aircraftIcon,
   tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -119,7 +117,7 @@ export default function MapView({
         center={Array.isArray(center) ? center : [center.lat, center.lng]}
         zoom={zoom}
         className="w-full h-full"
-        zoomControl={interactive}
+        zoomControl={false}
         dragging={interactive}
         touchZoom={interactive}
         doubleClickZoom={interactive}
