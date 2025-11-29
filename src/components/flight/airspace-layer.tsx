@@ -17,64 +17,71 @@ export default function AirspaceLayer({ visible = true }) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Spain geographic bounds: approximately
-        // West: -9.5, East: 4.5, South: 36, North: 43.8
-        const spainGeometry = "-9.5,36,4.5,43.8";
+        // Spain geographic bounds (bbox format: minx,miny,maxx,maxy)
+        // West: -9.5, South: 36, East: 4.5, North: 43.8
+        const spainBbox = "-9.5,36,4.5,43.8";
+
+        console.log("Fetching airspace data for Spain:", spainBbox);
 
         // Fetch airspaces from OpenAIP for Spain region
-        const airspaceResponse = await fetch(
-          `https://api.core.openaip.net/api/airspaces?` +
-            `page=1&limit=2000&` +
-            `geometry=${spainGeometry}`,
-          {
-            headers: {
-              "x-openaip-api-key": OPENAIP_API_KEY,
-            },
+        const airspaceUrl = `https://api.core.openaip.net/api/airspaces?page=1&limit=1000&bbox=${spainBbox}`;
+        console.log("Airspace URL:", airspaceUrl);
+
+        const airspaceResponse = await fetch(airspaceUrl, {
+          headers: {
+            "x-openaip-api-key": OPENAIP_API_KEY,
           },
-        );
+        });
 
         if (airspaceResponse.ok) {
           const airspaceData = await airspaceResponse.json();
-          // Filter for CTR, VFR zones, and other relevant airspaces
+          console.log("Airspace response:", airspaceData);
+
+          // Filter for VFR, CTR, TMA and ICAO classes A-E
           const filteredAirspaces = (airspaceData.items || []).filter(
             (airspace) => {
               const type = airspace.type?.toUpperCase();
+              const icaoClass = airspace.icaoClass?.toString();
+
+              // Show VFR zones, CTR, TMA, and ICAO classes A through E
               return (
+                type === "VFR" ||
                 type === "CTR" ||
                 type === "TMA" ||
-                type === "CLASS_A" ||
-                type === "CLASS_B" ||
-                type === "CLASS_C" ||
-                type === "CLASS_D" ||
-                type === "CLASS_E" ||
-                type === "VFR" ||
+                icaoClass === 0 || // Class A
+                icaoClass === 1 || // Class B
+                icaoClass === 2 || // Class C
+                icaoClass === 3 || // Class D
+                icaoClass === 4 || // Class E
                 type === "RMZ" ||
                 type === "TMZ"
               );
             },
           );
+          console.log("Filtered airspaces:", filteredAirspaces.length);
           setAirspaces(filteredAirspaces);
         } else {
-          console.error("Failed to fetch airspaces:", airspaceResponse.status);
+          const errorText = await airspaceResponse.text();
+          console.error("Failed to fetch airspaces:", airspaceResponse.status, errorText);
         }
 
         // Fetch airports from OpenAIP for Spain region
-        const airportResponse = await fetch(
-          `https://api.core.openaip.net/api/airports?` +
-            `page=1&limit=2000&` +
-            `geometry=${spainGeometry}`,
-          {
-            headers: {
-              "x-openaip-api-key": OPENAIP_API_KEY,
-            },
+        const airportUrl = `https://api.core.openaip.net/api/airports?page=1&limit=1000&bbox=${spainBbox}`;
+        console.log("Airport URL:", airportUrl);
+
+        const airportResponse = await fetch(airportUrl, {
+          headers: {
+            "x-openaip-api-key": OPENAIP_API_KEY,
           },
-        );
+        });
 
         if (airportResponse.ok) {
           const airportData = await airportResponse.json();
+          console.log("Airport response:", airportData);
           setAirports(airportData.items || []);
         } else {
-          console.error("Failed to fetch airports:", airportResponse.status);
+          const errorText = await airportResponse.text();
+          console.error("Failed to fetch airports:", airportResponse.status, errorText);
         }
       } catch (error) {
         console.error("Error fetching airspace and airport data:", error);
