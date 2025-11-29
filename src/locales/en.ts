@@ -23,6 +23,7 @@ export const en: Locale = {
     "planner.route_control.move_mode_on": "Move Mode: ON",
     "planner.route_control.airspace_on": "Airspace: ON",
     "planner.route_control.airspace_off": "Airspace: OFF",
+    "planner.route_control.reload_airspace": "Reload",
     "planner.route_control.export": "Export",
     "planner.route_control.import": "Import",
     "planner.route_control.clear": "Clear Route",

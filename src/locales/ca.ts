@@ -24,6 +24,7 @@ export const ca: Locale = {
     "planner.route_control.move_mode_on": "Mode moure: ON",
     "planner.route_control.airspace_on": "Espai aeri: ON",
     "planner.route_control.airspace_off": "Espai aeri: OFF",
+    "planner.route_control.reload_airspace": "Recarregar",
     "planner.route_control.export": "Exportar",
     "planner.route_control.import": "Importar",
     "planner.route_control.clear": "Netejar ruta",

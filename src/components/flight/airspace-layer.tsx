@@ -1,30 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { Polygon, Popup, CircleMarker } from "react-leaflet";
+import { Polygon, Popup, CircleMarker, useMap } from "react-leaflet";
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const OPENAIP_API_KEY = import.meta.env.VITE_OPENAIP_API_KEY;
 
-export default function AirspaceLayer({ visible = true }) {
+export default function AirspaceLayer({ visible = true, reloadTrigger = 0 }) {
   const { t } = useTranslation();
   const [airspaces, setAirspaces] = useState([]);
   const [airports, setAirports] = useState([]);
   const [loading, setLoading] = useState(false);
+  const map = useMap();
 
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || !map) return;
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Spain geographic bounds (bbox format: minx,miny,maxx,maxy)
-        // West: -9.5, South: 36, East: 4.5, North: 43.8
-        const spainBbox = "-9.5,36,4.5,43.8";
+        // Get current map bounds and expand them with a buffer
+        const bounds = map.getBounds();
+        const center = map.getCenter();
+        const zoomLevel = map.getZoom();
 
-        console.log("Fetching airspace data for Spain:", spainBbox);
+        // Calculate a buffer based on zoom level to ensure we get airspace data
+        // At higher zoom levels, we need a larger geographic buffer
+        const bufferFactor = Math.pow(2, 16 - zoomLevel) / 100000;
 
-        // Fetch airspaces from OpenAIP for Spain region
-        const airspaceUrl = `https://api.core.openaip.net/api/airspaces?page=1&limit=1000&bbox=${spainBbox}`;
+        const north = Math.min(bounds.getNorth() + bufferFactor, 90);
+        const south = Math.max(bounds.getSouth() - bufferFactor, -90);
+        const east = Math.min(bounds.getEast() + bufferFactor, 180);
+        const west = Math.max(bounds.getWest() - bufferFactor, -180);
+
+        // Bbox format: minx,miny,maxx,maxy (west,south,east,north)
+        const bbox = `${west},${south},${east},${north}`;
+
+        console.log("Map state:", {
+          center: { lat: center.lat, lng: center.lng },
+          zoom: zoomLevel,
+          bounds: { north, south, east, west },
+          bbox,
+        });
+        console.log("Fetching airspace data with bbox:", bbox);
+
+        // Fetch airspaces from OpenAIP for current map view
+        const airspaceUrl = `https://api.core.openaip.net/api/airspaces?page=1&limit=1000&bbox=${bbox}`;
         console.log("Airspace URL:", airspaceUrl);
 
         const airspaceResponse = await fetch(airspaceUrl, {
@@ -77,8 +97,8 @@ export default function AirspaceLayer({ visible = true }) {
           );
         }
 
-        // Fetch airports from OpenAIP for Spain region
-        const airportUrl = `https://api.core.openaip.net/api/airports?page=1&limit=1000&bbox=${spainBbox}`;
+        // Fetch airports from OpenAIP for current map view
+        const airportUrl = `https://api.core.openaip.net/api/airports?page=1&limit=1000&bbox=${bbox}`;
         console.log("Airport URL:", airportUrl);
 
         const airportResponse = await fetch(airportUrl, {
@@ -107,7 +127,7 @@ export default function AirspaceLayer({ visible = true }) {
     };
 
     fetchData();
-  }, [visible]);
+  }, [visible, map, reloadTrigger]);
 
   if (!visible) return null;
 

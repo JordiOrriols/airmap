@@ -10,6 +10,7 @@ import {
   MousePointer,
   Eye,
   EyeOff,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -41,6 +42,7 @@ type Props = {
   removeWaypoint: (index: number) => void;
   reorderWaypoints: (start: number, end: number) => void;
   fileInputRef: RefObject<HTMLInputElement>;
+  reloadAirspace?: () => void;
 };
 
 export default function RouteControlPanel({
@@ -61,6 +63,7 @@ export default function RouteControlPanel({
   removeWaypoint,
   reorderWaypoints,
   fileInputRef,
+  reloadAirspace,
 }: Props) {
   const { t } = useTranslation();
   return (
@@ -145,6 +148,17 @@ export default function RouteControlPanel({
               </>
             )}
           </Button>
+
+          {showAirspace && (
+            <Button
+              onClick={reloadAirspace}
+              variant="outline"
+              className="w-full backdrop-blur-sm bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60 transition-all duration-300"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              {t("planner.route_control.reload_airspace", "Reload")}
+            </Button>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-2">

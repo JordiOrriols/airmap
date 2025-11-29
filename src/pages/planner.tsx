@@ -74,6 +74,7 @@ export default function FlightPlanner() {
   const [isEditMode, setIsEditMode] = useState(true); // Start in edit mode
   const [saved, setSaved] = useState(false);
   const [showAirspace, setShowAirspace] = useState(false);
+  const [airspaceReloadTrigger, setAirspaceReloadTrigger] = useState(0);
   const [weatherLocation, setWeatherLocation] = useState({
     lat: MAP_CENTER.lat,
     lng: MAP_CENTER.lng,
@@ -211,6 +212,11 @@ export default function FlightPlanner() {
     setIsEditMode(!isEditMode);
   };
 
+  const reloadAirspace = () => {
+    // Trigger airspace reload by incrementing the trigger counter
+    setAirspaceReloadTrigger((prev) => prev + 1);
+  };
+
   const reorderWaypoints = (startIndex, endIndex) => {
     const result = Array.from(waypoints);
     const [removed] = result.splice(startIndex, 1);
@@ -319,6 +325,7 @@ export default function FlightPlanner() {
         waypoints={waypoints}
         currentPosition={null}
         showAirspace={showAirspace}
+        airspaceReloadTrigger={airspaceReloadTrigger}
         showWaypoints={true}
         showAircraft={false}
         showPolyline={waypoints.length > 1}
@@ -353,6 +360,7 @@ export default function FlightPlanner() {
           removeWaypoint={removeWaypoint}
           reorderWaypoints={reorderWaypoints}
           fileInputRef={fileInputRef}
+          reloadAirspace={reloadAirspace}
         />
 
         <CollapsiblePanel

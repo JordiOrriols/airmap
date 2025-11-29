@@ -21,6 +21,7 @@ type MapViewProps = {
   currentPosition?: LatLng | null;
   currentHeading?: number;
   showAirspace?: boolean;
+  airspaceReloadTrigger?: number;
   showWaypoints?: boolean;
   showAircraft?: boolean;
   showPolyline?: boolean;
@@ -70,6 +71,7 @@ export default function MapView({
   currentPosition = null,
   currentHeading = 0,
   showAirspace = true,
+  airspaceReloadTrigger = 0,
   showWaypoints = true,
   showAircraft = true,
   showPolyline = true,
@@ -133,7 +135,9 @@ export default function MapView({
         />
         <MapController center={currentPosition || center} />
 
-        {showAirspace && <AirspaceLayer visible={true} />}
+        {showAirspace && (
+          <AirspaceLayer visible={true} reloadTrigger={airspaceReloadTrigger} />
+        )}
 
         {showWaypoints &&
           waypoints.map((wp, idx) => (
