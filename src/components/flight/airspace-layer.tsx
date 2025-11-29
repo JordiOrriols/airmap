@@ -40,8 +40,15 @@ export default function AirspaceLayer({ visible = true }) {
           // Filter for VFR, CTR, TMA and ICAO classes A-E
           const filteredAirspaces = (airspaceData.items || []).filter(
             (airspace) => {
-              const type = airspace.type?.toUpperCase();
-              const icaoClass = airspace.icaoClass?.toString();
+              // Debug: log the first few airspaces to see the structure
+              console.log("Airspace structure:", {
+                name: airspace.name,
+                type: airspace.type,
+                icaoClass: airspace.icaoClass,
+              });
+
+              const type = airspace.type ? String(airspace.type).toUpperCase() : "";
+              const icaoClass = airspace.icaoClass;
 
               // Show VFR zones, CTR, TMA, and ICAO classes A through E
               return (
@@ -56,13 +63,18 @@ export default function AirspaceLayer({ visible = true }) {
                 type === "RMZ" ||
                 type === "TMZ"
               );
-            },
+            }
           );
           console.log("Filtered airspaces:", filteredAirspaces.length);
+          console.log("Filtered airspaces:", filteredAirspaces);
           setAirspaces(filteredAirspaces);
         } else {
           const errorText = await airspaceResponse.text();
-          console.error("Failed to fetch airspaces:", airspaceResponse.status, errorText);
+          console.error(
+            "Failed to fetch airspaces:",
+            airspaceResponse.status,
+            errorText
+          );
         }
 
         // Fetch airports from OpenAIP for Spain region
@@ -81,7 +93,11 @@ export default function AirspaceLayer({ visible = true }) {
           setAirports(airportData.items || []);
         } else {
           const errorText = await airportResponse.text();
-          console.error("Failed to fetch airports:", airportResponse.status, errorText);
+          console.error(
+            "Failed to fetch airports:",
+            airportResponse.status,
+            errorText
+          );
         }
       } catch (error) {
         console.error("Error fetching airspace and airport data:", error);
@@ -96,15 +112,15 @@ export default function AirspaceLayer({ visible = true }) {
   if (!visible) return null;
 
   // Color mapping for different airspace classes
-  const getAirspaceColor = (airspaceClass) => {
+  const getAirspaceColor = (airspace) => {
     const colors = {
-      A: "#FF0000",
-      B: "#FF0000",
-      C: "#9900FF",
-      D: "#0000FF",
-      E: "#9900FF",
-      F: "#FFFF00",
-      G: "#FFFF00",
+      0: "#FF0000", // Class A
+      1: "#FF0000", // Class B
+      2: "#9900FF", // Class C
+      3: "#0000FF", // Class D
+      4: "#9900FF", // Class E
+      5: "#FFFF00", // Class F
+      6: "#FFFF00", // Class G
       CTR: "#0000FF",
       TMA: "#9900FF",
       RMZ: "#FF6B6B",
@@ -116,7 +132,23 @@ export default function AirspaceLayer({ visible = true }) {
       VFR: "#90EE90",
       OTHER: "#808080",
     };
-    return colors[airspaceClass?.toUpperCase()] || colors.OTHER;
+
+    // Try to match by ICAO class first (numeric)
+    if (airspace.icaoClass !== undefined && airspace.icaoClass !== null) {
+      if (colors[airspace.icaoClass] !== undefined) {
+        return colors[airspace.icaoClass];
+      }
+    }
+
+    // Then try to match by type string
+    if (airspace.type) {
+      const typeKey = airspace.type.toUpperCase();
+      if (colors[typeKey] !== undefined) {
+        return colors[typeKey];
+      }
+    }
+
+    return colors.OTHER;
   };
 
   const convertToCoordinates = (geometry) => {
@@ -177,7 +209,7 @@ export default function AirspaceLayer({ visible = true }) {
         const coordinates = convertToCoordinates(airspace.geometry);
         if (!coordinates) return null;
 
-        const color = getAirspaceColor(airspace.type);
+        const color = getAirspaceColor(airspace);
 
         return (
           <Polygon
@@ -242,8 +274,7 @@ export default function AirspaceLayer({ visible = true }) {
 
       {/* Render airports as circle markers */}
       {airports.map((airport) => {
-        if (!airport.geometry || !airport.geometry.coordinates)
-          return null;
+        if (!airport.geometry || !airport.geometry.coordinates) return null;
         const [lng, lat] = airport.geometry.coordinates;
         const isMajor = airport.type === "major" || airport.type === "MAJOR";
         const radius = isMajor ? 8 : 5;
