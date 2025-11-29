@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Polygon, Popup, useMap } from "react-leaflet";
+import { Polygon, Popup, CircleMarker } from "react-leaflet";
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -8,27 +8,24 @@ const OPENAIP_API_KEY = import.meta.env.VITE_OPENAIP_API_KEY;
 export default function AirspaceLayer({ visible = true }) {
   const { t } = useTranslation();
   const [airspaces, setAirspaces] = useState([]);
+  const [airports, setAirports] = useState([]);
   const [loading, setLoading] = useState(false);
-  const map = useMap();
 
   useEffect(() => {
     if (!visible) return;
 
-    const fetchAirspaces = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        // Get map bounds for Spain region
-        const bounds = map.getBounds();
-        const north = bounds.getNorth();
-        const south = bounds.getSouth();
-        const east = bounds.getEast();
-        const west = bounds.getWest();
+        // Spain geographic bounds: approximately
+        // West: -9.5, East: 4.5, South: 36, North: 43.8
+        const spainGeometry = "-9.5,36,4.5,43.8";
 
         // Fetch airspaces from OpenAIP for Spain region
-        const response = await fetch(
+        const airspaceResponse = await fetch(
           `https://api.core.openaip.net/api/airspaces?` +
-            `page=1&limit=500&` +
-            `geometry=${west},${south},${east},${north}`,
+            `page=1&limit=2000&` +
+            `geometry=${spainGeometry}`,
           {
             headers: {
               "x-openaip-api-key": OPENAIP_API_KEY,
@@ -36,31 +33,58 @@ export default function AirspaceLayer({ visible = true }) {
           },
         );
 
-        if (response.ok) {
-          const data = await response.json();
-          setAirspaces(data.items || []);
+        if (airspaceResponse.ok) {
+          const airspaceData = await airspaceResponse.json();
+          // Filter for CTR, VFR zones, and other relevant airspaces
+          const filteredAirspaces = (airspaceData.items || []).filter(
+            (airspace) => {
+              const type = airspace.type?.toUpperCase();
+              return (
+                type === "CTR" ||
+                type === "TMA" ||
+                type === "CLASS_A" ||
+                type === "CLASS_B" ||
+                type === "CLASS_C" ||
+                type === "CLASS_D" ||
+                type === "CLASS_E" ||
+                type === "VFR" ||
+                type === "RMZ" ||
+                type === "TMZ"
+              );
+            },
+          );
+          setAirspaces(filteredAirspaces);
         } else {
-          console.error("Failed to fetch airspaces:", response.status);
+          console.error("Failed to fetch airspaces:", airspaceResponse.status);
+        }
+
+        // Fetch airports from OpenAIP for Spain region
+        const airportResponse = await fetch(
+          `https://api.core.openaip.net/api/airports?` +
+            `page=1&limit=2000&` +
+            `geometry=${spainGeometry}`,
+          {
+            headers: {
+              "x-openaip-api-key": OPENAIP_API_KEY,
+            },
+          },
+        );
+
+        if (airportResponse.ok) {
+          const airportData = await airportResponse.json();
+          setAirports(airportData.items || []);
+        } else {
+          console.error("Failed to fetch airports:", airportResponse.status);
         }
       } catch (error) {
-        console.error("Error fetching airspaces:", error);
+        console.error("Error fetching airspace and airport data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAirspaces();
-
-    // Refetch when map moves significantly
-    const handleMoveEnd = () => {
-      fetchAirspaces();
-    };
-
-    map.on("moveend", handleMoveEnd);
-    return () => {
-      map.off("moveend", handleMoveEnd);
-    };
-  }, [visible, map]);
+    fetchData();
+  }, [visible]);
 
   if (!visible) return null;
 
@@ -82,9 +106,10 @@ export default function AirspaceLayer({ visible = true }) {
       PROHIBITED: "#8B0000",
       DANGER: "#FFA500",
       GLIDING: "#00FF00",
+      VFR: "#90EE90",
       OTHER: "#808080",
     };
-    return colors[airspaceClass] || colors.OTHER;
+    return colors[airspaceClass?.toUpperCase()] || colors.OTHER;
   };
 
   const convertToCoordinates = (geometry) => {
@@ -205,6 +230,68 @@ export default function AirspaceLayer({ visible = true }) {
               </div>
             </Popup>
           </Polygon>
+        );
+      })}
+
+      {/* Render airports as circle markers */}
+      {airports.map((airport) => {
+        if (!airport.geometry || !airport.geometry.coordinates)
+          return null;
+        const [lng, lat] = airport.geometry.coordinates;
+        const isMajor = airport.type === "major" || airport.type === "MAJOR";
+        const radius = isMajor ? 8 : 5;
+        const color = isMajor ? "#FF6B00" : "#00CCFF";
+
+        return (
+          <CircleMarker
+            key={airport._id}
+            center={[lat, lng]}
+            radius={radius}
+            pathOptions={{
+              color: color,
+              fillColor: color,
+              fillOpacity: 0.8,
+              weight: 2,
+              opacity: 0.9,
+            }}
+          >
+            <Popup>
+              <div style={{ minWidth: "150px" }}>
+                <h3
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    marginBottom: "8px",
+                    color: color,
+                  }}
+                >
+                  {airport.name}
+                </h3>
+                <div style={{ fontSize: "12px", lineHeight: "1.5" }}>
+                  {airport.icao && (
+                    <div style={{ marginBottom: "4px" }}>
+                      <strong>ICAO:</strong> {airport.icao}
+                    </div>
+                  )}
+                  {airport.iata && (
+                    <div style={{ marginBottom: "4px" }}>
+                      <strong>IATA:</strong> {airport.iata}
+                    </div>
+                  )}
+                  {airport.elevation && (
+                    <div style={{ marginBottom: "4px" }}>
+                      <strong>Elevation:</strong> {airport.elevation} ft
+                    </div>
+                  )}
+                  {airport.type && (
+                    <div style={{ marginBottom: "4px" }}>
+                      <strong>Type:</strong> {airport.type}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Popup>
+          </CircleMarker>
         );
       })}
     </>
