@@ -9,8 +9,7 @@ import {
 } from "../ui/select";
 import WeatherCard from "../molecules/weather-card";
 import { useTranslation } from "react-i18next";
-
-const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+import { useCurrentWeather, useWeatherForecast } from "../../api/weather";
 
 export default function WeatherPanel({
   location = { lat: 41.5209, lng: 2.105 },
@@ -20,121 +19,43 @@ export default function WeatherPanel({
   const { t } = useTranslation();
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
   const [selectedHour, setSelectedHour] = useState("12");
 
-  useEffect(() => {
-    if (forecastMode) {
-      fetchForecast();
-    } else {
-      fetchCurrentWeather();
-    }
-  }, [location.lat, location.lng, forecastMode]);
+  const currentWeatherQuery = useCurrentWeather(location, !forecastMode);
+  const forecastQuery = useWeatherForecast(location, forecastMode);
+
+  const loading = forecastMode ? forecastQuery.isLoading : currentWeatherQuery.isLoading;
 
   useEffect(() => {
-    if (forecastMode && forecast.length > 0) {
-      updateSelectedWeather();
+    if (forecastMode && forecastQuery.data) {
+      const grouped = forecastQuery.data;
+      setForecast(grouped);
+      updateSelectedWeatherFromForecast(grouped);
+    } else if (!forecastMode && currentWeatherQuery.data) {
+      setWeather(currentWeatherQuery.data);
     }
-  }, [selectedDay, selectedHour, forecast]);
+  }, [currentWeatherQuery.data, forecastQuery.data, forecastMode]);
 
-  const convertWindSpeed = (mps) => {
-    return Math.round(mps * 1.94384); // m/s to knots
-  };
-
-  const fetchCurrentWeather = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setWeather({
-          temp: Math.round(data.main.temp),
-          feelsLike: Math.round(data.main.feels_like),
-          condition: data.weather[0].main,
-          description: data.weather[0].description,
-          windSpeed: convertWindSpeed(data.wind.speed),
-          windGust: data.wind.gust
-            ? convertWindSpeed(data.wind.gust)
-            : convertWindSpeed(data.wind.speed),
-          windDirection: data.wind.deg,
-          cloudCover: data.clouds.all,
-          visibility: Math.round(data.visibility / 1000),
-          precipitation: data.rain?.["1h"] || 0,
-          cloudBase:
-            data.clouds.all > 50 ? Math.round(data.clouds.all * 30) : null,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching weather:", error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (forecastMode && Object.keys(forecast).length > 0) {
+      updateSelectedWeatherFromForecast(forecast);
     }
-  };
+  }, [selectedDay, selectedHour, forecast, forecastMode]);
 
-  const fetchForecast = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-
-        // Group by day
-        const grouped = {};
-        data.list.forEach((item) => {
-          const date = new Date(item.dt * 1000);
-          const dayKey = date.toISOString().split("T")[0];
-
-          if (!grouped[dayKey]) {
-            grouped[dayKey] = [];
-          }
-
-          grouped[dayKey].push({
-            hour: date.getHours(),
-            temp: Math.round(item.main.temp),
-            feelsLike: Math.round(item.main.feels_like),
-            condition: item.weather[0].main,
-            description: item.weather[0].description,
-            windSpeed: convertWindSpeed(item.wind.speed),
-            windGust: item.wind.gust
-              ? convertWindSpeed(item.wind.gust)
-              : convertWindSpeed(item.wind.speed),
-            windDirection: item.wind.deg,
-            cloudCover: item.clouds.all,
-            visibility: Math.round(item.visibility / 1000),
-            precipitation: (item.rain?.["3h"] || 0) + (item.snow?.["3h"] || 0),
-            cloudBase:
-              item.clouds.all > 50 ? Math.round(item.clouds.all * 30) : null,
-          });
-        });
-
-        setForecast(grouped);
-        updateSelectedWeather();
-      }
-    } catch (error) {
-      console.error("Error fetching forecast:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateSelectedWeather = () => {
-    const days = Object.keys(forecast);
+  const updateSelectedWeatherFromForecast = (forecastData: any) => {
+    const days = Object.keys(forecastData);
     if (days.length === 0) return;
 
-    const selectedDayData = forecast[days[selectedDay]];
+    const selectedDayData = forecastData[days[selectedDay]];
     if (!selectedDayData) return;
 
     // Find closest hour
     const hourNum = parseInt(selectedHour);
-    const closest = selectedDayData.reduce((prev, curr) => {
-      return Math.abs(curr.hour - hourNum) < Math.abs(prev.hour - hourNum)
+    const closest = selectedDayData.reduce((prev: any, curr: any) => {
+      const prevHour = prev.hour || 0;
+      const currHour = curr.hour || 0;
+      return Math.abs(currHour - hourNum) < Math.abs(prevHour - hourNum)
         ? curr
         : prev;
     });
