@@ -24,6 +24,9 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
               <p className="text-white/60 text-sm flex items-center gap-1">
                 <span>→</span> {segment.to}
               </p>
+              {segment.vfrTo !== undefined && (
+                <p className="text-amber-300 text-xs mt-1">VFR @ dest: {segment.vfrTo || t("airspace.na", "N/A")}</p>
+              )}
             </div>
           </div>
         </div>

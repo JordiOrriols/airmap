@@ -2,132 +2,42 @@ import React, { useEffect, useState } from "react";
 import { Polygon, Popup, CircleMarker, useMap } from "react-leaflet";
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
-const OPENAIP_API_KEY = import.meta.env.VITE_OPENAIP_API_KEY;
+import { useAirspaceData, processAirspaceData } from "../../api/openaip";
 
 export default function AirspaceLayer({ visible = true, reloadTrigger = 0 }) {
   const { t } = useTranslation();
-  const [airspaces, setAirspaces] = useState([]);
-  const [airports, setAirports] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [bbox, setBbox] = useState("");
   const map = useMap();
 
+  // Compute bounding box from map
   useEffect(() => {
     if (!visible || !map) return;
 
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        // Get current map bounds and expand them with a buffer
-        const bounds = map.getBounds();
-        const center = map.getCenter();
-        const zoomLevel = map.getZoom();
+    const updateBbox = () => {
+      const bounds = map.getBounds();
+      const zoomLevel = map.getZoom();
 
-        // Calculate a buffer based on zoom level to ensure we get airspace data
-        // At higher zoom levels, we need a larger geographic buffer
-        const bufferFactor = Math.pow(2, 16 - zoomLevel) / 100000;
+      // Calculate a buffer based on zoom level
+      const bufferFactor = Math.pow(2, 16 - zoomLevel) / 100000;
 
-        const north = Math.min(bounds.getNorth() + bufferFactor, 90);
-        const south = Math.max(bounds.getSouth() - bufferFactor, -90);
-        const east = Math.min(bounds.getEast() + bufferFactor, 180);
-        const west = Math.max(bounds.getWest() - bufferFactor, -180);
+      const north = Math.min(bounds.getNorth() + bufferFactor, 90);
+      const south = Math.max(bounds.getSouth() - bufferFactor, -90);
+      const east = Math.min(bounds.getEast() + bufferFactor, 180);
+      const west = Math.max(bounds.getWest() - bufferFactor, -180);
 
-        // Bbox format: minx,miny,maxx,maxy (west,south,east,north)
-        const bbox = `${west},${south},${east},${north}`;
-
-        console.log("Map state:", {
-          center: { lat: center.lat, lng: center.lng },
-          zoom: zoomLevel,
-          bounds: { north, south, east, west },
-          bbox,
-        });
-        console.log("Fetching airspace data with bbox:", bbox);
-
-        // Fetch airspaces from OpenAIP for current map view
-        const airspaceUrl = `https://api.core.openaip.net/api/airspaces?page=1&limit=1000&bbox=${bbox}`;
-        console.log("Airspace URL:", airspaceUrl);
-
-        const airspaceResponse = await fetch(airspaceUrl, {
-          headers: {
-            "x-openaip-api-key": OPENAIP_API_KEY,
-          },
-        });
-
-        if (airspaceResponse.ok) {
-          const airspaceData = await airspaceResponse.json();
-          console.log("Airspace response:", airspaceData);
-
-          // Filter for VFR, CTR, TMA and ICAO classes A-E
-          const filteredAirspaces = (airspaceData.items || []).filter(
-            (airspace) => {
-              // Debug: log the first few airspaces to see the structure
-              console.log("Airspace structure:", {
-                name: airspace.name,
-                type: airspace.type,
-                icaoClass: airspace.icaoClass,
-              });
-
-              const type = airspace.type ? String(airspace.type).toUpperCase() : "";
-              const icaoClass = airspace.icaoClass;
-
-              // Show VFR zones, CTR, TMA, and ICAO classes A through E
-              return (
-                type === "VFR" ||
-                type === "CTR" ||
-                type === "TMA" ||
-                icaoClass === 0 || // Class A
-                icaoClass === 1 || // Class B
-                icaoClass === 2 || // Class C
-                icaoClass === 3 || // Class D
-                icaoClass === 4 || // Class E
-                type === "RMZ" ||
-                type === "TMZ"
-              );
-            }
-          );
-          console.log("Filtered airspaces:", filteredAirspaces.length);
-          console.log("Filtered airspaces:", filteredAirspaces);
-          setAirspaces(filteredAirspaces);
-        } else {
-          const errorText = await airspaceResponse.text();
-          console.error(
-            "Failed to fetch airspaces:",
-            airspaceResponse.status,
-            errorText
-          );
-        }
-
-        // Fetch airports from OpenAIP for current map view
-        const airportUrl = `https://api.core.openaip.net/api/airports?page=1&limit=1000&bbox=${bbox}`;
-        console.log("Airport URL:", airportUrl);
-
-        const airportResponse = await fetch(airportUrl, {
-          headers: {
-            "x-openaip-api-key": OPENAIP_API_KEY,
-          },
-        });
-
-        if (airportResponse.ok) {
-          const airportData = await airportResponse.json();
-          console.log("Airport response:", airportData);
-          setAirports(airportData.items || []);
-        } else {
-          const errorText = await airportResponse.text();
-          console.error(
-            "Failed to fetch airports:",
-            airportResponse.status,
-            errorText
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching airspace and airport data:", error);
-      } finally {
-        setLoading(false);
-      }
+      // Bbox format: minx,miny,maxx,maxy (west,south,east,north)
+      const newBbox = `${west},${south},${east},${north}`;
+      setBbox(newBbox);
     };
 
-    fetchData();
+    updateBbox();
   }, [visible, map, reloadTrigger]);
+
+  // Fetch airspace and airport data
+  const { data, isLoading } = useAirspaceData(bbox, visible && !!bbox);
+
+  const airspaces = data?.airspaces ? processAirspaceData(data.airspaces, t) : [];
+  const airports = data?.airports || [];
 
   if (!visible) return null;
 
@@ -162,7 +72,7 @@ export default function AirspaceLayer({ visible = true, reloadTrigger = 0 }) {
 
     // Then try to match by type string
     if (airspace.type) {
-      const typeKey = airspace.type.toUpperCase();
+      const typeKey = `${airspace.type}`.toUpperCase();
       if (colors[typeKey] !== undefined) {
         return colors[typeKey];
       }
@@ -203,7 +113,7 @@ export default function AirspaceLayer({ visible = true, reloadTrigger = 0 }) {
 
   return (
     <>
-      {loading && (
+      {isLoading && (
         <div
           style={{
             position: "absolute",
@@ -267,6 +177,10 @@ export default function AirspaceLayer({ visible = true, reloadTrigger = 0 }) {
                   <div style={{ marginBottom: "4px" }}>
                     <strong>{t("airspace.upper_limit", "Upper Limit")}:</strong>{" "}
                     {formatAltitude(airspace.upperLimit)}
+                  </div>
+                  <div style={{ marginBottom: "4px" }}>
+                    <strong>{t("airspace.vfr_upper", "VFR Upper Limit")}:</strong>{" "}
+                    {airspace.vfrUpperDisplay || t("airspace.na", "N/A")}
                   </div>
                   {airspace.country && (
                     <div style={{ marginBottom: "4px" }}>

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { createQueryOptions } from "../lib/react-query";
 
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 const OPENWEATHER_API_URL = "https://api.openweathermap.org/data/2.5";
@@ -118,28 +119,24 @@ export const fetchWeatherForecast = async (
  * React Query hook for current weather
  */
 export const useCurrentWeather = (location: Location, enabled = true) => {
-  return useQuery({
-    queryKey: ["weather", "current", location.lat, location.lng],
-    queryFn: () => fetchCurrentWeather(location),
-    enabled,
-    retry: 3,
-    retryDelay: (attemptIndex) => Math.pow(2, attemptIndex) * 1000,
-    staleTime: 1000 * 60 * 10, // 10 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes (formerly cacheTime)
-  });
+  return useQuery(
+    createQueryOptions({
+      queryKey: ["weather", "current", location.lat, location.lng],
+      queryFn: () => fetchCurrentWeather(location),
+      enabled,
+    })
+  );
 };
 
 /**
  * React Query hook for weather forecast
  */
 export const useWeatherForecast = (location: Location, enabled = true) => {
-  return useQuery({
-    queryKey: ["weather", "forecast", location.lat, location.lng],
-    queryFn: () => fetchWeatherForecast(location),
-    enabled,
-    retry: 3,
-    retryDelay: (attemptIndex) => Math.pow(2, attemptIndex) * 1000,
-    staleTime: 1000 * 60 * 10, // 10 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes (formerly cacheTime)
-  });
+  return useQuery(
+    createQueryOptions({
+      queryKey: ["weather", "forecast", location.lat, location.lng],
+      queryFn: () => fetchWeatherForecast(location),
+      enabled,
+    })
+  );
 };

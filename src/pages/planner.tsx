@@ -32,6 +32,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createPageUrl } from "../utils/index";
 import { Link } from "react-router-dom";
 import AirspaceLayer from "../components/flight/airspace-layer";
+import { pointInPolygon } from "../utils/pointInPolygon";
 import WaypointListPanel from "../components/organisms/waypoints-list-panel";
 import WeatherPanel from "../components/organisms/weather-panel";
 import CollapsiblePanel from "../components/molecules/collapsible-panel";
@@ -47,6 +48,7 @@ import {
   speedToKnots,
 } from "../utils/geo";
 import ScrollContainer from "@/components/atoms/scroll-container";
+import { useAirspaces, processAirspaceForPIP } from "../api/openaip";
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -75,6 +77,7 @@ export default function FlightPlanner() {
   const [saved, setSaved] = useState(false);
   const [showAirspace, setShowAirspace] = useState(false);
   const [airspaceReloadTrigger, setAirspaceReloadTrigger] = useState(0);
+  const [waypointVfrs, setWaypointVfrs] = useState([]);
   const [weatherLocation, setWeatherLocation] = useState({
     lat: MAP_CENTER.lat,
     lng: MAP_CENTER.lng,
@@ -217,6 +220,71 @@ export default function FlightPlanner() {
     setAirspaceReloadTrigger((prev) => prev + 1);
   };
 
+  // Compute bounding box from waypoints
+  const waypointsBbox = React.useMemo(() => {
+    if (!waypoints || waypoints.length === 0) return "";
+
+    let minLat = 90,
+      maxLat = -90,
+      minLng = 180,
+      maxLng = -180;
+    waypoints.forEach((w) => {
+      if (w.lat < minLat) minLat = w.lat;
+      if (w.lat > maxLat) maxLat = w.lat;
+      if (w.lng < minLng) minLng = w.lng;
+      if (w.lng > maxLng) maxLng = w.lng;
+    });
+
+    const buffer = 0.1; // ~11km buffer
+    const north = Math.min(maxLat + buffer, 90);
+    const south = Math.max(minLat - buffer, -90);
+    const east = Math.min(maxLng + buffer, 180);
+    const west = Math.max(minLng - buffer, -180);
+
+    return `${west},${south},${east},${north}`;
+  }, [waypoints]);
+
+  // Fetch airspaces using react-query
+  const { data: airspacesData } = useAirspaces(
+    waypointsBbox,
+    showAirspace && waypoints.length > 0
+  );
+
+  // Compute per-waypoint VFR upper limits
+  useEffect(() => {
+    if (!waypoints || waypoints.length === 0) {
+      setWaypointVfrs([]);
+      return;
+    }
+
+    if (!airspacesData) {
+      setWaypointVfrs(waypoints.map(() => null));
+      return;
+    }
+
+    try {
+      // Process airspaces for point-in-polygon checks
+      const processed = processAirspaceForPIP(airspacesData);
+
+      // For each waypoint, find airspaces that contain it and pick minimal vfrUpperFeet
+      const vfrs = waypoints.map((wp) => {
+        const matches = processed
+          .filter((as) => as.polygon && pointInPolygon(wp.lat, wp.lng, as.polygon))
+          .map((as) => as.vfrUpperFeet)
+          .filter((v) => v !== null && v !== undefined);
+
+        if (matches.length === 0) return null;
+        const minFeet = Math.min(...matches);
+        return `${minFeet} ft`;
+      });
+
+      setWaypointVfrs(vfrs);
+    } catch (error) {
+      console.error("Error computing waypoint VFRs:", error);
+      setWaypointVfrs(waypoints.map(() => null));
+    }
+  }, [waypoints, airspacesData, airspaceReloadTrigger, showAirspace]);
+
   const reorderWaypoints = (startIndex, endIndex) => {
     const result = Array.from(waypoints);
     const [removed] = result.splice(startIndex, 1);
@@ -237,13 +305,14 @@ export default function FlightPlanner() {
       nextWp.lng
     );
     const speedInKnots = speedToKnots(cruiseSpeed, speedUnit);
-
     return {
       from: wp.name,
       to: nextWp.name,
       bearing: bearing.toFixed(1),
       distance: distance.toFixed(1),
       time: ((distance / speedInKnots) * 60).toFixed(1), // Time in minutes
+      vfrFrom: waypointVfrs[index] || null,
+      vfrTo: waypointVfrs[index + 1] || null,
     };
   });
 
