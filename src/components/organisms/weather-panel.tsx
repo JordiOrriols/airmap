@@ -10,7 +10,7 @@ import {
 import WeatherCard from "../molecules/weather-card";
 import { useTranslation } from "react-i18next";
 
-const OPENWEATHER_API_KEY = "YOUR_API_KEY"; // Users need to get free key from openweathermap.org
+const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 
 export default function WeatherPanel({
   location = { lat: 41.5209, lng: 2.105 },
@@ -46,7 +46,7 @@ export default function WeatherPanel({
     setLoading(true);
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`,
+        `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`
       );
 
       if (response.ok) {
@@ -79,7 +79,7 @@ export default function WeatherPanel({
     setLoading(true);
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`,
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${location.lat}&lon=${location.lng}&appid=${OPENWEATHER_API_KEY}&units=metric`
       );
 
       if (response.ok) {
@@ -151,12 +151,12 @@ export default function WeatherPanel({
           index === 0
             ? t("date.today", "Today")
             : index === 1
-              ? t("date.tomorrow", "Tomorrow")
-              : date.toLocaleDateString("en-US", {
-                  weekday: "short",
-                  month: "short",
-                  day: "numeric",
-                }),
+            ? t("date.tomorrow", "Tomorrow")
+            : date.toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+              }),
       };
     });
   };
