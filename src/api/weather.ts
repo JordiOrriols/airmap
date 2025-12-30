@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
-const OPENWEATHER_API_URL = "https://api.openweathermap.org/data/3.0";
+const OPENWEATHER_API_URL = "https://api.openweathermap.org/data/2.5";
 
 export interface WeatherData {
   temp: number;
