@@ -4,7 +4,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import WaypointCard from "../molecules/waypoint-card";
 import { useTranslation } from "react-i18next";
 
-export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
+export default function WaypointListPanel({ waypoints, onRemove, onReorder, vfrs = [] }) {
   const { t } = useTranslation();
   if (waypoints.length === 0) return null;
 
@@ -44,6 +44,7 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder }) {
                           dragHandleProps={provided.dragHandleProps}
                           draggableProps={provided.draggableProps}
                           innerRef={provided.innerRef}
+                          vfrUpperDisplay={vfrs[index]}
                         />
                       </div>
                     )}

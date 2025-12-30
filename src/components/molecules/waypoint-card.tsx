@@ -10,6 +10,7 @@ export default function WaypointCard({
   dragHandleProps = {},
   draggableProps = {},
   innerRef,
+  vfrUpperDisplay,
 }) {
   return (
     <div
@@ -36,6 +37,9 @@ export default function WaypointCard({
           <p className="text-white/70 text-xs">
             {waypoint.lat.toFixed(4)}°, {waypoint.lng.toFixed(4)}°
           </p>
+          {vfrUpperDisplay !== undefined && (
+            <p className="text-amber-300 text-xs mt-1">VFR: {vfrUpperDisplay || "N/A"}</p>
+          )}
         </div>
       </div>
       <Button
