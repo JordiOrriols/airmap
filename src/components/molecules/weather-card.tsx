@@ -45,7 +45,7 @@ export default function WeatherCard({ weather, compact = false }) {
   }
 
   return (
-    <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4">
+    <>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <WeatherIcon condition={weather.condition} size="lg" />
@@ -106,6 +106,6 @@ export default function WeatherCard({ weather, compact = false }) {
           value={<>{weather.feelsLike}°C</>}
         />
       </div>
-    </div>
+    </>
   );
 }

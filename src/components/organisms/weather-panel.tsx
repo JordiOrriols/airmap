@@ -25,7 +25,9 @@ export default function WeatherPanel({
   const currentWeatherQuery = useCurrentWeather(location, !forecastMode);
   const forecastQuery = useWeatherForecast(location, forecastMode);
 
-  const loading = forecastMode ? forecastQuery.isLoading : currentWeatherQuery.isLoading;
+  const loading = forecastMode
+    ? forecastQuery.isLoading
+    : currentWeatherQuery.isLoading;
 
   useEffect(() => {
     if (forecastMode && forecastQuery.data) {
@@ -151,25 +153,25 @@ export default function WeatherPanel({
             </div>
           </div>
         )}
-
-        {loading && (
-          <div className="flex items-center justify-center gap-2 text-white py-8">
-            <Loader2 className="w-6 h-6 animate-spin" />
-            <span>{t("weather.loading_data", "Loading weather data...")}</span>
-          </div>
-        )}
-
-        {!loading && weather && <WeatherCard weather={weather} />}
-
-        {!loading && !weather && (
-          <div className="text-center text-white/70 py-8">
-            <p>{t("weather.no_data", "Weather data unavailable")}</p>
-            <p className="text-xs mt-2">
-              {t("weather.check_api", "Check API key configuration")}
-            </p>
-          </div>
-        )}
       </div>
+
+      {loading && (
+        <div className="flex items-center justify-center gap-2 text-white py-8">
+          <Loader2 className="w-6 h-6 animate-spin" />
+          <span>{t("weather.loading_data", "Loading weather data...")}</span>
+        </div>
+      )}
+
+      {!loading && weather && <WeatherCard weather={weather} />}
+
+      {!loading && !weather && (
+        <div className="text-center text-white/70 py-8">
+          <p>{t("weather.no_data", "Weather data unavailable")}</p>
+          <p className="text-xs mt-2">
+            {t("weather.check_api", "Check API key configuration")}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
