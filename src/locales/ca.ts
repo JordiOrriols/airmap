@@ -7,7 +7,6 @@ export const ca: Locale = {
     "home.subtitle": "Gestiona i crea les teves rutes de vol",
     "home.create": "Crear nova ruta",
     "home.create_first": "Crear la primera ruta",
-    "home.search_placeholder": "Cerca rutes...",
 
     // Planner
     "planner.header.title": "Planificador de rutes de vol",
@@ -115,9 +114,7 @@ export const ca: Locale = {
     "date.tomorrow": "Demà",
 
     // Home additional
-    "home.no_routes_found": "No s'han trobat rutes",
     "home.no_routes_yet": "Encara no hi ha rutes",
-    "home.try_adjust_search": "Prova d'ajustar la teva cerca",
     "home.create_first_desc": "Crea la teva primera ruta de vol per començar",
 
     // Generic

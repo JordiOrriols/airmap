@@ -7,7 +7,6 @@ export const en: Locale = {
     "home.subtitle": "Manage and create your flight routes",
     "home.create": "Create New Route",
     "home.create_first": "Create First Route",
-    "home.search_placeholder": "Search routes...",
 
     // Planner
     "planner.header.title": "Flight Route Planner",
@@ -116,9 +115,7 @@ export const en: Locale = {
     "date.tomorrow": "Tomorrow",
 
     // Home additional
-    "home.no_routes_found": "No routes found",
     "home.no_routes_yet": "No routes yet",
-    "home.try_adjust_search": "Try adjusting your search query",
     "home.create_first_desc": "Create your first flight route to get started",
 
     // Generic

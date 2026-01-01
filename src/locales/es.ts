@@ -7,7 +7,6 @@ export const es: Locale = {
     "home.subtitle": "Gestiona y crea tus rutas de vuelo",
     "home.create": "Crear nueva ruta",
     "home.create_first": "Crear la primera ruta",
-    "home.search_placeholder": "Buscar rutas...",
 
     // Planner
     "planner.header.title": "Planificador de rutas de vuelo",
@@ -115,9 +114,7 @@ export const es: Locale = {
     "date.tomorrow": "Mañana",
 
     // Home additional
-    "home.no_routes_found": "No se encontraron rutas",
     "home.no_routes_yet": "Aún no hay rutas",
-    "home.try_adjust_search": "Prueba ajustando tu búsqueda",
     "home.create_first_desc": "Crea tu primera ruta de vuelo para comenzar",
 
     // Generic

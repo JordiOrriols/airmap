@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Plus, Plane, Search } from "lucide-react";
+import { Plus, Plane } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import RouteCard from "../components/molecules/route-card";
 import { createPageUrl } from "../utils";
@@ -12,7 +11,6 @@ import { MAP_CENTER } from "@/utils/constants";
 
 export default function Home() {
   const [routes, setRoutes] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -38,10 +36,6 @@ export default function Home() {
       loadRoutes();
     }
   };
-
-  const filteredRoutes = routes.filter((route) =>
-    route.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -129,22 +123,13 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Search and Create */}
+        {/* Create Button */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="mb-8 flex flex-col md:flex-row gap-4"
+          className="mb-8 flex justify-center"
         >
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/50 w-5 h-5" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t("home.search_placeholder", "Search routes...")}
-              className="pl-12 bg-slate-900/60 backdrop-blur-xl border-white/30 text-white placeholder:text-white/50 h-14 text-lg rounded-2xl"
-            />
-          </div>
           <Button
             onClick={createNewRoute}
             className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white h-14 px-8 text-lg rounded-2xl shadow-xl"
@@ -157,7 +142,7 @@ export default function Home() {
         {/* Routes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
-            {filteredRoutes.map((route, index) => (
+            {routes.map((route, index) => (
               <motion.div
                 key={route.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -178,7 +163,7 @@ export default function Home() {
         </div>
 
         {/* Empty State */}
-        {filteredRoutes.length === 0 && (
+        {routes.length === 0 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -189,30 +174,21 @@ export default function Home() {
                 <Plane className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-3">
-                {searchQuery
-                  ? t("home.no_routes_found", "No routes found")
-                  : t("home.no_routes_yet", "No routes yet")}
+                {t("home.no_routes_yet", "No routes yet")}
               </h3>
               <p className="text-white/70 mb-6 max-w-md">
-                {searchQuery
-                  ? t(
-                      "home.try_adjust_search",
-                      "Try adjusting your search query"
-                    )
-                  : t(
-                      "home.create_first_desc",
-                      "Create your first flight route to get started"
-                    )}
+                {t(
+                  "home.create_first_desc",
+                  "Create your first flight route to get started"
+                )}
               </p>
-              {!searchQuery && (
-                <Button
-                  onClick={createNewRoute}
-                  className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
-                >
-                  <Plus className="w-5 h-5 mr-2" />
-                  {t("home.create_first", "Create First Route")}
-                </Button>
-              )}
+              <Button
+                onClick={createNewRoute}
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                {t("home.create_first", "Create First Route")}
+              </Button>
             </div>
           </motion.div>
         )}
