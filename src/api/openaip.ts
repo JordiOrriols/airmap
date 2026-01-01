@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createQueryOptions } from "../lib/react-query";
 
-const OPENAIP_API_KEY = import.meta.env.VITE_OPENAIP_API_KEY;
+const OPENAIP_API_KEY = import.meta.env["VITE_OPENAIP_API_KEY"];
 const OPENAIP_API_URL = "https://api.core.openaip.net/api";
 
 export interface AirspaceLowerLimit {
@@ -12,7 +12,7 @@ export interface AirspaceLowerLimit {
 
 export interface AirspaceGeometry {
   type: string;
-  coordinates: number[][][];
+  coordinates: number[][][] | number[][][][];
 }
 
 export interface Airspace {
@@ -25,16 +25,18 @@ export interface Airspace {
   geometry: AirspaceGeometry;
   vfrUpperFeet?: number | null;
   vfrUpperDisplay?: string;
-  polygon?: number[][];
+  polygon?: number[][] | null;
+  activity?: string;
 }
 
 export interface Airport {
   _id: string;
   name: string;
-  icaoCode: string;
-  type: number;
+  icaoCode?: string;
+  iata?: string;
+  type: number | string;
   country: string;
-  elevation: {
+  elevation?: {
     value: number;
     unit: number;
   };
@@ -165,7 +167,9 @@ export const fetchAirports = async (bbox: string): Promise<Airport[]> => {
 /**
  * Fetch both airspaces and airports for a bounding box
  */
-export const fetchAirspaceData = async (bbox: string) => {
+export const fetchAirspaceData = async (
+  bbox: string
+): Promise<{ airspaces: Airspace[]; airports: Airport[] }> => {
   const [airspaces, airports] = await Promise.all([fetchAirspaces(bbox), fetchAirports(bbox)]);
 
   return { airspaces, airports };
@@ -175,8 +179,8 @@ export const fetchAirspaceData = async (bbox: string) => {
  * React Query hook for airspaces
  */
 export const useAirspaces = (bbox: string, enabled = true) => {
-  return useQuery(
-    createQueryOptions({
+  return useQuery<Airspace[]>(
+    createQueryOptions<Airspace[]>({
       queryKey: ["openaip", "airspaces", bbox],
       queryFn: () => fetchAirspaces(bbox),
       enabled: enabled && !!bbox,
@@ -188,8 +192,8 @@ export const useAirspaces = (bbox: string, enabled = true) => {
  * React Query hook for airports
  */
 export const useAirports = (bbox: string, enabled = true) => {
-  return useQuery(
-    createQueryOptions({
+  return useQuery<Airport[]>(
+    createQueryOptions<Airport[]>({
       queryKey: ["openaip", "airports", bbox],
       queryFn: () => fetchAirports(bbox),
       enabled: enabled && !!bbox,
@@ -201,8 +205,8 @@ export const useAirports = (bbox: string, enabled = true) => {
  * React Query hook for both airspaces and airports
  */
 export const useAirspaceData = (bbox: string, enabled = true) => {
-  return useQuery(
-    createQueryOptions({
+  return useQuery<{ airspaces: Airspace[]; airports: Airport[] }>(
+    createQueryOptions<{ airspaces: Airspace[]; airports: Airport[] }>({
       queryKey: ["openaip", "airspaceData", bbox],
       queryFn: () => fetchAirspaceData(bbox),
       enabled: enabled && !!bbox,
