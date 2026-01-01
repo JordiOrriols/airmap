@@ -39,6 +39,7 @@ import CollapsiblePanel from "../components/molecules/collapsible-panel";
 import RouteStatsCard from "../components/molecules/route-stats-card";
 import RouteSegmentCard from "../components/molecules/route-segment-card";
 import GradientIcon from "../components/atoms/gradient-icon";
+import ThemeToggle from "../components/atoms/theme-toggle";
 import { routeStorage } from "../utils/storage";
 import { MAP_CENTER } from "@/utils/constants";
 import RouteControlPanel from "../components/organisms/route-control-panel";
@@ -354,17 +355,20 @@ export default function FlightPlanner() {
               : t("planner.header.mode_move", "Drag to reposition")}
           </p>
         </div>
-        {saved && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 px-2 py-1 rounded-lg"
-          >
-            <Check className="w-3 h-3 text-emerald-400" />
-            <span className="text-xs text-emerald-300">Saved</span>
-          </motion.div>
-        )}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          {saved && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 px-2 py-1 rounded-lg"
+            >
+              <Check className="w-3 h-3 text-emerald-400" />
+              <span className="text-xs text-emerald-300">Saved</span>
+            </motion.div>
+          )}
+        </div>
       </div>
     </div>
   );

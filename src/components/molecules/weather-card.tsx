@@ -24,7 +24,9 @@ export default function WeatherCard({ weather, compact = false }) {
           <div className="flex items-center gap-3">
             <WeatherIcon condition={weather.condition} size="md" />
             <div>
-              <p className="text-app-primary font-bold text-lg">{weather.temp}°C</p>
+              <p className="text-app-primary font-bold text-lg">
+                {weather.temp}°C
+              </p>
               <p className="text-app-secondary text-xs">{weather.condition}</p>
             </div>
           </div>
@@ -50,7 +52,9 @@ export default function WeatherCard({ weather, compact = false }) {
         <div className="flex items-center gap-3">
           <WeatherIcon condition={weather.condition} size="lg" />
           <div>
-            <p className="text-app-primary font-bold text-2xl">{weather.temp}°C</p>
+            <p className="text-app-primary font-bold text-2xl">
+              {weather.temp}°C
+            </p>
             <p className="text-app-secondary text-sm">{weather.condition}</p>
           </div>
         </div>
@@ -62,6 +66,7 @@ export default function WeatherCard({ weather, compact = false }) {
           label={t("weather.wind", "Wind")}
           value={`${weather.windSpeed} kt`}
           iconColor="text-cyan-300"
+          size="compact"
         />
 
         {weather.windGust > weather.windSpeed && (
@@ -70,14 +75,20 @@ export default function WeatherCard({ weather, compact = false }) {
             label={t("weather.gusts", "Gusts")}
             value={`${weather.windGust} kt`}
             iconColor="text-orange-300"
+            size="compact"
           />
         )}
 
         <StatDisplay
           icon={Cloud}
           label={t("weather.clouds", "Clouds")}
-          value={weather.cloudBase ? `${weather.cloudCover}% (${weather.cloudBase} ft)` : `${weather.cloudCover}%`}
+          value={
+            weather.cloudBase
+              ? `${weather.cloudCover}% (${weather.cloudBase} ft)`
+              : `${weather.cloudCover}%`
+          }
           iconColor="text-gray-300"
+          size="compact"
         />
 
         <StatDisplay
@@ -85,6 +96,7 @@ export default function WeatherCard({ weather, compact = false }) {
           label={t("weather.visibility", "Visibility")}
           value={`${weather.visibility} km`}
           iconColor="text-blue-300"
+          size="compact"
         />
 
         {weather.precipitation > 0 && (
@@ -93,6 +105,7 @@ export default function WeatherCard({ weather, compact = false }) {
             label={t("weather.rain", "Precipitation")}
             value={`${weather.precipitation} mm`}
             iconColor="text-blue-400"
+            size="compact"
           />
         )}
 
@@ -101,6 +114,7 @@ export default function WeatherCard({ weather, compact = false }) {
           label={t("weather.feels_like", "Feels Like")}
           value={`${weather.feelsLike}°C`}
           iconColor="text-red-300"
+          size="compact"
         />
       </div>
     </>
