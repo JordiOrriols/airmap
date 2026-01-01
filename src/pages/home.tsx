@@ -79,49 +79,51 @@ export default function Home() {
 
       <div className="relative z-10 container mx-auto px-6 py-12 max-w-7xl">
         {/* Header */}
-        <motion.div
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="text-center mb-12"
-        >
-          <div className="inline-flex items-center justify-center bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-3xl px-8 py-6 mb-6 shadow-2xl">
-            <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-4 rounded-2xl mr-4">
-              <Plane className="w-10 h-10 text-white" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <motion.div
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center"
+          >
+            <div className="flex items-center justify-center bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-2xl px-5 py-3 shadow-lg w-full">
+              <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-2 rounded-xl mr-3">
+                <Plane className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-left flex-1">
+                <h1 className="text-xl font-semibold text-white">
+                  {t("home.title", "Flight Route Planner")}
+                </h1>
+                <p className="text-white/70 text-sm mt-0.5">
+                  {t("home.subtitle", "Manage and create your flight routes")}
+                </p>
+              </div>
+              <div className="ml-4 flex items-center gap-1.5">
+                {[
+                  { code: "en", label: "EN" },
+                  { code: "es", label: "ES" },
+                  { code: "ca", label: "CA" },
+                ].map((lng) => {
+                  const active = (i18n.language || "").startsWith(lng.code);
+                  return (
+                    <Button
+                      key={lng.code}
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => i18n.changeLanguage(lng.code)}
+                      className={`${
+                        active
+                          ? "bg-white/20 text-white"
+                          : "text-white/70 hover:bg-white/10"
+                      } rounded-lg px-2 py-1 text-xs`}
+                    >
+                      {lng.label}
+                    </Button>
+                  );
+                })}
+              </div>
             </div>
-            <div className="text-left">
-              <h1 className="text-4xl font-bold text-white">
-                {t("home.title", "Flight Route Planner")}
-              </h1>
-              <p className="text-white/70 text-lg mt-1">
-                {t("home.subtitle", "Manage and create your flight routes")}
-              </p>
-            </div>
-            <div className="ml-6 flex items-center gap-2">
-              {[
-                { code: "en", label: "EN" },
-                { code: "es", label: "ES" },
-                { code: "ca", label: "CA" },
-              ].map((lng) => {
-                const active = (i18n.language || "").startsWith(lng.code);
-                return (
-                  <Button
-                    key={lng.code}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => i18n.changeLanguage(lng.code)}
-                    className={`${
-                      active
-                        ? "bg-white/20 text-white"
-                        : "text-white/70 hover:bg-white/10"
-                    } rounded-lg px-3 py-2`}
-                  >
-                    {lng.label}
-                  </Button>
-                );
-              })}
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* Routes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
