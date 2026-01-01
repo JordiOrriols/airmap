@@ -54,7 +54,7 @@ export default function RouteCard({
         )}
       </div>
 
-      <div className="p-6">
+      <div className="p-6 pt-0">
         <div className="flex items-start justify-between mb-4">
           <h3 className="text-lg font-bold text-app-primary group-hover:text-blue-600 dark:group-hover:text-cyan-300 transition-colors">
             {route.name}

@@ -101,6 +101,19 @@ export default function MapView({
     return upcomingWaypointIcon || waypointIcon || defaultWaypointIcon;
   };
 
+  const getWaypointIconWithNumber = (index: number) => {
+    return new L.DivIcon({
+      className: "custom-waypoint-marker-with-number",
+      html: `<div style="position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+          <span style="color: white; font-weight: bold; font-size: 14px; font-family: Arial, sans-serif;">${index + 1}</span>
+        </div>
+      </div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+    });
+  };
+
   const defaultAircraftIcon = (rotation = 0) =>
     new L.DivIcon({
       className: "custom-aircraft-marker",
@@ -144,7 +157,7 @@ export default function MapView({
             <Marker
               key={idx}
               position={[wp.lat, wp.lng]}
-              icon={getWaypointIcon(idx)}
+              icon={getWaypointIconWithNumber(idx)}
               draggable={Boolean(onMarkerDrag)}
               eventHandlers={{
                 dragend: (e) => {
