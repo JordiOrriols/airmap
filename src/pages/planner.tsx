@@ -3,37 +3,17 @@ import { useTranslation } from "react-i18next";
 import MapView from "../components/organisms/map-view";
 import L from "leaflet";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../components/ui/select";
-import {
-  Navigation,
-  Trash2,
-  Save,
-  Plus,
   Plane,
-  Edit3,
-  MousePointer,
-  Download,
-  Upload,
   Home,
   Check,
-  Eye,
-  EyeOff,
   CloudSun,
   Route,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { createPageUrl } from "../utils/index";
 import { Link } from "react-router-dom";
-import AirspaceLayer from "../components/flight/airspace-layer";
 import { pointInPolygon } from "../utils/pointInPolygon";
-import WaypointListPanel from "../components/organisms/waypoints-list-panel";
 import WeatherPanel from "../components/organisms/weather-panel";
 import CollapsiblePanel from "../components/molecules/collapsible-panel";
 import RouteStatsCard from "../components/molecules/route-stats-card";
@@ -48,8 +28,8 @@ import {
   calculateDistance as geoCalculateDistance,
   speedToKnots,
 } from "../utils/geo";
-import ScrollContainer from "@/components/atoms/scroll-container";
 import { useAirspaces, processAirspaceForPIP } from "../api/openaip";
+import type { RouteData, SpeedUnit, Waypoint } from "../types";
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -68,21 +48,23 @@ const waypointIcon = new L.DivIcon({
 });
 
 export default function FlightPlanner() {
-  const [routeId, setRouteId] = useState(null);
-  const [waypoints, setWaypoints] = useState([]);
-  const [cruiseSpeed, setCruiseSpeed] = useState(120); // Default cruise speed
-  const [speedUnit, setSpeedUnit] = useState("knots"); // "knots" or "kmh"
-  const [routeName, setRouteName] = useState("");
-  const [isEditMode, setIsEditMode] = useState(true); // Start in edit mode
-  const [saved, setSaved] = useState(false);
-  const [showAirspace, setShowAirspace] = useState(false);
-  const [airspaceReloadTrigger, setAirspaceReloadTrigger] = useState(0);
-  const [waypointVfrs, setWaypointVfrs] = useState([]);
-  const [weatherLocation, setWeatherLocation] = useState({
-    lat: MAP_CENTER.lat,
-    lng: MAP_CENTER.lng,
-  });
-  const fileInputRef = useRef(null);
+  const [routeId, setRouteId] = useState<string | null>(null);
+  const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
+  const [cruiseSpeed, setCruiseSpeed] = useState<number>(120); // Default cruise speed
+  const [speedUnit, setSpeedUnit] = useState<SpeedUnit>("knots"); // "knots" or "kmh"
+  const [routeName, setRouteName] = useState<string>("");
+  const [isEditMode, setIsEditMode] = useState<boolean>(true); // Start in edit mode
+  const [saved, setSaved] = useState<boolean>(false);
+  const [showAirspace, setShowAirspace] = useState<boolean>(false);
+  const [airspaceReloadTrigger, setAirspaceReloadTrigger] = useState<number>(0);
+  const [waypointVfrs, setWaypointVfrs] = useState<(string | null)[]>([]);
+  const [weatherLocation, setWeatherLocation] = useState<{ lat: number; lng: number }>(
+    {
+      lat: MAP_CENTER.lat,
+      lng: MAP_CENTER.lng,
+    }
+  );
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     // Get route ID from URL
@@ -99,29 +81,29 @@ export default function FlightPlanner() {
 
   // Auto-save route when data changes
   useEffect(() => {
-    if (routeId) {
-      const timer = setTimeout(() => {
-        saveRoute();
-      }, 1000); // Auto-save after 1 second of no changes
+    if (!routeId) return;
 
-      return () => clearTimeout(timer);
-    }
-  }, [waypoints, cruiseSpeed, speedUnit, routeName]);
+    const timer = setTimeout(() => {
+      saveRoute();
+    }, 1000); // Auto-save after 1 second of no changes
 
-  const loadRoute = (id) => {
-    const route = routeStorage.getRoute(id);
+    return () => clearTimeout(timer);
+  }, [waypoints, cruiseSpeed, speedUnit, routeName, routeId]);
+
+  const loadRoute = (id: string) => {
+    const route = routeStorage.getRoute(id) as RouteData | undefined;
     if (route) {
       setRouteName(route.name);
       setWaypoints(route.waypoints || []);
       setCruiseSpeed(route.cruiseSpeed || 120);
-      setSpeedUnit(route.speedUnit || "knots");
+      setSpeedUnit((route.speedUnit as SpeedUnit) || "knots");
     }
   };
 
   const saveRoute = () => {
     if (!routeId) return;
 
-    const routeData = {
+    const routeData: RouteData = {
       id: routeId,
       name: routeName || "Unnamed Route",
       waypoints,
@@ -157,18 +139,23 @@ export default function FlightPlanner() {
     URL.revokeObjectURL(url);
   };
 
-  const importRoute = (event) => {
+  const importRoute = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = (e: ProgressEvent<FileReader>) => {
       try {
-        const importedData = JSON.parse(e.target.result);
+        const result = e.target?.result;
+        if (typeof result !== "string") return;
+
+        const importedData = JSON.parse(result) as Partial<RouteData> & {
+          waypoints?: Waypoint[];
+        };
         setRouteName(importedData.name || t("route.imported_name", "Imported Route"));
         setWaypoints(importedData.waypoints || []);
         setCruiseSpeed(importedData.cruiseSpeed || 120);
-        setSpeedUnit(importedData.speedUnit || "knots");
+        setSpeedUnit((importedData.speedUnit as SpeedUnit) || "knots");
       } catch (error) {
         alert(t("planner.import_error", "Error importing route. Please check the file format."));
       }
@@ -176,7 +163,7 @@ export default function FlightPlanner() {
     reader.readAsText(file);
   };
 
-  const handleMapClick = (latlng) => {
+  const handleMapClick = (latlng: L.LatLng) => {
     const newWaypoint = {
       lat: latlng.lat,
       lng: latlng.lng,
@@ -186,7 +173,7 @@ export default function FlightPlanner() {
     setWeatherLocation({ lat: latlng.lat, lng: latlng.lng });
   };
 
-  const removeWaypoint = (index) => {
+  const removeWaypoint = (index: number) => {
     setWaypoints(waypoints.filter((_, i) => i !== index));
   };
 
@@ -194,7 +181,7 @@ export default function FlightPlanner() {
     setWaypoints([]);
   };
 
-  const updateWaypointPosition = (index, newLat, newLng) => {
+  const updateWaypointPosition = (index: number, newLat: number, newLng: number) => {
     const updatedWaypoints = [...waypoints];
     updatedWaypoints[index] = {
       ...updatedWaypoints[index],
@@ -275,9 +262,10 @@ export default function FlightPlanner() {
     }
   }, [waypoints, airspacesData, airspaceReloadTrigger, showAirspace]);
 
-  const reorderWaypoints = (startIndex, endIndex) => {
+  const reorderWaypoints = (startIndex: number, endIndex: number) => {
     const result = Array.from(waypoints);
     const [removed] = result.splice(startIndex, 1);
+    if (!removed) return;
     result.splice(endIndex, 0, removed);
     setWaypoints(result);
   };
@@ -285,26 +273,39 @@ export default function FlightPlanner() {
   // Geospatial helpers moved to `src/utils/geo.ts` (imported above)
 
   // Calculate route segments with bearing and distance
-  const routeSegments = waypoints.slice(0, -1).map((wp, index) => {
-    const nextWp = waypoints[index + 1];
-    const bearing = geoCalculateBearing(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
-    const distance = geoCalculateDistance(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
-    const speedInKnots = speedToKnots(cruiseSpeed, speedUnit);
-    return {
-      from: wp.name,
-      to: nextWp.name,
-      bearing: bearing.toFixed(1),
-      distance: distance.toFixed(1),
-      time: ((distance / speedInKnots) * 60).toFixed(1), // Time in minutes
-      vfrFrom: waypointVfrs[index] || null,
-      vfrTo: waypointVfrs[index + 1] || null,
-    };
-  });
+  const routeSegments = waypoints
+    .slice(0, -1)
+    .map((wp, index) => {
+      const nextWp = waypoints[index + 1];
+      if (!nextWp) return null;
+
+      const bearing = geoCalculateBearing(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
+      const distance = geoCalculateDistance(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
+      const speedInKnots = speedToKnots(cruiseSpeed, speedUnit);
+      return {
+        from: wp.name,
+        to: nextWp.name,
+        bearing: bearing.toFixed(1),
+        distance: distance.toFixed(1),
+        time: ((distance / speedInKnots) * 60).toFixed(1), // Time in minutes
+        vfrFrom: waypointVfrs[index] || null,
+        vfrTo: waypointVfrs[index + 1] || null,
+      };
+    })
+    .filter(Boolean) as {
+      from: string;
+      to: string;
+      bearing: string;
+      distance: string;
+      time: string;
+      vfrFrom: string | null;
+      vfrTo: string | null;
+    }[];
 
   const totalDistance = routeSegments.reduce((sum, seg) => sum + parseFloat(seg.distance), 0);
   const totalTime = routeSegments.reduce((sum, seg) => sum + parseFloat(seg.time), 0);
 
-  const formatTime = (minutes) => {
+  const formatTime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const mins = Math.round(minutes % 60);
     return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
