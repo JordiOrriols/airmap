@@ -1,4 +1,4 @@
-import { QueryClient, UseQueryOptions } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 
 /**
  * Default query options for all React Query hooks
