@@ -2,11 +2,12 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import { Trash2, Navigation, Edit, Route, Timer } from "lucide-react";
+import { Navigation, Route, Timer, Edit, Trash2, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import Badge from "../atoms/badge";
 import MapView from "../organisms/map-view";
 import { getMapCenterAndZoom, calculateRouteStats } from "../../utils/geo";
+import RouteActionsMenu from "./route-actions-menu";
 
 export default function RouteCard({
   route,
@@ -29,6 +30,46 @@ export default function RouteCard({
     route.cruiseSpeed,
     route.speedUnit
   );
+
+  const handleExport = (_: unknown, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const data = {
+      name: route.name,
+      waypoints: route.waypoints,
+      cruiseSpeed: route.cruiseSpeed,
+      speedUnit: route.speedUnit,
+      exported: new Date().toISOString(),
+    };
+
+    const dataStr = JSON.stringify(data, null, 2);
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${route.name.replace(/\s+/g, "_") || "route"}_route.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const actions = [
+    {
+      label: t("route.edit_route", "Edit Route"),
+      icon: Edit,
+      href: editHref,
+    },
+    {
+      label: t("route.delete_route", "Remove"),
+      icon: Trash2,
+      variant: "danger" as const,
+      onSelect: (_route, e: React.MouseEvent) => onDelete(route.id, e),
+    },
+    {
+      label: t("route.export_route", "Export"),
+      icon: Download,
+      onSelect: handleExport,
+    },
+  ];
 
   return (
     <Card className="bg-card-app hover:bg-card-hover backdrop-blur-md border border-app-secondary rounded-3xl overflow-hidden hover:scale-[1.02] transition-all duration-300 shadow-card group">
@@ -55,18 +96,11 @@ export default function RouteCard({
       </div>
 
       <div className="p-6 pt-0">
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start justify-between mb-4 relative">
           <h3 className="text-lg font-bold text-app-primary group-hover:text-blue-600 dark:group-hover:text-cyan-300 transition-colors">
             {route.name}
           </h3>
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={(e) => onDelete(route.id, e)}
-            className="text-button-ghost hover:text-red-400 hover:bg-red-500/20 rounded-xl -mt-1"
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
+          <RouteActionsMenu route={route} actions={actions} />
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-4">
