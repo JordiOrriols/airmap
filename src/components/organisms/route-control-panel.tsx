@@ -1,8 +1,8 @@
-import React, { RefObject } from "react";
+import React from "react";
+import type { RefObject } from "react";
 import CollapsiblePanel from "../molecules/collapsible-panel";
 import {
   Navigation,
-  CloudSun,
   Trash2,
   Download,
   Upload,
@@ -17,14 +17,15 @@ import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import WaypointListPanel from "./waypoints-list-panel";
 import { useTranslation } from "react-i18next";
+import type { SpeedUnit, Waypoint } from "../../types";
 
 type Props = {
   routeName: string;
   setRouteName: (v: string) => void;
   cruiseSpeed: number;
   setCruiseSpeed: (v: number) => void;
-  speedUnit: string;
-  setSpeedUnit: (v: string) => void;
+  speedUnit: SpeedUnit;
+  setSpeedUnit: (v: SpeedUnit) => void;
   isEditMode: boolean;
   toggleEditMode: () => void;
   showAirspace: boolean;
@@ -32,10 +33,10 @@ type Props = {
   exportRoute: () => void;
   importRoute: (e: React.ChangeEvent<HTMLInputElement>) => void;
   clearRoute: () => void;
-  waypoints: any[];
+  waypoints: Waypoint[];
   removeWaypoint: (index: number) => void;
   reorderWaypoints: (start: number, end: number) => void;
-  fileInputRef: RefObject<HTMLInputElement>;
+  fileInputRef: RefObject<HTMLInputElement | null>;
   reloadAirspace?: () => void;
 };
 
@@ -90,7 +91,7 @@ export default function RouteControlPanel({
               onChange={(e) => setCruiseSpeed(Number(e.target.value))}
               className="bg-input-app border-input-app text-input-app placeholder:text-app-muted backdrop-blur-sm flex-1"
             />
-            <Select value={speedUnit} onValueChange={setSpeedUnit}>
+            <Select value={speedUnit} onValueChange={(v) => setSpeedUnit(v as SpeedUnit)}>
               <SelectTrigger className="w-24 bg-input-app border-input-app text-input-app backdrop-blur-sm">
                 <SelectValue />
               </SelectTrigger>

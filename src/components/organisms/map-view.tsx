@@ -27,7 +27,7 @@ type MapViewProps = {
   showPolyline?: boolean;
   interactive?: boolean; // enable map interactions
   allowMapClick?: boolean; // allow adding markers via map click
-  onMapClick?: (latlng: LatLng) => void;
+  onMapClick?: ((latlng: LatLng) => void) | undefined;
   onMarkerDrag?: (index: number, lat: number, lng: number) => void;
   waypointIcon?: L.DivIcon;
   passedWaypointIcon?: L.DivIcon;
@@ -43,7 +43,7 @@ function MapClickHandler({
   onMapClick,
 }: {
   allowMapClick?: boolean;
-  onMapClick?: (latlng: LatLng) => void;
+  onMapClick?: ((latlng: LatLng) => void) | undefined;
 }) {
   useMapEvents({
     click: (e) => {
@@ -93,13 +93,6 @@ export default function MapView({
     iconAnchor: [12, 12],
   });
 
-  const getWaypointIcon = (index: number) => {
-    if (index < 0) return waypointIcon || defaultWaypointIcon;
-    // For flexibility, prefer passed specific icons when provided
-    if (index < 0 && waypointIcon) return waypointIcon;
-    return upcomingWaypointIcon || waypointIcon || defaultWaypointIcon;
-  };
-
   const getWaypointIconWithNumber = (index: number) => {
     return new L.DivIcon({
       className: "custom-waypoint-marker-with-number",
@@ -128,7 +121,10 @@ export default function MapView({
   return (
     <div className="absolute inset-0 z-0">
       <MapContainer
-        center={Array.isArray(center) ? center : [center.lat, center.lng]}
+        center={(Array.isArray(center) ? [center[0], center[1]] : [center.lat, center.lng]) as [
+          number,
+          number
+        ]}
         zoom={zoom}
         className="w-full h-full"
         zoomControl={false}
@@ -150,7 +146,7 @@ export default function MapView({
           waypoints.map((wp, idx) => (
             <Marker
               key={idx}
-              position={[wp.lat, wp.lng]}
+              position={[wp.lat, wp.lng] as [number, number]}
               icon={getWaypointIconWithNumber(idx)}
               draggable={Boolean(onMarkerDrag)}
               eventHandlers={{
@@ -166,22 +162,19 @@ export default function MapView({
 
         {showPolyline && waypoints.length > 1 && (
           <Polyline
-            positions={waypoints.map((w) => [w.lat, w.lng])}
-            color="#a78bfa"
-            weight={3}
-            opacity={0.8}
-            dashArray="10, 10"
+            positions={waypoints.map((w) => [w.lat, w.lng] as [number, number])}
+            pathOptions={{ color: "#a78bfa", weight: 3, opacity: 0.8, dashArray: "10, 10" }}
           />
         )}
 
         {showAircraft && currentPosition && (
           <>
             <Marker
-              position={[currentPosition.lat, currentPosition.lng]}
+              position={[currentPosition.lat, currentPosition.lng] as [number, number]}
               icon={(aircraftIcon || defaultAircraftIcon)(currentHeading)}
             />
             <Circle
-              center={[currentPosition.lat, currentPosition.lng]}
+              center={[currentPosition.lat, currentPosition.lng] as [number, number]}
               radius={50}
               pathOptions={{
                 color: "#3b82f6",
