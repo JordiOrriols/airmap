@@ -9,8 +9,8 @@ export default function WeatherCard({ weather, compact = false }) {
   const { t } = useTranslation();
   if (!weather) {
     return (
-      <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4">
-        <p className="text-white/70 text-sm">
+      <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-2xl p-4">
+        <p className="text-app-secondary text-sm">
           {t("weather.no_data", "No weather data available")}
         </p>
       </div>
@@ -19,13 +19,13 @@ export default function WeatherCard({ weather, compact = false }) {
 
   if (compact) {
     return (
-      <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3">
+      <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-xl p-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <WeatherIcon condition={weather.condition} size="md" />
             <div>
-              <p className="text-white font-bold text-lg">{weather.temp}°C</p>
-              <p className="text-white/70 text-xs">{weather.condition}</p>
+              <p className="text-app-primary font-bold text-lg">{weather.temp}°C</p>
+              <p className="text-app-secondary text-xs">{weather.condition}</p>
             </div>
           </div>
           <div className="text-right">
@@ -50,8 +50,8 @@ export default function WeatherCard({ weather, compact = false }) {
         <div className="flex items-center gap-3">
           <WeatherIcon condition={weather.condition} size="lg" />
           <div>
-            <p className="text-white font-bold text-2xl">{weather.temp}°C</p>
-            <p className="text-white/70 text-sm">{weather.condition}</p>
+            <p className="text-app-primary font-bold text-2xl">{weather.temp}°C</p>
+            <p className="text-app-secondary text-sm">{weather.condition}</p>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export default function WeatherCard({ weather, compact = false }) {
             <>
               {weather.cloudCover}%
               {weather.cloudBase && (
-                <span className="text-white/60 text-xs block">
+                <span className="text-app-tertiary text-xs block">
                   {weather.cloudBase} ft
                 </span>
               )}

@@ -16,13 +16,13 @@ export default function WaypointCard({
     <div
       ref={innerRef}
       {...draggableProps}
-      className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3 flex items-center justify-between transition-all hover:bg-slate-700/60 mb-2"
+      className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-xl p-3 flex items-center justify-between transition-all hover:bg-card-hover mb-2"
     >
       <div className="flex items-center gap-3 flex-1 min-w-0">
         {draggable && (
           <div
             {...dragHandleProps}
-            className="cursor-grab active:cursor-grabbing text-white/50 hover:text-white/80 transition-colors"
+            className="cursor-grab active:cursor-grabbing text-app-tertiary hover:text-app-secondary transition-colors"
           >
             <GripVertical className="w-4 h-4" />
           </div>
@@ -31,10 +31,10 @@ export default function WaypointCard({
           {index + 1}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-white font-medium text-sm truncate">
+          <p className="text-app-primary font-medium text-sm truncate">
             {waypoint.name}
           </p>
-          <p className="text-white/70 text-xs">
+          <p className="text-app-secondary text-xs">
             {waypoint.lat.toFixed(4)}°, {waypoint.lng.toFixed(4)}°
           </p>
           {vfrUpperDisplay !== undefined && (
@@ -46,7 +46,7 @@ export default function WaypointCard({
         size="icon"
         variant="ghost"
         onClick={() => onRemove(index)}
-        className="flex-shrink-0 h-8 w-8 text-white/70 hover:text-white hover:bg-red-500/30"
+        className="flex-shrink-0 h-8 w-8 text-app-tertiary hover:text-app-primary hover:bg-red-500/30"
       >
         <X className="w-4 h-4" />
       </Button>

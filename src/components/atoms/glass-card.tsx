@@ -8,7 +8,7 @@ export default function GlassCard({
   ...props
 }) {
   const baseClasses =
-    "bg-slate-900/70 backdrop-blur-xs border border-white/20 rounded-3xl shadow-2xl";
+    "bg-card-app backdrop-blur-xs border border-app-secondary rounded-3xl shadow-card";
 
   if (animate) {
     return (

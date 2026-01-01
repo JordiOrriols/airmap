@@ -16,14 +16,14 @@ export default function InfoTile({
   children,
 }: InfoTileProps) {
   return (
-    <div className={`bg-slate-900/50 rounded-xl p-3 ${className}`}>
+    <div className={`bg-card-app/80 rounded-xl p-3 ${className}`}>
       <div className="flex items-center gap-2 mb-1">
         {icon && (
           <div className="w-4 h-4 flex items-center justify-center">{icon}</div>
         )}
-        {title && <span className="text-xs text-white/80">{title}</span>}
+        {title && <span className="text-xs text-app-secondary">{title}</span>}
       </div>
-      {value ? <p className="text-white font-bold">{value}</p> : children}
+      {value ? <p className="text-app-primary font-bold">{value}</p> : children}
     </div>
   );
 }

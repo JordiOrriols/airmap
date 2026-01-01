@@ -48,8 +48,8 @@ export default function RouteCard({
           tileAttribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
         {(!route.waypoints || route.waypoints.length === 0) && (
-          <div className="absolute inset-0 bg-slate-900/50 flex items-center justify-center backdrop-blur-sm">
-            <span className="text-white/60 text-sm">{t("route.no_waypoints", "No waypoints")}</span>
+          <div className="absolute inset-0 bg-card-app/80 flex items-center justify-center backdrop-blur-sm">
+            <span className="text-app-secondary text-sm">{t("route.no_waypoints", "No waypoints")}</span>
           </div>
         )}
       </div>

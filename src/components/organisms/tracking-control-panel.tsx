@@ -68,7 +68,11 @@ export default function TrackingControlPanel({
           <Button
             onClick={() => setShowAirspace(!showAirspace)}
             variant="outline"
-            className={`w-full backdrop-blur-sm transition-all duration-300 ${showAirspace ? "bg-blue-500/30 border-blue-400/40 text-white" : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"}`}
+            className={`w-full backdrop-blur-sm transition-all duration-300 ${
+              showAirspace 
+                ? "bg-blue-500/30 border-blue-400/40 text-white" 
+                : "bg-input-app border-app-secondary text-input-app hover:bg-button-ghost"
+            }`}
           >
             {showAirspace ? (
               <> {t("planner.route_control.airspace_on", "Airspace")} </>

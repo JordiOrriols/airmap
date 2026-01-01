@@ -14,8 +14,8 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder, vfrs
   };
 
   return (
-    <div className="mt-6 pt-6 border-t border-white/30">
-      <h3 className="text-sm font-semibold text-white/90 mb-3 flex items-center gap-2">
+    <div className="mt-6 pt-6 border-t border-app-secondary">
+      <h3 className="text-sm font-semibold text-app-primary mb-3 flex items-center gap-2">
         <MapPin className="w-4 h-4" />
         {t("waypoints.title", "Waypoints")} ({waypoints.length})
       </h3>

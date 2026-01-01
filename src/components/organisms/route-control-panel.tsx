@@ -74,7 +74,7 @@ export default function RouteControlPanel({
     >
       <div className="space-y-4">
         <div>
-          <label className="text-sm font-medium text-white/90 mb-2 block">
+          <label className="text-sm font-medium text-app-primary mb-2 block">
             {t("planner.route_control.route_name", "Route Name")}
           </label>
           <Input
@@ -138,7 +138,11 @@ export default function RouteControlPanel({
           <Button
             onClick={() => setShowAirspace(!showAirspace)}
             variant="outline"
-            className={`w-full backdrop-blur-sm transition-all duration-300 ${showAirspace ? "bg-blue-500/30 border-blue-400/40 text-white" : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"}`}
+            className={`w-full backdrop-blur-sm transition-all duration-300 ${
+              showAirspace 
+                ? "bg-blue-500/30 border-blue-400/40 text-white" 
+                : "bg-input-app border-app-secondary text-input-app hover:bg-button-ghost"
+            }`}
           >
             {showAirspace ? (
               <>
@@ -157,7 +161,7 @@ export default function RouteControlPanel({
             <Button
               onClick={reloadAirspace}
               variant="outline"
-              className="w-full backdrop-blur-sm bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60 transition-all duration-300"
+              className="w-full backdrop-blur-sm bg-input-app border-app-secondary text-input-app hover:bg-button-ghost transition-all duration-300"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               {t("planner.route_control.reload_airspace", "Reload")}
@@ -169,7 +173,7 @@ export default function RouteControlPanel({
           <Button
             onClick={exportRoute}
             variant="outline"
-            className="bg-slate-800/60 border-white/30 text-white hover:bg-blue-500/30 hover:border-blue-400/40 backdrop-blur-sm transition-all"
+            className="bg-input-app border-app-secondary text-input-app hover:bg-blue-500/30 hover:border-blue-400/40 backdrop-blur-sm transition-all"
             disabled={waypoints.length === 0}
           >
             <Download className="w-4 h-4 mr-1" />
@@ -179,7 +183,7 @@ export default function RouteControlPanel({
           <Button
             onClick={() => fileInputRef.current?.click()}
             variant="outline"
-            className="bg-slate-800/60 border-white/30 text-white hover:bg-purple-500/30 hover:border-purple-400/40 backdrop-blur-sm transition-all"
+            className="bg-input-app border-app-secondary text-input-app hover:bg-purple-500/30 hover:border-purple-400/40 backdrop-blur-sm transition-all"
           >
             <Upload className="w-4 h-4 mr-1" />
             {t("planner.route_control.import", "Import")}
@@ -189,7 +193,7 @@ export default function RouteControlPanel({
         <Button
           onClick={clearRoute}
           variant="outline"
-          className="w-full bg-slate-800/60 border-white/30 text-white hover:bg-red-500/30 hover:border-red-400/40 backdrop-blur-sm transition-all"
+          className="w-full bg-input-app border-app-secondary text-input-app hover:bg-red-500/30 hover:border-red-400/40 backdrop-blur-sm transition-all"
           disabled={waypoints.length === 0}
         >
           <Trash2 className="w-4 h-4 mr-2" />

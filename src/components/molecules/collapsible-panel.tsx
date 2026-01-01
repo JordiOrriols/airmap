@@ -18,21 +18,21 @@ export default function CollapsiblePanel({
     <ErrorBoundary
       fallback={<div>{t("error.something_wrong", "Something went wrong")}</div>}
     >
-      <div className="bg-slate-900/70 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden">
+      <div className="bg-card-app backdrop-blur-xl border border-app-secondary rounded-3xl shadow-card overflow-hidden">
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+          className="w-full p-4 flex items-center justify-between hover:bg-button-ghost transition-colors"
         >
           <div className="flex items-center gap-3">
             <div className={`bg-gradient-to-r ${gradient} p-2 rounded-xl`}>
               <Icon className="w-5 h-5 text-white" />
             </div>
-            <h2 className="text-lg font-bold text-white">{title}</h2>
+            <h2 className="text-lg font-bold text-app-primary">{title}</h2>
           </div>
           {isCollapsed ? (
-            <ChevronDown className="w-5 h-5 text-white/70" />
+            <ChevronDown className="w-5 h-5 text-app-secondary" />
           ) : (
-            <ChevronUp className="w-5 h-5 text-white/70" />
+            <ChevronUp className="w-5 h-5 text-app-secondary" />
           )}
         </button>
 

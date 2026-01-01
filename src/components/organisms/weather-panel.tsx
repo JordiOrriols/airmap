@@ -93,7 +93,7 @@ export default function WeatherPanel({
     return (
       <div className="space-y-2">
         {loading && (
-          <div className="flex items-center justify-center gap-2 text-white/70 text-sm">
+          <div className="flex items-center justify-center gap-2 text-app-secondary text-sm">
             <Loader2 className="w-4 h-4 animate-spin" />
             Loading weather...
           </div>
@@ -108,11 +108,11 @@ export default function WeatherPanel({
 
   return (
     <div className="space-y-4">
-      <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4">
+      <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-2xl p-4">
         {forecastMode && !compact && (
           <div className="mb-4 space-y-3">
             <div>
-              <label className="text-xs text-white/80 mb-1 block flex items-center gap-1">
+              <label className="text-xs text-app-secondary mb-1 block flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 {t("weather.select_day", "Select Day")}
               </label>
@@ -120,7 +120,7 @@ export default function WeatherPanel({
                 value={selectedDay.toString()}
                 onValueChange={(v) => setSelectedDay(parseInt(v))}
               >
-                <SelectTrigger className="bg-slate-800/60 border-white/30 text-white">
+                <SelectTrigger className="bg-input-app border-app-secondary text-input-app">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,12 +134,12 @@ export default function WeatherPanel({
             </div>
 
             <div>
-              <label className="text-xs text-white/80 mb-1 block flex items-center gap-1">
+              <label className="text-xs text-app-secondary mb-1 block flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {t("weather.select_hour", "Select Hour")}
               </label>
               <Select value={selectedHour} onValueChange={setSelectedHour}>
-                <SelectTrigger className="bg-slate-800/60 border-white/30 text-white">
+                <SelectTrigger className="bg-input-app border-app-secondary text-input-app">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
@@ -156,7 +156,7 @@ export default function WeatherPanel({
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center gap-2 text-white py-8">
+        <div className="flex items-center justify-center gap-2 text-app-secondary py-8">
           <Loader2 className="w-6 h-6 animate-spin" />
           <span>{t("weather.loading_data", "Loading weather data...")}</span>
         </div>
@@ -165,7 +165,7 @@ export default function WeatherPanel({
       {!loading && weather && <WeatherCard weather={weather} />}
 
       {!loading && !weather && (
-        <div className="text-center text-white/70 py-8">
+        <div className="text-center text-app-secondary py-8">
           <p>{t("weather.no_data", "Weather data unavailable")}</p>
           <p className="text-xs mt-2">
             {t("weather.check_api", "Check API key configuration")}

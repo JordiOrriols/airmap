@@ -13,15 +13,15 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
     >
-      <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-2xl p-4 hover:bg-slate-700/60 transition-all duration-300">
+      <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-2xl p-4 hover:bg-card-hover transition-all duration-300">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             <Badge size="md" gradient="from-violet-500 to-purple-500">
               {index + 1}
             </Badge>
             <div>
-              <p className="text-white font-semibold">{segment.from}</p>
-              <p className="text-white/60 text-sm flex items-center gap-1">
+              <p className="text-app-primary font-semibold">{segment.from}</p>
+              <p className="text-app-secondary text-sm flex items-center gap-1">
                 <span>→</span> {segment.to}
               </p>
               {segment.vfrTo !== undefined && (
@@ -31,7 +31,7 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-white/30">
+        <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-app-secondary">
           <InfoTile
             title={t("stat.heading", "Heading")}
             icon={
