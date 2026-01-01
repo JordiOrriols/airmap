@@ -70,7 +70,7 @@ export default function RouteCard({
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="bg-stat-distance backdrop-blur-sm border border-stat-distance rounded-xl p-3">
+          <div className="bg-stat-card backdrop-blur-sm border border-stat-card rounded-xl p-3">
             <div className="flex items-center gap-2 mb-1">
               <Route className="w-3.5 h-3.5 text-stat-distance-icon" />
               <span className="text-xs text-app-secondary">
@@ -85,7 +85,7 @@ export default function RouteCard({
             </p>
           </div>
 
-          <div className="bg-stat-time backdrop-blur-sm border border-stat-time rounded-xl p-3">
+          <div className="bg-stat-card backdrop-blur-sm border border-stat-card rounded-xl p-3">
             <div className="flex items-center gap-2 mb-1">
               <Timer className="w-3.5 h-3.5 text-stat-time-icon" />
               <span className="text-xs text-app-secondary">

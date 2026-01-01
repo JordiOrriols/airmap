@@ -16,7 +16,7 @@ export default function InfoTile({
   children,
 }: InfoTileProps) {
   return (
-    <div className={`bg-card-app/80 rounded-xl p-3 ${className}`}>
+    <div className={`bg-stat-card rounded-xl p-3 ${className}`}>
       <div className="flex items-center gap-2 mb-1">
         {icon && (
           <div className="w-4 h-4 flex items-center justify-center">{icon}</div>

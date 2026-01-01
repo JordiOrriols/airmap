@@ -146,13 +146,10 @@
   .hover\:bg-button-ghost:hover { background-color: var(--app-button-ghost-hover); }
   
   /* Stat utilities */
-  .bg-stat-distance { background-color: var(--app-stat-distance-bg); }
-  .border-stat-distance { border-color: var(--app-stat-distance-border); }
+  .bg-stat-card { background-color: var(--app-stat-bg); }
+  .border-stat-card { border-color: var(--app-stat-border); }
   .text-stat-distance-icon { color: var(--app-stat-distance-icon); }
   .text-stat-distance { color: var(--app-stat-distance-text); }
-  
-  .bg-stat-time { background-color: var(--app-stat-time-bg); }
-  .border-stat-time { border-color: var(--app-stat-time-border); }
   .text-stat-time-icon { color: var(--app-stat-time-icon); }
   .text-stat-time { color: var(--app-stat-time-text); }
   

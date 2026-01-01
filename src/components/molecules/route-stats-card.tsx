@@ -13,10 +13,10 @@ export default function RouteStatsCard({
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-2xl p-4">
+      <div className="bg-stat-card backdrop-blur-sm border border-stat-card rounded-2xl p-4">
         <div className="flex items-center gap-2 mb-1">
-          <TrendingUp className="w-4 h-4 text-cyan-300" />
-          <span className="text-xs text-app-primary font-medium">
+          <TrendingUp className="w-4 h-4 text-stat-distance-icon" />
+          <span className="text-xs text-app-secondary font-medium">
             {t("route_stats.total_distance", "Total Distance")}
           </span>
         </div>
@@ -28,10 +28,10 @@ export default function RouteStatsCard({
         </p>
       </div>
 
-      <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-2xl p-4">
+      <div className="bg-stat-card backdrop-blur-sm border border-stat-card rounded-2xl p-4">
         <div className="flex items-center gap-2 mb-1">
-          <Clock className="w-4 h-4 text-purple-300" />
-          <span className="text-xs text-app-primary font-medium">
+          <Clock className="w-4 h-4 text-stat-time-icon" />
+          <span className="text-xs text-app-secondary font-medium">
             {t("route_stats.flight_time", "Flight Time")}
           </span>
         </div>
