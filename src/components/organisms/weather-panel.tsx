@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import WeatherCard from "../molecules/weather-card";
 import { useTranslation } from "react-i18next";
 import { useCurrentWeather, useWeatherForecast } from "../../api/weather";
+import type { WeatherData, ForecastData } from "../../api/weather";
 
 export default function WeatherPanel({
   location = { lat: 41.5209, lng: 2.105 },
@@ -11,8 +12,8 @@ export default function WeatherPanel({
   compact = false,
 }) {
   const { t } = useTranslation();
-  const [weather, setWeather] = useState(null);
-  const [forecast, setForecast] = useState([]);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [forecast, setForecast] = useState<ForecastData>({});
   const [selectedDay, setSelectedDay] = useState(0);
   const [selectedHour, setSelectedHour] = useState("12");
 
@@ -37,11 +38,14 @@ export default function WeatherPanel({
     }
   }, [selectedDay, selectedHour, forecast, forecastMode]);
 
-  const updateSelectedWeatherFromForecast = (forecastData: any) => {
+  const updateSelectedWeatherFromForecast = (forecastData: ForecastData) => {
     const days = Object.keys(forecastData);
     if (days.length === 0) return;
 
-    const selectedDayData = forecastData[days[selectedDay]];
+    const dayKey = days[selectedDay];
+    if (!dayKey) return;
+
+    const selectedDayData = forecastData[dayKey];
     if (!selectedDayData) return;
 
     // Find closest hour

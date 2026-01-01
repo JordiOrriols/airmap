@@ -9,9 +9,10 @@ import MapView from "../components/organisms/map-view";
 import { useTranslation } from "react-i18next";
 import { MAP_CENTER } from "@/utils/constants";
 import ThemeToggle from "../components/atoms/theme-toggle";
+import type { RouteData } from "../types";
 
 export default function Home() {
-  const [routes, setRoutes] = useState([]);
+  const [routes, setRoutes] = useState<RouteData[]>([]);
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -19,16 +20,16 @@ export default function Home() {
   }, []);
 
   const loadRoutes = () => {
-    const allRoutes = routeStorage.getAllRoutes();
+    const allRoutes = routeStorage.getAllRoutes() as RouteData[];
     setRoutes(allRoutes);
   };
 
   const createNewRoute = () => {
-    const newRoute = routeStorage.createNewRoute();
+    const newRoute = routeStorage.createNewRoute() as RouteData;
     window.location.href = createPageUrl(`planner?routeId=${newRoute.id}`);
   };
 
-  const deleteRoute = (routeId, e) => {
+  const deleteRoute = (routeId: string, e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -36,15 +37,6 @@ export default function Home() {
       routeStorage.deleteRoute(routeId);
       loadRoutes();
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString() +
-      " " +
-      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    );
   };
 
   return (
