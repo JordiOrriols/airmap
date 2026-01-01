@@ -1,7 +1,7 @@
 import React from "react";
 import { Wind, Droplets, Thermometer, Eye, Cloud } from "lucide-react";
 import WeatherIcon from "../atoms/weather-icon";
-import InfoTile from "../atoms/info-tile";
+import StatDisplay from "../atoms/stat-display";
 import Badge from "../atoms/badge";
 import { useTranslation } from "react-i18next";
 
@@ -57,53 +57,55 @@ export default function WeatherCard({ weather, compact = false }) {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <InfoTile
-          title={t("weather.wind", "Wind")}
-          icon={<Wind className="w-4 h-4 text-cyan-300" />}
-          value={<>{weather.windSpeed} kt</>}
+        <StatDisplay
+          icon={Wind}
+          label={t("weather.wind", "Wind")}
+          value={`${weather.windSpeed}`}
+          unit="kt"
+          iconColor="text-cyan-300"
         />
 
         {weather.windGust > weather.windSpeed && (
-          <InfoTile
-            title={t("weather.gusts", "Gusts")}
-            icon={<Wind className="w-4 h-4 text-orange-300" />}
-            value={<>{weather.windGust} kt</>}
+          <StatDisplay
+            icon={Wind}
+            label={t("weather.gusts", "Gusts")}
+            value={`${weather.windGust}`}
+            unit="kt"
+            iconColor="text-orange-300"
           />
         )}
 
-        <InfoTile
-          title={t("weather.clouds", "Clouds")}
-          icon={<Cloud className="w-4 h-4 text-gray-300" />}
-          value={
-            <>
-              {weather.cloudCover}%
-              {weather.cloudBase && (
-                <span className="text-app-tertiary text-xs block">
-                  {weather.cloudBase} ft
-                </span>
-              )}
-            </>
-          }
+        <StatDisplay
+          icon={Cloud}
+          label={t("weather.clouds", "Clouds")}
+          value={`${weather.cloudCover}%`}
+          unit={weather.cloudBase ? `${weather.cloudBase} ft` : undefined}
+          iconColor="text-gray-300"
         />
 
-        <InfoTile
-          title={t("weather.visibility", "Visibility")}
-          icon={<Eye className="w-4 h-4 text-blue-300" />}
-          value={<>{weather.visibility} km</>}
+        <StatDisplay
+          icon={Eye}
+          label={t("weather.visibility", "Visibility")}
+          value={`${weather.visibility}`}
+          unit="km"
+          iconColor="text-blue-300"
         />
 
         {weather.precipitation > 0 && (
-          <InfoTile
-            title={t("weather.rain", "Precipitation")}
-            icon={<Droplets className="w-4 h-4 text-blue-400" />}
-            value={<>{weather.precipitation} mm</>}
+          <StatDisplay
+            icon={Droplets}
+            label={t("weather.rain", "Precipitation")}
+            value={`${weather.precipitation}`}
+            unit="mm"
+            iconColor="text-blue-400"
           />
         )}
 
-        <InfoTile
-          title={t("weather.feels_like", "Feels Like")}
-          icon={<Thermometer className="w-4 h-4 text-red-300" />}
-          value={<>{weather.feelsLike}°C</>}
+        <StatDisplay
+          icon={Thermometer}
+          label={t("weather.feels_like", "Feels Like")}
+          value={`${weather.feelsLike}°C`}
+          iconColor="text-red-300"
         />
       </div>
     </>

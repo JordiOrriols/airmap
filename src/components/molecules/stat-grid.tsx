@@ -1,11 +1,12 @@
 import React from "react";
-import InfoTile from "../atoms/info-tile";
+import StatDisplay from "../atoms/stat-display";
 
 type StatItem = {
   key?: string | number;
-  title?: string;
   icon?: React.ReactNode;
+  label?: string;
   value?: React.ReactNode;
+  unit?: React.ReactNode;
   className?: string;
 };
 
@@ -24,11 +25,12 @@ export default function StatGrid({
   return (
     <div className={`grid ${cols} gap-3 ${className}`}>
       {items.map((it, idx) => (
-        <InfoTile
+        <StatDisplay
           key={it.key ?? idx}
-          title={it.title}
+          label={it.label}
           icon={it.icon}
           value={it.value}
+          unit={it.unit}
           className={it.className}
         />
       ))}

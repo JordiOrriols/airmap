@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Navigation, Clock, TrendingUp } from "lucide-react";
-import InfoTile from "../atoms/info-tile";
+import StatDisplay from "../atoms/stat-display";
 import { useTranslation } from "react-i18next";
 import Badge from "../atoms/badge";
 
@@ -32,31 +32,29 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
         </div>
 
         <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-app-secondary">
-          <InfoTile
-            title={t("stat.heading", "Heading")}
-            icon={
-              <Navigation
-                className="w-3 h-3 text-cyan-300"
-                style={{ transform: `rotate(${segment.bearing}deg)` }}
-              />
-            }
-            value={<>{segment.bearing}°</>}
+          <StatDisplay
+            icon={Navigation}
+            label={t("stat.heading", "Heading")}
+            value={`${segment.bearing}°`}
+            iconColor="text-cyan-300"
+            size="compact"
           />
 
-          <InfoTile
-            title={t("stat.distance", "Distance")}
-            icon={<TrendingUp className="w-3 h-3 text-emerald-300" />}
-            value={
-              <>
-                {segment.distance} {t("unit.nm", "NM")}
-              </>
-            }
+          <StatDisplay
+            icon={TrendingUp}
+            label={t("stat.distance", "Distance")}
+            value={segment.distance}
+            unit={t("unit.nm", "NM")}
+            iconColor="text-emerald-300"
+            size="compact"
           />
 
-          <InfoTile
-            title={t("stat.time", "Time")}
-            icon={<Clock className="w-3 h-3 text-purple-300" />}
-            value={<>{formatTime(parseFloat(segment.time))}</>}
+          <StatDisplay
+            icon={Clock}
+            label={t("stat.time", "Time")}
+            value={formatTime(parseFloat(segment.time))}
+            iconColor="text-purple-300"
+            size="compact"
           />
         </div>
       </div>

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { MapPin, Clock, TrendingUp } from "lucide-react";
 import GradientIcon from "../atoms/gradient-icon";
 import GlassCard from "../atoms/glass-card";
-import InfoTile from "../atoms/info-tile";
+import StatDisplay from "../atoms/stat-display";
 import Badge from "../atoms/badge";
 
 export default function NextWaypointPanel({
@@ -50,24 +50,19 @@ export default function NextWaypointPanel({
           </div>
 
           <div className="grid grid-cols-2 gap-3 pt-3 border-t border-app-secondary">
-            <InfoTile
-              title={t("next_waypoint.distance", "Distance")}
-              icon={<TrendingUp className="w-3 h-3 text-cyan-300" />}
-              value={
-                <span className="text-xl font-bold text-app-primary">
-                  {distanceToNext.toFixed(1)} {t("unit.nm", "NM")}
-                </span>
-              }
+            <StatDisplay
+              icon={TrendingUp}
+              label={t("next_waypoint.distance", "Distance")}
+              value={`${distanceToNext.toFixed(1)}`}
+              unit={t("unit.nm", "NM")}
+              iconColor="text-cyan-300"
             />
 
-            <InfoTile
-              title={t("next_waypoint.eta", "ETA")}
-              icon={<Clock className="w-3 h-3 text-purple-300" />}
-              value={
-                <span className="text-xl font-bold text-app-primary">
-                  {formatTime(etaToNext)}
-                </span>
-              }
+            <StatDisplay
+              icon={Clock}
+              label={t("next_waypoint.eta", "ETA")}
+              value={formatTime(etaToNext)}
+              iconColor="text-purple-300"
             />
           </div>
         </div>
