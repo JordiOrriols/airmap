@@ -57,7 +57,12 @@ export default function WeatherPanel({
     } else if (!forecastMode && currentWeatherQuery.data) {
       setWeather(currentWeatherQuery.data);
     }
-  }, [currentWeatherQuery.data, forecastQuery.data, forecastMode, updateSelectedWeatherFromForecast]);
+  }, [
+    currentWeatherQuery.data,
+    forecastQuery.data,
+    forecastMode,
+    updateSelectedWeatherFromForecast,
+  ]);
 
   useEffect(() => {
     if (forecastMode && Object.keys(forecast).length > 0) {

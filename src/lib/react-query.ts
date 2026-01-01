@@ -1,8 +1,4 @@
-import {
-  QueryCache,
-  QueryClient,
-  type UseQueryOptions,
-} from "@tanstack/react-query";
+import { QueryCache, QueryClient, type UseQueryOptions } from "@tanstack/react-query";
 
 /**
  * Default query options for all React Query hooks
