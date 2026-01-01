@@ -110,7 +110,7 @@ export default function WeatherPanel({
     <div className="space-y-4">
       <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-2xl p-4">
         {forecastMode && !compact && (
-          <div className="mb-4 space-y-3">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs text-app-secondary mb-1 block flex items-center gap-1">
                 <Calendar className="w-3 h-3" />

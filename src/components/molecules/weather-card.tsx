@@ -60,7 +60,7 @@ export default function WeatherCard({ weather, compact = false }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <StatDisplay
           icon={Wind}
           label={t("weather.wind", "Wind")}
