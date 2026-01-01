@@ -15,7 +15,7 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
       transition={{ delay: index * 0.05 }}
     >
       <Card className="p-4 hover:shadow-md transition-all duration-300">
-        <div className="flex items-start justify-between mb-3">
+        <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <Badge size="md" gradient="from-violet-500 to-purple-500">
               {index + 1}
@@ -32,7 +32,7 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-app-secondary">
+        <div className="grid grid-cols-3 gap-3 pt-3 border-t border-app-secondary">
           <StatDisplay
             icon={Navigation}
             label={t("stat.heading", "Heading")}

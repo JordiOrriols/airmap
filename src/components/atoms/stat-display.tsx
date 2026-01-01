@@ -4,7 +4,7 @@ export default function StatDisplay({
   icon: Icon,
   label,
   value,
-  unit,
+  unit = null,
   iconColor = "text-cyan-300",
   size = "large",
 }) {
