@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Loader2, Calendar, Clock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import WeatherCard from "../molecules/weather-card";
@@ -22,6 +22,30 @@ export default function WeatherPanel({
 
   const loading = forecastMode ? forecastQuery.isLoading : currentWeatherQuery.isLoading;
 
+  const updateSelectedWeatherFromForecast = useCallback(
+    (forecastData: ForecastData) => {
+      const days = Object.keys(forecastData);
+      if (days.length === 0) return;
+
+      const dayKey = days[selectedDay];
+      if (!dayKey) return;
+
+      const selectedDayData = forecastData[dayKey];
+      if (!selectedDayData || selectedDayData.length === 0) return;
+
+      // Find closest hour
+      const hourNum = parseInt(selectedHour, 10);
+      const closest = selectedDayData.reduce<WeatherData>((prev, curr) => {
+        const prevHour = prev.hour ?? 0;
+        const currHour = curr.hour ?? 0;
+        return Math.abs(currHour - hourNum) < Math.abs(prevHour - hourNum) ? curr : prev;
+      });
+
+      setWeather(closest);
+    },
+    [selectedDay, selectedHour]
+  );
+
   useEffect(() => {
     if (forecastMode && forecastQuery.data) {
       const grouped = forecastQuery.data;
@@ -30,34 +54,13 @@ export default function WeatherPanel({
     } else if (!forecastMode && currentWeatherQuery.data) {
       setWeather(currentWeatherQuery.data);
     }
-  }, [currentWeatherQuery.data, forecastQuery.data, forecastMode]);
+  }, [currentWeatherQuery.data, forecastQuery.data, forecastMode, updateSelectedWeatherFromForecast]);
 
   useEffect(() => {
     if (forecastMode && Object.keys(forecast).length > 0) {
       updateSelectedWeatherFromForecast(forecast);
     }
-  }, [selectedDay, selectedHour, forecast, forecastMode]);
-
-  const updateSelectedWeatherFromForecast = (forecastData: ForecastData) => {
-    const days = Object.keys(forecastData);
-    if (days.length === 0) return;
-
-    const dayKey = days[selectedDay];
-    if (!dayKey) return;
-
-    const selectedDayData = forecastData[dayKey];
-    if (!selectedDayData) return;
-
-    // Find closest hour
-    const hourNum = parseInt(selectedHour);
-    const closest = selectedDayData.reduce((prev: any, curr: any) => {
-      const prevHour = prev.hour || 0;
-      const currHour = curr.hour || 0;
-      return Math.abs(currHour - hourNum) < Math.abs(prevHour - hourNum) ? curr : prev;
-    });
-
-    setWeather(closest);
-  };
+  }, [forecast, forecastMode, updateSelectedWeatherFromForecast]);
 
   const getDayOptions = () => {
     return Object.keys(forecast).map((day, index) => {

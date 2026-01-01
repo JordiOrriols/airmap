@@ -16,11 +16,18 @@ export const defaultQueryOptions = {
 
 const queryCache = new QueryCache({
   onError: (error) => {
-    const err = error as { message?: string; status?: number; url?: string } | unknown;
+    const message = error instanceof Error ? error.message : "Unknown error";
+    const status = typeof (error as { status?: unknown })?.status === "number"
+      ? (error as { status: number }).status
+      : undefined;
+    const url = typeof (error as { url?: unknown })?.url === "string"
+      ? (error as { url: string }).url
+      : undefined;
+
     console.error("React Query Error:", {
-      message: (err as any)?.message || "Unknown error",
-      status: (err as any)?.status,
-      url: (err as any)?.url,
+      message,
+      status,
+      url,
       timestamp: new Date().toISOString(),
     });
   },
