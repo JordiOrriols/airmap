@@ -84,12 +84,12 @@ export default function RouteControlPanel({
               "planner.route_control.route_name_placeholder",
               "Enter route name...",
             )}
-            className="bg-slate-800/60 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm"
+            className="bg-input-app border-input-app text-input-app placeholder:text-app-muted backdrop-blur-sm"
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-white/90 mb-2 block">
+          <label className="text-sm font-medium text-header mb-2 block">
             {t("planner.route_control.cruise_speed", "Cruise Speed")}
           </label>
           <div className="flex gap-2">
@@ -97,10 +97,10 @@ export default function RouteControlPanel({
               type="number"
               value={cruiseSpeed}
               onChange={(e) => setCruiseSpeed(Number(e.target.value))}
-              className="bg-slate-800/60 border-white/30 text-white placeholder:text-white/40 backdrop-blur-sm flex-1"
+              className="bg-input-app border-input-app text-input-app placeholder:text-app-muted backdrop-blur-sm flex-1"
             />
             <Select value={speedUnit} onValueChange={setSpeedUnit}>
-              <SelectTrigger className="w-24 bg-slate-800/60 border-white/30 text-white backdrop-blur-sm">
+              <SelectTrigger className="w-24 bg-input-app border-input-app text-input-app backdrop-blur-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -116,7 +116,11 @@ export default function RouteControlPanel({
         <div className="pt-4 space-y-3">
           <Button
             onClick={toggleEditMode}
-            className={`w-full backdrop-blur-sm transition-all duration-300 ${isEditMode ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-emerald-400/30" : "bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60"} border`}
+            className={`w-full backdrop-blur-sm transition-all duration-300 border ${
+              isEditMode 
+                ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-emerald-400/30" 
+                : "bg-input-app border-app-secondary text-input-app hover:bg-button-ghost"
+            }`}
           >
             {isEditMode ? (
               <>

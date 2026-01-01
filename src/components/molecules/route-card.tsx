@@ -31,7 +31,7 @@ export default function RouteCard({
   );
 
   return (
-    <Card className="bg-slate-900/70 backdrop-blur-xl border border-white/30 rounded-3xl overflow-hidden hover:bg-slate-800/70 hover:scale-105 transition-all duration-300 shadow-xl group">
+    <Card className="bg-card-app hover:bg-card-hover backdrop-blur-md border border-app-secondary rounded-3xl overflow-hidden hover:scale-[1.02] transition-all duration-300 shadow-card group">
       {/* Map Preview */}
       <div className="h-40 relative">
         <MapView
@@ -56,55 +56,55 @@ export default function RouteCard({
 
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
-          <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
+          <h3 className="text-lg font-bold text-app-primary group-hover:text-blue-600 dark:group-hover:text-cyan-300 transition-colors">
             {route.name}
           </h3>
           <Button
             size="icon"
             variant="ghost"
             onClick={(e) => onDelete(route.id, e)}
-            className="text-white/60 hover:text-red-400 hover:bg-red-500/20 rounded-xl -mt-1"
+            className="text-button-ghost hover:text-red-400 hover:bg-red-500/20 rounded-xl -mt-1"
           >
             <Trash2 className="w-4 h-4" />
           </Button>
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3">
+          <div className="bg-stat-distance backdrop-blur-sm border border-stat-distance rounded-xl p-3">
             <div className="flex items-center gap-2 mb-1">
-              <Route className="w-3.5 h-3.5 text-cyan-300" />
-              <span className="text-xs text-white/70">
+              <Route className="w-3.5 h-3.5 text-stat-distance-icon" />
+              <span className="text-xs text-app-secondary">
                 {t("route_stats.total_distance", "Distance")}
               </span>
             </div>
-            <p className="text-lg font-bold text-white">
+            <p className="text-lg font-bold text-stat-distance">
               {totalDistance.toFixed(1)}
             </p>
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-app-tertiary">
               {t("route_stats.nautical_miles", "NM")}
             </p>
           </div>
 
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3">
+          <div className="bg-stat-time backdrop-blur-sm border border-stat-time rounded-xl p-3">
             <div className="flex items-center gap-2 mb-1">
-              <Timer className="w-3.5 h-3.5 text-purple-300" />
-              <span className="text-xs text-white/70">
+              <Timer className="w-3.5 h-3.5 text-stat-time-icon" />
+              <span className="text-xs text-app-secondary">
                 {t("route_stats.flight_time", "Time")}
               </span>
             </div>
-            <p className="text-lg font-bold text-white">
+            <p className="text-lg font-bold text-stat-time">
               {formatTime(totalTime)}
             </p>
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-app-tertiary">
               {route.cruiseSpeed} {route.speedUnit}
             </p>
           </div>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
+        <div className="mt-4 pt-4 border-t border-app-primary space-y-2">
           <Link to={startHref}>
             <Button
-              className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm mb-2"
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white text-sm mb-2 shadow-md hover:shadow-lg"
               disabled={!route.waypoints || route.waypoints.length === 0}
             >
               <Navigation className="w-4 h-4 mr-2" />
@@ -114,7 +114,7 @@ export default function RouteCard({
           <Link to={editHref}>
             <Button
               variant="outline"
-              className="w-full bg-slate-800/60 border-white/30 text-white hover:bg-slate-700/60 text-sm"
+              className="w-full bg-input-app border border-app-secondary text-app-primary hover:bg-button-ghost text-sm shadow-sm hover:shadow-md"
             >
               <Edit className="w-4 h-4 mr-2" />
               {t("route.edit_route", "Edit Route")}

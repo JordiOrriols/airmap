@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./src/styles/theme.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -117,6 +118,59 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer utilities {
+  /* Background utilities */
+  .bg-app-primary { background-color: var(--app-bg-primary); }
+  .bg-app-secondary { background-color: var(--app-bg-secondary); }
+  .bg-app-overlay { background: var(--app-bg-overlay); }
+  
+  /* Card utilities */
+  .bg-card-app { background-color: var(--app-card-bg); }
+  .hover\:bg-card-hover:hover { background-color: var(--app-card-hover); }
+  .shadow-card { box-shadow: var(--app-card-shadow); }
+  
+  /* Text utilities */
+  .text-app-primary { color: var(--app-text-primary); }
+  .text-app-secondary { color: var(--app-text-secondary); }
+  .text-app-tertiary { color: var(--app-text-tertiary); }
+  .text-app-muted { color: var(--app-text-muted); }
+  
+  /* Border utilities */
+  .border-app-primary { border-color: var(--app-border-primary); }
+  .border-app-secondary { border-color: var(--app-border-secondary); }
+  
+  /* Button utilities */
+  .text-button-ghost { color: var(--app-button-ghost-text); }
+  .hover\:bg-button-ghost:hover { background-color: var(--app-button-ghost-hover); }
+  
+  /* Stat utilities */
+  .bg-stat-distance { background-color: var(--app-stat-distance-bg); }
+  .border-stat-distance { border-color: var(--app-stat-distance-border); }
+  .text-stat-distance-icon { color: var(--app-stat-distance-icon); }
+  .text-stat-distance { color: var(--app-stat-distance-text); }
+  
+  .bg-stat-time { background-color: var(--app-stat-time-bg); }
+  .border-stat-time { border-color: var(--app-stat-time-border); }
+  .text-stat-time-icon { color: var(--app-stat-time-icon); }
+  .text-stat-time { color: var(--app-stat-time-text); }
+  
+  /* Header utilities */
+  .bg-header { background-color: var(--app-header-bg); }
+  .text-header { color: var(--app-header-text); }
+  .text-header-secondary { color: var(--app-header-text-secondary); }
+  
+  /* Input utilities */
+  .bg-input-app { background-color: var(--app-input-bg); }
+  .border-input-app { border-color: var(--app-input-border); }
+  .text-input-app { color: var(--app-input-text); }
+  
+  /* Create card utilities */
+  .bg-create-card { background-color: var(--app-create-card-bg); }
+  .hover\:bg-create-card-hover:hover { background-color: var(--app-create-card-hover); }
+  .text-create-card { color: var(--app-create-card-text); }
+  .text-create-card-secondary { color: var(--app-create-card-text-secondary); }
 }
 
 body {

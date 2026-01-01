@@ -218,12 +218,12 @@ export default function FlightTracking() {
   if (!route) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#1e3a8a] via-[#7c3aed] to-[#2563eb] flex items-center justify-center">
-        <Card className="bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-3xl p-12 text-center">
-          <Plane className="w-16 h-16 text-white mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">
+        <Card className="bg-header backdrop-blur-xl border border-app-secondary rounded-3xl p-12 text-center">
+          <Plane className="w-16 h-16 text-header mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-header mb-2">
             {t("tracking.no_route.title", "No Route Selected")}
           </h2>
-          <p className="text-white/70 mb-6">
+          <p className="text-header-secondary mb-6">
             {t(
               "tracking.no_route.desc",
               "Please select a route to start tracking"
@@ -297,21 +297,21 @@ export default function FlightTracking() {
         animate={{ y: 0, opacity: 1 }}
         className="absolute top-6 left-1/2 transform -translate-x-1/2 z-20"
       >
-        <div className="bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-2xl px-8 py-4 shadow-2xl">
+        <div className="bg-header backdrop-blur-xl border border-app-secondary rounded-2xl px-8 py-4 shadow-card">
           <div className="flex items-center gap-4">
             <Link to={createPageUrl("home")}>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white/70 hover:text-white hover:bg-white/10 rounded-xl"
+                className="text-header-secondary hover:text-header hover:bg-button-ghost rounded-xl"
               >
                 <Home className="w-5 h-5" />
               </Button>
             </Link>
             <GradientIcon icon={Navigation} size="lg" />
             <div>
-              <h1 className="text-2xl font-bold text-white">{route.name}</h1>
-              <p className="text-sm text-white/70">
+              <h1 className="text-2xl font-bold text-header">{route.name}</h1>
+              <p className="text-sm text-header-secondary">
                 {isTracking
                   ? t("tracking.status.in_progress", "Flight in progress")
                   : t("tracking.status.ready", "Ready to start")}
@@ -355,14 +355,14 @@ export default function FlightTracking() {
             animate={{ opacity: 1, scale: 1 }}
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
           >
-            <div className="bg-slate-900/90 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-8 shadow-2xl text-center">
+            <div className="bg-header backdrop-blur-xl border border-app-secondary rounded-3xl px-12 py-8 shadow-card text-center">
               <div className="bg-gradient-to-r from-emerald-500 to-teal-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Plane className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-3xl font-bold text-white mb-2">
+              <h3 className="text-3xl font-bold text-header mb-2">
                 Flight Complete!
               </h3>
-              <p className="text-white/70 mb-6">You've reached all waypoints</p>
+              <p className="text-header-secondary mb-6">You've reached all waypoints</p>
               <Button
                 onClick={stopTracking}
                 className="bg-gradient-to-r from-violet-500 to-purple-500"

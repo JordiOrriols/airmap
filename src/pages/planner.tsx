@@ -332,23 +332,23 @@ export default function FlightPlanner() {
   };
 
   const headerComponent = (
-    <div className="bg-slate-900/70 backdrop-blur-xl border border-white/30 rounded-2xl p-4 shadow-xl">
+    <div className="bg-header backdrop-blur-xl border border-app-secondary rounded-2xl p-4 shadow-card">
       <div className="flex items-center gap-3">
         <Link to={createPageUrl("home")}>
           <Button
             variant="ghost"
             size="icon"
-            className="text-white/70 hover:text-white hover:bg-white/10 rounded-xl"
+            className="text-header-secondary hover:text-header hover:bg-button-ghost rounded-xl"
           >
             <Home className="w-5 h-5" />
           </Button>
         </Link>
         <GradientIcon icon={Plane} size="md" />
         <div className="flex-1">
-          <h1 className="text-xl font-bold text-white">
+          <h1 className="text-xl font-bold text-header">
             {t("planner.header.title", "Flight Route Planner")}
           </h1>
-          <p className="text-xs text-white/70">
+          <p className="text-xs text-header-secondary">
             {isEditMode
               ? t("planner.header.mode_edit", "Click to add waypoints")
               : t("planner.header.mode_move", "Drag to reposition")}

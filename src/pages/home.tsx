@@ -8,6 +8,7 @@ import { routeStorage } from "../utils/storage";
 import MapView from "../components/organisms/map-view";
 import { useTranslation } from "react-i18next";
 import { MAP_CENTER } from "@/utils/constants";
+import ThemeToggle from "../components/atoms/theme-toggle";
 
 export default function Home() {
   const [routes, setRoutes] = useState([]);
@@ -66,7 +67,7 @@ export default function Home() {
       </div>
 
       {/* Overlay gradient */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-br from-[#d7e9f7]/70 via-[#dce8f2]/60 to-[#e7f1fd]/70"></div>
+      <div className="absolute inset-0 z-[1] bg-app-overlay"></div>
 
       <style>{`
       .map-tiles-light-blue {
@@ -85,18 +86,19 @@ export default function Home() {
             animate={{ y: 0, opacity: 1 }}
             className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center"
           >
-            <div className="flex items-center justify-center bg-slate-900/80 backdrop-blur-xl border border-white/30 rounded-2xl px-5 py-3 shadow-lg w-full">
+            <div className="flex items-center justify-center bg-header backdrop-blur-xl border border-app-secondary rounded-2xl px-5 py-3 shadow-lg w-full">
               <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-2 rounded-xl mr-3">
-                <Plane className="w-5 h-5 text-white" />
+                <Plane className="w-5 h-5 text-header" />
               </div>
               <div className="text-left flex-1">
-                <h1 className="text-xl font-semibold text-white">
+                <h1 className="text-xl font-semibold text-header">
                   {t("home.title", "Flight Route Planner")}
                 </h1>
-                <p className="text-white/70 text-sm mt-0.5">
+                <p className="text-sm mt-0.5 text-header-secondary">
                   {t("home.subtitle", "Manage and create your flight routes")}
                 </p>
               </div>
+              <ThemeToggle />
               <div className="ml-4 flex items-center gap-1.5">
                 {[
                   { code: "en", label: "EN" },
@@ -110,11 +112,9 @@ export default function Home() {
                       variant="ghost"
                       size="sm"
                       onClick={() => i18n.changeLanguage(lng.code)}
-                      className={`${
-                        active
-                          ? "bg-white/20 text-white"
-                          : "text-white/70 hover:bg-white/10"
-                      } rounded-lg px-2 py-1 text-xs`}
+                      className={`text-header rounded-lg px-2 py-1 text-xs ${
+                        active ? "opacity-100 bg-white/20" : "opacity-70 hover:bg-white/10"
+                      }`}
                     >
                       {lng.label}
                     </Button>
@@ -152,16 +152,16 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: routes.length * 0.05 }}
               onClick={createNewRoute}
-              className="bg-slate-900/70 backdrop-blur-xl border-2 border-dashed border-white/30 rounded-3xl overflow-hidden hover:bg-slate-800/70 hover:scale-105 hover:border-emerald-500/50 transition-all duration-300 shadow-xl cursor-pointer group flex items-center justify-center min-h-full"
+              className="bg-create-card hover:bg-create-card-hover backdrop-blur-xl border-2 border-dashed border-app-secondary rounded-3xl overflow-hidden hover:scale-105 hover:border-emerald-500/50 transition-all duration-300 shadow-xl cursor-pointer group flex items-center justify-center min-h-full"
             >
               <div className="p-6 text-center">
                 <div className="bg-gradient-to-r from-emerald-500 to-teal-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Plus className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors">
+                <h3 className="text-xl font-bold text-create-card mb-2 group-hover:text-emerald-300 transition-colors">
                   {t("home.create", "Create New Route")}
                 </h3>
-                <p className="text-white/60 text-sm">
+                <p className="text-sm text-create-card-secondary">
                   {t("home.create_desc", "Start planning your next flight")}
                 </p>
               </div>
@@ -176,14 +176,14 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-20"
           >
-            <div className="bg-slate-900/70 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-16 inline-block">
+            <div className="bg-create-card backdrop-blur-xl border border-app-secondary rounded-3xl px-12 py-16 inline-block">
               <div className="bg-gradient-to-r from-pink-500 to-purple-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Plane className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-3">
+              <h3 className="text-2xl font-bold text-create-card mb-3">
                 {t("home.no_routes_yet", "No routes yet")}
               </h3>
-              <p className="text-white/70 mb-6 max-w-md">
+              <p className="text-create-card-secondary mb-6 max-w-md">
                 {t(
                   "home.create_first_desc",
                   "Create your first flight route to get started"
