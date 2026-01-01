@@ -121,10 +121,12 @@ export default function MapView({
   return (
     <div className="absolute inset-0 z-0">
       <MapContainer
-        center={(Array.isArray(center) ? [center[0], center[1]] : [center.lat, center.lng]) as [
-          number,
-          number
-        ]}
+        center={
+          (Array.isArray(center) ? [center[0], center[1]] : [center.lat, center.lng]) as [
+            number,
+            number,
+          ]
+        }
         zoom={zoom}
         className="w-full h-full"
         zoomControl={false}

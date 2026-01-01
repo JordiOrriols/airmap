@@ -38,15 +38,12 @@ const processWeatherData = (data: any): WeatherData => {
     condition: data.weather[0].main,
     description: data.weather[0].description,
     windSpeed: convertWindSpeed(data.wind.speed),
-    windGust: data.wind.gust
-      ? convertWindSpeed(data.wind.gust)
-      : convertWindSpeed(data.wind.speed),
+    windGust: data.wind.gust ? convertWindSpeed(data.wind.gust) : convertWindSpeed(data.wind.speed),
     windDirection: data.wind.deg,
     cloudCover: data.clouds.all,
     visibility: Math.round(data.visibility / 1000),
     precipitation: data.rain?.["1h"] || 0,
-    cloudBase:
-      data.clouds.all > 50 ? Math.round(data.clouds.all * 30) : null,
+    cloudBase: data.clouds.all > 50 ? Math.round(data.clouds.all * 30) : null,
   };
 };
 
@@ -104,8 +101,7 @@ export const fetchWeatherForecast = async (location: Location): Promise<Forecast
       cloudCover: item.clouds.all,
       visibility: Math.round(item.visibility / 1000),
       precipitation: (item.rain?.["3h"] || 0) + (item.snow?.["3h"] || 0),
-      cloudBase:
-        item.clouds.all > 50 ? Math.round(item.clouds.all * 30) : null,
+      cloudBase: item.clouds.all > 50 ? Math.round(item.clouds.all * 30) : null,
       hour: date.getHours(),
     });
   });

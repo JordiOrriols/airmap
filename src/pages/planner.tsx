@@ -3,13 +3,7 @@ import { useTranslation } from "react-i18next";
 import MapView from "../components/organisms/map-view";
 import L from "leaflet";
 import { Button } from "../components/ui/button";
-import {
-  Plane,
-  Home,
-  Check,
-  CloudSun,
-  Route,
-} from "lucide-react";
+import { Plane, Home, Check, CloudSun, Route } from "lucide-react";
 import { motion } from "framer-motion";
 import { createPageUrl } from "../utils/index";
 import { Link } from "react-router-dom";
@@ -58,12 +52,10 @@ export default function FlightPlanner() {
   const [showAirspace, setShowAirspace] = useState<boolean>(false);
   const [airspaceReloadTrigger, setAirspaceReloadTrigger] = useState<number>(0);
   const [waypointVfrs, setWaypointVfrs] = useState<(string | null)[]>([]);
-  const [weatherLocation, setWeatherLocation] = useState<{ lat: number; lng: number }>(
-    {
-      lat: MAP_CENTER.lat,
-      lng: MAP_CENTER.lng,
-    }
-  );
+  const [weatherLocation, setWeatherLocation] = useState<{ lat: number; lng: number }>({
+    lat: MAP_CENTER.lat,
+    lng: MAP_CENTER.lng,
+  });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -296,14 +288,14 @@ export default function FlightPlanner() {
       };
     })
     .filter(Boolean) as {
-      from: string;
-      to: string;
-      bearing: string;
-      distance: string;
-      time: string;
-      vfrFrom: string | null;
-      vfrTo: string | null;
-    }[];
+    from: string;
+    to: string;
+    bearing: string;
+    distance: string;
+    time: string;
+    vfrFrom: string | null;
+    vfrTo: string | null;
+  }[];
 
   const totalDistance = routeSegments.reduce((sum, seg) => sum + parseFloat(seg.distance), 0);
   const totalTime = routeSegments.reduce((sum, seg) => sum + parseFloat(seg.time), 0);

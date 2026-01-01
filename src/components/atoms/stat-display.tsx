@@ -25,7 +25,9 @@ export default function StatDisplay({
   const rounded = size === "compact" ? "rounded-md" : "rounded-2xl";
 
   return (
-    <div className={`bg-stat-card backdrop-blur-sm border border-stat-card ${rounded} ${padding} ${className}`}>
+    <div
+      className={`bg-stat-card backdrop-blur-sm border border-stat-card ${rounded} ${padding} ${className}`}
+    >
       <div className="flex items-center gap-2 mb-2">
         <Icon className={`w-4 h-4 ${iconColor}`} />
         <span className="text-xs text-app-secondary font-medium">{label}</span>

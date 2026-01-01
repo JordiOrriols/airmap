@@ -12,7 +12,12 @@ type WaypointListPanelProps = {
   vfrs?: (string | null)[];
 };
 
-export default function WaypointListPanel({ waypoints, onRemove, onReorder, vfrs = [] }: WaypointListPanelProps) {
+export default function WaypointListPanel({
+  waypoints,
+  onRemove,
+  onReorder,
+  vfrs = [],
+}: WaypointListPanelProps) {
   const { t } = useTranslation();
   if (waypoints.length === 0) return null;
 
