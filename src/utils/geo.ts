@@ -78,3 +78,25 @@ export function getMapCenterAndZoom(waypoints?: LatLng[]) {
   
   return { center: { lat: centerLat, lng: centerLng }, zoom };
 }
+
+export function calculateRouteStats(
+  waypoints?: LatLng[],
+  cruiseSpeed?: number,
+  speedUnit?: "knots" | "kmh"
+) {
+  if (!waypoints || waypoints.length < 2 || !cruiseSpeed) {
+    return { totalDistance: 0, totalTime: 0 };
+  }
+
+  let totalDistance = 0;
+  for (let i = 0; i < waypoints.length - 1; i++) {
+    const wp = waypoints[i];
+    const nextWp = waypoints[i + 1];
+    totalDistance += calculateDistance(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
+  }
+
+  const speedInKnots = speedToKnots(cruiseSpeed, speedUnit || "knots");
+  const totalTime = (totalDistance / speedInKnots) * 60; // Time in minutes
+
+  return { totalDistance, totalTime };
+}

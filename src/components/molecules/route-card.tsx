@@ -2,13 +2,11 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import { MapPin, Clock, Trash2, Navigation, Edit } from "lucide-react";
+import { Trash2, Navigation, Edit, Route, Timer } from "lucide-react";
 import { Link } from "react-router-dom";
-import CardHeader from "./card-header";
-import StatGrid from "./stat-grid";
 import Badge from "../atoms/badge";
 import MapView from "../organisms/map-view";
-import { getMapCenterAndZoom } from "../../utils/geo";
+import { getMapCenterAndZoom, calculateRouteStats } from "../../utils/geo";
 
 export default function RouteCard({
   route,
@@ -18,16 +16,19 @@ export default function RouteCard({
   editHref,
 }) {
   const { t } = useTranslation();
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString() +
-      " " +
-      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    );
+
+  const formatTime = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = Math.round(minutes % 60);
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
   };
 
   const { center, zoom: mapZoom } = getMapCenterAndZoom(route.waypoints);
+  const { totalDistance, totalTime } = calculateRouteStats(
+    route.waypoints,
+    route.cruiseSpeed,
+    route.speedUnit
+  );
 
   return (
     <Card className="bg-slate-900/70 backdrop-blur-xl border border-white/30 rounded-3xl overflow-hidden hover:bg-slate-800/70 hover:scale-105 transition-all duration-300 shadow-xl group">
@@ -53,49 +54,52 @@ export default function RouteCard({
         )}
       </div>
 
-      <div className="p-6 pt-0">
-        <CardHeader
-          title={
-            <span className="group-hover:text-cyan-300 transition-colors">
-              {route.name}
-            </span>
-          }
-          subtitle={
-            <span>{t("route.updated", { date: formatDate(route.updated) })}</span>
-          }
-          actions={
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={(e) => onDelete(route.id, e)}
-              className="text-white/60 hover:text-red-400 hover:bg-red-500/20 rounded-xl"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          }
-        />
-
-        <div className="space-y-3 mt-4">
-        <div className="flex items-center gap-3 text-white/80">
-          <Badge className="p-2" gradient="from-pink-500 to-purple-500">
-            <MapPin className="w-4 h-4 text-white" />
-          </Badge>
-          <span className="text-sm">
-            {t("planner.route_info.waypoints", {
-              count: route.waypoints?.length || 0,
-            })}
-          </span>
+      <div className="p-6">
+        <div className="flex items-start justify-between mb-4">
+          <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
+            {route.name}
+          </h3>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={(e) => onDelete(route.id, e)}
+            className="text-white/60 hover:text-red-400 hover:bg-red-500/20 rounded-xl -mt-1"
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
         </div>
 
-        <div className="flex items-center gap-3 text-white/80">
-          <Badge className="p-2" gradient="from-cyan-500 to-blue-500">
-            <Clock className="w-4 h-4 text-white" />
-          </Badge>
-          <span className="text-sm">
-            {route.cruiseSpeed} {route.speedUnit}
-          </span>
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <Route className="w-3.5 h-3.5 text-cyan-300" />
+              <span className="text-xs text-white/70">
+                {t("route_stats.total_distance", "Distance")}
+              </span>
+            </div>
+            <p className="text-lg font-bold text-white">
+              {totalDistance.toFixed(1)}
+            </p>
+            <p className="text-xs text-white/60">
+              {t("route_stats.nautical_miles", "NM")}
+            </p>
+          </div>
+
+          <div className="bg-slate-800/60 backdrop-blur-sm border border-white/30 rounded-xl p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <Timer className="w-3.5 h-3.5 text-purple-300" />
+              <span className="text-xs text-white/70">
+                {t("route_stats.flight_time", "Time")}
+              </span>
+            </div>
+            <p className="text-lg font-bold text-white">
+              {formatTime(totalTime)}
+            </p>
+            <p className="text-xs text-white/60">
+              {route.cruiseSpeed} {route.speedUnit}
+            </p>
+          </div>
         </div>
-      </div>
 
         <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
           <Link to={startHref}>

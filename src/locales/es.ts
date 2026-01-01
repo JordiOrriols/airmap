@@ -32,12 +32,10 @@ export const es: Locale = {
     "planner.import_error":
       "Error al importar la ruta. Revisa el formato del archivo.",
     "route.imported_name": "Ruta importada",
-    "planner.route_info.waypoints": "{count} puntos de ruta",
 
     // Route card
     "route.start_flight": "Iniciar vuelo",
     "route.edit_route": "Editar ruta",
-    "route.updated": "Actualizado: {{date}}",
 
     // Tracking
     "tracking.no_route.title": "Ninguna ruta seleccionada",

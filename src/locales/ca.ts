@@ -32,12 +32,10 @@ export const ca: Locale = {
     "planner.import_error":
       "Error en importar la ruta. Revisa el format del fitxer.",
     "route.imported_name": "Ruta importada",
-    "planner.route_info.waypoints": "{count} punts de ruta",
 
     // Route card
     "route.start_flight": "Iniciar vol",
     "route.edit_route": "Editar ruta",
-    "route.updated": "Actualitzat: {{date}}",
 
     // Tracking
     "tracking.no_route.title": "Cap ruta seleccionada",
