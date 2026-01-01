@@ -8,9 +8,9 @@ interface RouteActionsMenuProps {
   route: RouteData;
   actions: Array<{
     label: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     href?: string;
-    onSelect?: (route: RouteData, e: React.MouseEvent) => void;
+    onSelect?: (route: RouteData, e: React.MouseEvent<HTMLButtonElement>) => void;
     variant?: "default" | "danger";
   }>;
 }

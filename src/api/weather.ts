@@ -28,11 +28,23 @@ interface Location {
   lng: number;
 }
 
+type WeatherApiData = {
+  main: { temp: number; feels_like: number };
+  weather: { main: string; description: string }[];
+  wind: { speed: number; gust?: number; deg: number };
+  clouds: { all: number };
+  visibility: number;
+  rain?: Record<string, number>;
+  snow?: Record<string, number>;
+};
+
+type WeatherForecastEntry = WeatherApiData & { dt: number };
+
 const convertWindSpeed = (mps: number): number => {
   return Math.round(mps * 1.94384); // m/s to knots
 };
 
-const processWeatherData = (data: any): WeatherData => {
+const processWeatherData = (data: WeatherApiData): WeatherData => {
   return {
     temp: Math.round(data.main.temp),
     feelsLike: Math.round(data.main.feels_like),
@@ -78,7 +90,7 @@ export const fetchWeatherForecast = async (location: Location): Promise<Forecast
 
   // Group by day
   const grouped: ForecastData = {};
-  data.list.forEach((item: any) => {
+  data.list.forEach((item: WeatherForecastEntry) => {
     const date = new Date(item.dt * 1000);
     const dayKey = date.toISOString().split("T")[0] ?? "";
     if (!dayKey) return;

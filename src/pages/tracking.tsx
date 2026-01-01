@@ -341,7 +341,7 @@ export default function FlightTracking() {
                 <Plane className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-3xl font-bold text-header mb-2">Flight Complete!</h3>
-              <p className="text-header-secondary mb-6">You've reached all waypoints</p>
+              <p className="text-header-secondary mb-6">You&apos;ve reached all waypoints</p>
               <Button
                 onClick={stopTracking}
                 className="bg-gradient-to-r from-violet-500 to-purple-500"

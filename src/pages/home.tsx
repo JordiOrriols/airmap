@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "../components/ui/button";
 import { Plus, Plane } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,14 +15,14 @@ export default function Home() {
   const [routes, setRoutes] = useState<RouteData[]>([]);
   const { t, i18n } = useTranslation();
 
-  useEffect(() => {
-    loadRoutes();
-  }, []);
-
-  const loadRoutes = () => {
+  const loadRoutes = useCallback(() => {
     const allRoutes = routeStorage.getAllRoutes() as RouteData[];
     setRoutes(allRoutes);
-  };
+  }, []);
+
+  useEffect(() => {
+    loadRoutes();
+  }, [loadRoutes]);
 
   const createNewRoute = () => {
     const newRoute = routeStorage.createNewRoute() as RouteData;

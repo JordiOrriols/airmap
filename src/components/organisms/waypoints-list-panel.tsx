@@ -1,6 +1,6 @@
 import React from "react";
 import { MapPin } from "lucide-react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd";
 import WaypointCard from "../molecules/waypoint-card";
 import { useTranslation } from "react-i18next";
 import type { Waypoint } from "../../types";
@@ -21,7 +21,7 @@ export default function WaypointListPanel({
   const { t } = useTranslation();
   if (waypoints.length === 0) return null;
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     onReorder(result.source.index, result.destination.index);
   };
