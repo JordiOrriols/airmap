@@ -5,9 +5,9 @@ const OPENAIP_API_KEY = import.meta.env.VITE_OPENAIP_API_KEY;
 const OPENAIP_API_URL = "https://api.core.openaip.net/api";
 
 export interface AirspaceLowerLimit {
-  value: number;
-  unit: number;
-  referenceDatum: string;
+	value: number;
+	unit: number | string;
+	referenceDatum?: string;
 }
 
 export interface AirspaceGeometry {
