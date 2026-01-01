@@ -60,8 +60,7 @@ export default function WeatherCard({ weather, compact = false }) {
         <StatDisplay
           icon={Wind}
           label={t("weather.wind", "Wind")}
-          value={`${weather.windSpeed}`}
-          unit="kt"
+          value={`${weather.windSpeed} kt`}
           iconColor="text-cyan-300"
         />
 
@@ -69,8 +68,7 @@ export default function WeatherCard({ weather, compact = false }) {
           <StatDisplay
             icon={Wind}
             label={t("weather.gusts", "Gusts")}
-            value={`${weather.windGust}`}
-            unit="kt"
+            value={`${weather.windGust} kt`}
             iconColor="text-orange-300"
           />
         )}
@@ -78,16 +76,14 @@ export default function WeatherCard({ weather, compact = false }) {
         <StatDisplay
           icon={Cloud}
           label={t("weather.clouds", "Clouds")}
-          value={`${weather.cloudCover}%`}
-          unit={weather.cloudBase ? `${weather.cloudBase} ft` : undefined}
+          value={weather.cloudBase ? `${weather.cloudCover}% (${weather.cloudBase} ft)` : `${weather.cloudCover}%`}
           iconColor="text-gray-300"
         />
 
         <StatDisplay
           icon={Eye}
           label={t("weather.visibility", "Visibility")}
-          value={`${weather.visibility}`}
-          unit="km"
+          value={`${weather.visibility} km`}
           iconColor="text-blue-300"
         />
 
@@ -95,8 +91,7 @@ export default function WeatherCard({ weather, compact = false }) {
           <StatDisplay
             icon={Droplets}
             label={t("weather.rain", "Precipitation")}
-            value={`${weather.precipitation}`}
-            unit="mm"
+            value={`${weather.precipitation} mm`}
             iconColor="text-blue-400"
           />
         )}

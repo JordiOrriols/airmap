@@ -43,8 +43,7 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
           <StatDisplay
             icon={TrendingUp}
             label={t("stat.distance", "Distance")}
-            value={segment.distance}
-            unit={t("unit.nm", "NM")}
+            value={`${segment.distance} ${t("unit.nm", "NM")}`}
             iconColor="text-emerald-300"
             size="compact"
           />
