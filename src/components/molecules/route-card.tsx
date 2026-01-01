@@ -59,15 +59,15 @@ export default function RouteCard({
       href: editHref,
     },
     {
+      label: t("route.export_route", "Export"),
+      icon: Download,
+      onSelect: handleExport,
+    },
+    {
       label: t("route.delete_route", "Remove"),
       icon: Trash2,
       variant: "danger" as const,
       onSelect: (_route, e: React.MouseEvent) => onDelete(route.id, e),
-    },
-    {
-      label: t("route.export_route", "Export"),
-      icon: Download,
-      onSelect: handleExport,
     },
   ];
 
@@ -90,7 +90,9 @@ export default function RouteCard({
         />
         {(!route.waypoints || route.waypoints.length === 0) && (
           <div className="absolute inset-0 bg-card-app/80 flex items-center justify-center backdrop-blur-sm">
-            <span className="text-app-secondary text-sm">{t("route.no_waypoints", "No waypoints")}</span>
+            <span className="text-app-secondary text-sm">
+              {t("route.no_waypoints", "No waypoints")}
+            </span>
           </div>
         )}
       </div>
@@ -138,20 +140,11 @@ export default function RouteCard({
         <div className="mt-4 pt-4 border-t border-app-primary space-y-2">
           <Link to={startHref}>
             <Button
-              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white text-sm mb-2 shadow-md hover:shadow-lg"
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white text-sm shadow-md hover:shadow-lg"
               disabled={!route.waypoints || route.waypoints.length === 0}
             >
               <Navigation className="w-4 h-4 mr-2" />
               {t("route.start_flight", "Start Flight")}
-            </Button>
-          </Link>
-          <Link to={editHref}>
-            <Button
-              variant="outline"
-              className="w-full bg-input-app border border-app-secondary text-app-primary hover:bg-button-ghost text-sm shadow-sm hover:shadow-md"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              {t("route.edit_route", "Edit Route")}
             </Button>
           </Link>
         </div>
