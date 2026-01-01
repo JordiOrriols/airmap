@@ -29,7 +29,7 @@ export default function Home() {
     window.location.href = createPageUrl(`planner?routeId=${newRoute.id}`);
   };
 
-  const deleteRoute = (routeId: string, e: React.MouseEvent<HTMLButtonElement>) => {
+  const deleteRoute = (routeId: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -130,7 +130,6 @@ export default function Home() {
               >
                 <RouteCard
                   route={route}
-                  index={index}
                   onDelete={deleteRoute}
                   startHref={createPageUrl(`tracker?routeId=${route.id}`)}
                   editHref={createPageUrl(`planner?routeId=${route.id}`)}

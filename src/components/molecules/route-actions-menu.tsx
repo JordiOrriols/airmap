@@ -2,14 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { EllipsisVertical } from "lucide-react";
+import type { RouteData } from "../../types";
 
 interface RouteActionsMenuProps {
-  route: Record<string, unknown>;
+  route: RouteData;
   actions: Array<{
     label: string;
     icon: React.ComponentType<any>;
     href?: string;
-    onSelect?: (route: Record<string, unknown>, e: React.MouseEvent) => void;
+    onSelect?: (route: RouteData, e: React.MouseEvent) => void;
     variant?: "default" | "danger";
   }>;
 }
