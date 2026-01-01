@@ -123,22 +123,6 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Create Button */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="mb-8 flex justify-center"
-        >
-          <Button
-            onClick={createNewRoute}
-            className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white h-14 px-8 text-lg rounded-2xl shadow-xl"
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            {t("home.create", "Create New Route")}
-          </Button>
-        </motion.div>
-
         {/* Routes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
@@ -159,6 +143,27 @@ export default function Home() {
                 />
               </motion.div>
             ))}
+            
+            {/* Create New Route Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: routes.length * 0.05 }}
+              onClick={createNewRoute}
+              className="bg-slate-900/70 backdrop-blur-xl border-2 border-dashed border-white/30 rounded-3xl overflow-hidden hover:bg-slate-800/70 hover:scale-105 hover:border-emerald-500/50 transition-all duration-300 shadow-xl cursor-pointer group flex items-center justify-center min-h-full"
+            >
+              <div className="p-6 text-center">
+                <div className="bg-gradient-to-r from-emerald-500 to-teal-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Plus className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors">
+                  {t("home.create", "Create New Route")}
+                </h3>
+                <p className="text-white/60 text-sm">
+                  {t("home.create_desc", "Start planning your next flight")}
+                </p>
+              </div>
+            </motion.div>
           </AnimatePresence>
         </div>
 

@@ -53,7 +53,7 @@ export default function RouteCard({
         )}
       </div>
 
-      <div className="p-6">
+      <div className="p-6 pt-0">
         <CardHeader
           title={
             <span className="group-hover:text-cyan-300 transition-colors">
