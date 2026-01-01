@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createQueryOptions } from "../lib/react-query";
 
-const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+const OPENWEATHER_API_KEY = import.meta.env["VITE_OPENWEATHER_API_KEY"];
 const OPENWEATHER_API_URL = "https://api.openweathermap.org/data/2.5";
 
 export interface WeatherData {
@@ -16,6 +16,7 @@ export interface WeatherData {
   visibility: number;
   precipitation: number;
   cloudBase: number | null;
+  hour?: number;
 }
 
 export interface ForecastData {
@@ -46,8 +47,6 @@ const processWeatherData = (data: any): WeatherData => {
     cloudBase: data.clouds.all > 50 ? Math.round(data.clouds.all * 30) : null,
   };
 };
-
-const MAX_RETRIES = 3;
 
 /**
  * Fetch current weather for a given location
@@ -113,8 +112,8 @@ export const fetchWeatherForecast = async (location: Location): Promise<Forecast
  * React Query hook for current weather
  */
 export const useCurrentWeather = (location: Location, enabled = true) => {
-  return useQuery(
-    createQueryOptions({
+  return useQuery<WeatherData>(
+    createQueryOptions<WeatherData>({
       queryKey: ["weather", "current", location.lat, location.lng],
       queryFn: () => fetchCurrentWeather(location),
       enabled,
@@ -126,8 +125,8 @@ export const useCurrentWeather = (location: Location, enabled = true) => {
  * React Query hook for weather forecast
  */
 export const useWeatherForecast = (location: Location, enabled = true) => {
-  return useQuery(
-    createQueryOptions({
+  return useQuery<ForecastData>(
+    createQueryOptions<ForecastData>({
       queryKey: ["weather", "forecast", location.lat, location.lng],
       queryFn: () => fetchWeatherForecast(location),
       enabled,

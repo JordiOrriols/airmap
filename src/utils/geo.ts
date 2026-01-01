@@ -81,6 +81,7 @@ export function calculateRouteStats(
   for (let i = 0; i < waypoints.length - 1; i++) {
     const wp = waypoints[i];
     const nextWp = waypoints[i + 1];
+    if (!wp || !nextWp) continue;
     totalDistance += calculateDistance(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
   }
 

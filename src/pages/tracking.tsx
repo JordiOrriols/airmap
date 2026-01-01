@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import MapView from "../components/organisms/map-view";
 import L from "leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { Navigation, Home, Plane } from "lucide-react";
@@ -245,7 +246,12 @@ export default function FlightTracking() {
           zoom={13}
           className="w-full h-full"
           zoomControl={false}
-        ></MapContainer>
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          />
+        </MapContainer>
       </div>
 
       <MapView

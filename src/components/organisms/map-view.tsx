@@ -84,15 +84,6 @@ export default function MapView({
   tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   tileAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }: MapViewProps) {
-  // Default icons
-  const defaultWaypointIcon = new L.DivIcon({
-    className: "custom-waypoint-marker",
-    html: `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 24px; height: 24px; border-radius: 50%; border: 3px solid white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
-  });
-
   const getWaypointIconWithNumber = (index: number) => {
     return new L.DivIcon({
       className: "custom-waypoint-marker-with-number",
@@ -149,7 +140,7 @@ export default function MapView({
             <Marker
               key={idx}
               position={[wp.lat, wp.lng] as [number, number]}
-              icon={getWaypointIconWithNumber(idx)}
+              icon={waypointIcon ?? upcomingWaypointIcon ?? getWaypointIconWithNumber(idx)}
               draggable={Boolean(onMarkerDrag)}
               eventHandlers={{
                 dragend: (e) => {

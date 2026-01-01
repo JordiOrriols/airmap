@@ -1,4 +1,8 @@
-import { QueryClient } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  type UseQueryOptions,
+} from "@tanstack/react-query";
 
 /**
  * Default query options for all React Query hooks
@@ -10,21 +14,26 @@ export const defaultQueryOptions = {
   gcTime: 1000 * 60 * 30, // 30 minutes (formerly cacheTime)
 };
 
+const queryCache = new QueryCache({
+  onError: (error) => {
+    const err = error as { message?: string; status?: number; url?: string } | unknown;
+    console.error("React Query Error:", {
+      message: (err as any)?.message || "Unknown error",
+      status: (err as any)?.status,
+      url: (err as any)?.url,
+      timestamp: new Date().toISOString(),
+    });
+  },
+});
+
 /**
  * Custom query client with default options and error logging
  */
 export const queryClient = new QueryClient({
+  queryCache,
   defaultOptions: {
     queries: {
       ...defaultQueryOptions,
-      onError: (error: any) => {
-        console.error("React Query Error:", {
-          message: error?.message || "Unknown error",
-          status: error?.status,
-          url: error?.url,
-          timestamp: new Date().toISOString(),
-        });
-      },
     },
   },
 });
@@ -34,9 +43,7 @@ export const queryClient = new QueryClient({
  */
 export const createQueryOptions = <TData = unknown, TError = Error>(
   options: UseQueryOptions<TData, TError>
-): UseQueryOptions<TData, TError> => {
-  return {
-    ...defaultQueryOptions,
-    ...options,
-  };
-};
+) => ({
+  ...defaultQueryOptions,
+  ...options,
+});
