@@ -26,11 +26,11 @@
   --app-button-ghost-hover: rgb(243 244 246);
   
   /* Stat card colors - unified */
-  --app-stat-bg: rgb(240 249 255);
-  --app-stat-border: rgb(96 165 250 / 0.6);
-  --app-stat-distance-icon: rgb(37 99 235);
+  --app-stat-bg: rgb(243 244 246);
+  --app-stat-border: rgb(209 213 219 / 0.6);
+  --app-stat-distance-icon: rgb(107 114 128);
   --app-stat-distance-text: rgb(31 41 55);
-  --app-stat-time-icon: rgb(126 34 206);
+  --app-stat-time-icon: rgb(107 114 128);
   --app-stat-time-text: rgb(31 41 55);
   
   /* Header colors */
@@ -76,11 +76,11 @@
   --app-button-ghost-hover: rgb(51 65 85);
   
   /* Stat card colors - unified */
-  --app-stat-bg: rgb(30 41 59);
-  --app-stat-border: rgb(96 165 250 / 0.6);
-  --app-stat-distance-icon: rgb(147 197 253);
+  --app-stat-bg: rgb(51 65 85);
+  --app-stat-border: rgb(148 163 184 / 0.6);
+  --app-stat-distance-icon: rgb(148 163 184);
   --app-stat-distance-text: rgb(255 255 255);
-  --app-stat-time-icon: rgb(217 70 239);
+  --app-stat-time-icon: rgb(148 163 184);
   --app-stat-time-text: rgb(255 255 255);
   
   /* Header colors */
