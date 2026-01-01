@@ -2,7 +2,7 @@ import React from "react";
 import GlassCard from "../atoms/glass-card";
 import { Button } from "../ui/button";
 import StatDisplay from "../atoms/stat-display";
-import { Navigation, TrendingUp, Eye, EyeOff } from "lucide-react";
+import { Navigation, TrendingUp } from "lucide-react";
 import WeatherPanel from "./weather-panel";
 import { useTranslation } from "react-i18next";
 

@@ -3,7 +3,7 @@ import StatDisplay from "../atoms/stat-display";
 
 type StatItem = {
   key?: string | number;
-  icon?: React.ReactNode;
+  icon?: React.ComponentType<{ className?: string }>;
   label?: string;
   value?: React.ReactNode;
   unit?: React.ReactNode;
@@ -24,10 +24,10 @@ export default function StatGrid({ items, columns = 2, className = "" }: StatGri
         <StatDisplay
           key={it.key ?? idx}
           label={it.label}
-          icon={it.icon}
+          icon={it.icon ?? (() => null)}
           value={it.value}
           unit={it.unit}
-          className={it.className}
+          className={it.className ?? ""}
         />
       ))}
     </div>

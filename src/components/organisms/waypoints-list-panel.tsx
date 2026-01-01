@@ -3,12 +3,20 @@ import { MapPin } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import WaypointCard from "../molecules/waypoint-card";
 import { useTranslation } from "react-i18next";
+import type { Waypoint } from "../../types";
 
-export default function WaypointListPanel({ waypoints, onRemove, onReorder, vfrs = [] }) {
+type WaypointListPanelProps = {
+  waypoints: Waypoint[];
+  onRemove: (index: number) => void;
+  onReorder: (startIndex: number, endIndex: number) => void;
+  vfrs?: (string | null)[];
+};
+
+export default function WaypointListPanel({ waypoints, onRemove, onReorder, vfrs = [] }: WaypointListPanelProps) {
   const { t } = useTranslation();
   if (waypoints.length === 0) return null;
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = (result: any) => {
     if (!result.destination) return;
     onReorder(result.source.index, result.destination.index);
   };
@@ -37,7 +45,7 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder, vfrs
                           index={index}
                           onRemove={onRemove}
                           draggable={true}
-                          dragHandleProps={provided.dragHandleProps}
+                          dragHandleProps={provided.dragHandleProps ?? undefined}
                           draggableProps={provided.draggableProps}
                           innerRef={provided.innerRef}
                           vfrUpperDisplay={vfrs[index]}

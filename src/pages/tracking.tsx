@@ -16,10 +16,12 @@ import {
   calculateDistance as geoCalculateDistance,
   calculateBearing as geoCalculateBearing,
 } from "../utils/geo";
-import { MapContainer } from "react-leaflet";
+import type { RouteData } from "../types";
+
+type LatLng = { lat: number; lng: number };
 
 // Fix for default marker icon
-delete L.Icon.Default.prototype._getIconUrl;
+delete (L.Icon.Default.prototype as { _getIconUrl?: unknown })._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -66,18 +68,18 @@ const upcomingWaypointIcon = new L.DivIcon({
 
 export default function FlightTracking() {
   const { t } = useTranslation();
-  const [route, setRoute] = useState(null);
+  const [route, setRoute] = useState<RouteData | null>(null);
   const [isTracking, setIsTracking] = useState(false);
-  const [currentPosition, setCurrentPosition] = useState(null);
+  const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [currentHeading, setCurrentHeading] = useState(0);
   const [currentWaypointIndex, setCurrentWaypointIndex] = useState(0);
   const [speed, setSpeed] = useState(0);
   const [distanceToNext, setDistanceToNext] = useState(0);
   const [etaToNext, setEtaToNext] = useState(0);
   const [showAirspace, setShowAirspace] = useState(true);
-  const [weatherLocation, setWeatherLocation] = useState(null);
-  const watchIdRef = useRef(null);
-  const lastPositionRef = useRef(null);
+  const [weatherLocation, setWeatherLocation] = useState<LatLng | null>(null);
+  const watchIdRef = useRef<number | null>(null);
+  const lastPositionRef = useRef<LatLng | null>(null);
 
   useEffect(() => {
     // Load route from URL parameter
@@ -85,7 +87,7 @@ export default function FlightTracking() {
     const routeId = urlParams.get("routeId");
 
     if (routeId) {
-      const foundRoute = routeStorage.getRoute(routeId);
+      const foundRoute = routeStorage.getRoute(routeId) as RouteData | undefined;
       if (foundRoute && foundRoute.waypoints && foundRoute.waypoints.length > 0) {
         setRoute(foundRoute);
       }
@@ -105,7 +107,7 @@ export default function FlightTracking() {
     watchIdRef.current = navigator.geolocation.watchPosition(
       (position) => {
         const { latitude, longitude, speed: gpsSpeed, heading } = position.coords;
-        const newPosition = { lat: latitude, lng: longitude };
+        const newPosition: LatLng = { lat: latitude, lng: longitude };
 
         setCurrentPosition(newPosition);
         setWeatherLocation(newPosition);
@@ -169,7 +171,7 @@ export default function FlightTracking() {
   };
 
   const stopTracking = () => {
-    if (watchIdRef.current) {
+    if (watchIdRef.current !== null) {
       navigator.geolocation.clearWatch(watchIdRef.current);
       watchIdRef.current = null;
     }
@@ -178,17 +180,11 @@ export default function FlightTracking() {
 
   useEffect(() => {
     return () => {
-      if (watchIdRef.current) {
+      if (watchIdRef.current !== null) {
         navigator.geolocation.clearWatch(watchIdRef.current);
       }
     };
   }, []);
-
-  const getWaypointIcon = (index) => {
-    if (index < currentWaypointIndex) return passedWaypointIcon;
-    if (index === currentWaypointIndex) return activeWaypointIcon;
-    return upcomingWaypointIcon;
-  };
 
   const formatTime = (minutes) => {
     if (!minutes || minutes === Infinity) return "--";
@@ -218,9 +214,11 @@ export default function FlightTracking() {
     );
   }
 
-  const mapCenter =
-    currentPosition ||
-    (route.waypoints[0] ? [route.waypoints[0].lat, route.waypoints[0].lng] : [41.5209, 2.105]);
+  const mapCenter: [number, number] = currentPosition
+    ? [currentPosition.lat, currentPosition.lng]
+    : route.waypoints[0]
+      ? [route.waypoints[0].lat, route.waypoints[0].lng]
+      : [41.5209, 2.105];
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">

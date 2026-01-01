@@ -2,7 +2,6 @@ import React from "react";
 import { Wind, Droplets, Thermometer, Eye, Cloud } from "lucide-react";
 import WeatherIcon from "../atoms/weather-icon";
 import StatDisplay from "../atoms/stat-display";
-import Badge from "../atoms/badge";
 import { useTranslation } from "react-i18next";
 
 export default function WeatherCard({ weather, compact = false }) {

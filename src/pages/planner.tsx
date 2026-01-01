@@ -32,7 +32,7 @@ import { useAirspaces, processAirspaceForPIP } from "../api/openaip";
 import type { RouteData, SpeedUnit, Waypoint } from "../types";
 
 // Fix for default marker icon
-delete L.Icon.Default.prototype._getIconUrl;
+delete (L.Icon.Default.prototype as { _getIconUrl?: unknown })._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -163,8 +163,8 @@ export default function FlightPlanner() {
     reader.readAsText(file);
   };
 
-  const handleMapClick = (latlng: L.LatLng) => {
-    const newWaypoint = {
+  const handleMapClick = (latlng: { lat: number; lng: number }) => {
+    const newWaypoint: Waypoint = {
       lat: latlng.lat,
       lng: latlng.lng,
       name: `WPT ${waypoints.length + 1}`,
@@ -183,8 +183,11 @@ export default function FlightPlanner() {
 
   const updateWaypointPosition = (index: number, newLat: number, newLng: number) => {
     const updatedWaypoints = [...waypoints];
+    const current = updatedWaypoints[index];
+    if (!current) return;
+
     updatedWaypoints[index] = {
-      ...updatedWaypoints[index],
+      ...current,
       lat: newLat,
       lng: newLng,
     };

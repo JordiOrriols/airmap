@@ -4,21 +4,29 @@ import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Navigation, Route, Timer, Edit, Trash2, Download } from "lucide-react";
 import { Link } from "react-router-dom";
-import Badge from "../atoms/badge";
 import MapView from "../organisms/map-view";
 import { getMapCenterAndZoom, calculateRouteStats } from "../../utils/geo";
 import RouteActionsMenu from "./route-actions-menu";
+import type { RouteData } from "../../types";
 
-export default function RouteCard({ route, index, onDelete, startHref, editHref }) {
+type RouteCardProps = {
+  route: RouteData;
+  onDelete: (routeId: string, e: React.MouseEvent) => void;
+  startHref: string;
+  editHref: string;
+};
+
+export default function RouteCard({ route, onDelete, startHref, editHref }: RouteCardProps) {
   const { t } = useTranslation();
 
-  const formatTime = (minutes) => {
+  const formatTime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const mins = Math.round(minutes % 60);
     return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
   };
 
   const { center, zoom: mapZoom } = getMapCenterAndZoom(route.waypoints);
+  const mapCenter = center ?? { lat: 41.5209, lng: 2.105 };
   const { totalDistance, totalTime } = calculateRouteStats(
     route.waypoints,
     route.cruiseSpeed,
@@ -70,7 +78,7 @@ export default function RouteCard({ route, index, onDelete, startHref, editHref 
       {/* Map Preview */}
       <div className="h-40 relative">
         <MapView
-          center={center}
+          center={mapCenter}
           zoom={mapZoom}
           waypoints={route.waypoints || []}
           currentPosition={null}
