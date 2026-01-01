@@ -39,3 +39,42 @@ export function speedToKnots(speed: number, unit: "knots" | "kmh") {
   if (unit === "kmh") return speed / 1.852;
   return speed;
 }
+
+type LatLng = { lat: number; lng: number };
+
+export function getMapCenterAndZoom(waypoints?: LatLng[]) {
+  if (!waypoints || waypoints.length === 0) {
+    return { center: { lat: 41.5209, lng: 2.105 }, zoom: 8 };
+  }
+  
+  if (waypoints.length === 1) {
+    return { center: waypoints[0], zoom: 11 };
+  }
+
+  // Calculate bounds to fit all waypoints
+  const lats = waypoints.map(wp => wp.lat);
+  const lngs = waypoints.map(wp => wp.lng);
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const minLng = Math.min(...lngs);
+  const maxLng = Math.max(...lngs);
+  
+  const centerLat = (minLat + maxLat) / 2;
+  const centerLng = (minLng + maxLng) / 2;
+  
+  // Calculate zoom with padding for better visibility
+  const latDiff = maxLat - minLat;
+  const lngDiff = maxLng - minLng;
+  // Add 40% padding to bounds
+  const maxDiff = Math.max(latDiff, lngDiff) * 1.4;
+  
+  let zoom = 7;
+  if (maxDiff < 0.01) zoom = 12;
+  else if (maxDiff < 0.05) zoom = 10;
+  else if (maxDiff < 0.1) zoom = 9;
+  else if (maxDiff < 0.5) zoom = 8;
+  else if (maxDiff < 1) zoom = 7;
+  else if (maxDiff < 2) zoom = 6;
+  
+  return { center: { lat: centerLat, lng: centerLng }, zoom };
+}
