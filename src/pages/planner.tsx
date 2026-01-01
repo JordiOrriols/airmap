@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import MapView from "../components/organisms/map-view";
 import L from "leaflet";
@@ -58,6 +58,18 @@ export default function FlightPlanner() {
   });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const { t } = useTranslation();
+
+  const loadRoute = useCallback((id: string) => {
+    const route = routeStorage.getRoute(id) as RouteData | undefined;
+    if (route) {
+      setRouteName(route.name);
+      setWaypoints(route.waypoints || []);
+      setCruiseSpeed(route.cruiseSpeed || 120);
+      setSpeedUnit((route.speedUnit as SpeedUnit) || "knots");
+    }
+  }, []);
+
   useEffect(() => {
     // Get route ID from URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -67,32 +79,9 @@ export default function FlightPlanner() {
       setRouteId(id);
       loadRoute(id);
     }
-  }, []);
+  }, [loadRoute]);
 
-  const { t } = useTranslation();
-
-  // Auto-save route when data changes
-  useEffect(() => {
-    if (!routeId) return;
-
-    const timer = setTimeout(() => {
-      saveRoute();
-    }, 1000); // Auto-save after 1 second of no changes
-
-    return () => clearTimeout(timer);
-  }, [waypoints, cruiseSpeed, speedUnit, routeName, routeId]);
-
-  const loadRoute = (id: string) => {
-    const route = routeStorage.getRoute(id) as RouteData | undefined;
-    if (route) {
-      setRouteName(route.name);
-      setWaypoints(route.waypoints || []);
-      setCruiseSpeed(route.cruiseSpeed || 120);
-      setSpeedUnit((route.speedUnit as SpeedUnit) || "knots");
-    }
-  };
-
-  const saveRoute = () => {
+  const saveRoute = useCallback(() => {
     if (!routeId) return;
 
     const routeData: RouteData = {
@@ -110,7 +99,18 @@ export default function FlightPlanner() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     }
-  };
+  }, [routeId, routeName, waypoints, cruiseSpeed, speedUnit]);
+
+  // Auto-save route when data changes
+  useEffect(() => {
+    if (!routeId) return;
+
+    const timer = setTimeout(() => {
+      saveRoute();
+    }, 1000); // Auto-save after 1 second of no changes
+
+    return () => clearTimeout(timer);
+  }, [waypoints, cruiseSpeed, speedUnit, routeName, routeId, saveRoute]);
 
   const exportRoute = () => {
     const routeData = {
@@ -148,7 +148,7 @@ export default function FlightPlanner() {
         setWaypoints(importedData.waypoints || []);
         setCruiseSpeed(importedData.cruiseSpeed || 120);
         setSpeedUnit((importedData.speedUnit as SpeedUnit) || "knots");
-      } catch (error) {
+      } catch {
         alert(t("planner.import_error", "Error importing route. Please check the file format."));
       }
     };
