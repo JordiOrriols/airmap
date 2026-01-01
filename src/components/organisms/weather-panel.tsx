@@ -35,11 +35,14 @@ export default function WeatherPanel({
 
       // Find closest hour
       const hourNum = parseInt(selectedHour, 10);
+      if (selectedDayData.length === 0) return;
+      const first = selectedDayData[0];
+      if (!first) return;
       const closest = selectedDayData.reduce<WeatherData>((prev, curr) => {
         const prevHour = prev.hour ?? 0;
         const currHour = curr.hour ?? 0;
         return Math.abs(currHour - hourNum) < Math.abs(prevHour - hourNum) ? curr : prev;
-      });
+      }, first);
 
       setWeather(closest);
     },

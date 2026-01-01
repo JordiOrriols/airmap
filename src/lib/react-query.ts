@@ -15,14 +15,22 @@ export const defaultQueryOptions = {
 };
 
 const queryCache = new QueryCache({
-  onError: (error) => {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    const status = typeof (error as { status?: unknown })?.status === "number"
-      ? (error as { status: number }).status
-      : undefined;
-    const url = typeof (error as { url?: unknown })?.url === "string"
-      ? (error as { url: string }).url
-      : undefined;
+  onError: (error: unknown) => {
+    let message = "Unknown error";
+    let status: number | undefined;
+    let url: string | undefined;
+
+    if (error instanceof Error) {
+      message = error.message;
+    }
+
+    const errorObj = error as Record<string, unknown>;
+    if (typeof errorObj["status"] === "number") {
+      status = errorObj["status"];
+    }
+    if (typeof errorObj["url"] === "string") {
+      url = errorObj["url"];
+    }
 
     console.error("React Query Error:", {
       message,

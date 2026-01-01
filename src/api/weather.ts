@@ -48,8 +48,8 @@ const processWeatherData = (data: WeatherApiData): WeatherData => {
   return {
     temp: Math.round(data.main.temp),
     feelsLike: Math.round(data.main.feels_like),
-    condition: data.weather[0].main,
-    description: data.weather[0].description,
+    condition: data.weather[0]?.main || "Unknown",
+    description: data.weather[0]?.description || "No description",
     windSpeed: convertWindSpeed(data.wind.speed),
     windGust: data.wind.gust ? convertWindSpeed(data.wind.gust) : convertWindSpeed(data.wind.speed),
     windDirection: data.wind.deg,
@@ -102,8 +102,8 @@ export const fetchWeatherForecast = async (location: Location): Promise<Forecast
     grouped[dayKey].push({
       temp: Math.round(item.main.temp),
       feelsLike: Math.round(item.main.feels_like),
-      condition: item.weather[0].main,
-      description: item.weather[0].description,
+      condition: item.weather[0]?.main || "Unknown",
+      description: item.weather[0]?.description || "No description",
       windSpeed: convertWindSpeed(item.wind.speed),
       windGust: item.wind.gust
         ? convertWindSpeed(item.wind.gust)
