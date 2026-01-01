@@ -1,7 +1,3 @@
-export interface Translation {
-  [key: string]: string;
-}
+import type { ResourceLanguage } from "i18next";
 
-export interface Locale {
-  translation: Translation;
-}
+export type Locale = ResourceLanguage;

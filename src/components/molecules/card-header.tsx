@@ -3,7 +3,6 @@ import React from "react";
 type CardHeaderProps = {
   title: React.ReactNode;
   subtitle?: React.ReactNode;
-  meta?: React.ReactNode;
   actions?: React.ReactNode;
   className?: string;
 };
@@ -11,7 +10,6 @@ type CardHeaderProps = {
 export default function CardHeader({
   title,
   subtitle,
-  meta,
   actions,
   className = "",
 }: CardHeaderProps) {
