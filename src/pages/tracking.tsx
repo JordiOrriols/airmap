@@ -21,8 +21,7 @@ import { MapContainer } from "react-leaflet";
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
@@ -87,11 +86,7 @@ export default function FlightTracking() {
 
     if (routeId) {
       const foundRoute = routeStorage.getRoute(routeId);
-      if (
-        foundRoute &&
-        foundRoute.waypoints &&
-        foundRoute.waypoints.length > 0
-      ) {
+      if (foundRoute && foundRoute.waypoints && foundRoute.waypoints.length > 0) {
         setRoute(foundRoute);
       }
     }
@@ -101,12 +96,7 @@ export default function FlightTracking() {
 
   const startTracking = () => {
     if (!navigator.geolocation) {
-      alert(
-        t(
-          "tracking.geolocation_unsupported",
-          "Geolocation is not supported by your browser"
-        )
-      );
+      alert(t("tracking.geolocation_unsupported", "Geolocation is not supported by your browser"));
       return;
     }
 
@@ -114,12 +104,7 @@ export default function FlightTracking() {
 
     watchIdRef.current = navigator.geolocation.watchPosition(
       (position) => {
-        const {
-          latitude,
-          longitude,
-          speed: gpsSpeed,
-          heading,
-        } = position.coords;
+        const { latitude, longitude, speed: gpsSpeed, heading } = position.coords;
         const newPosition = { lat: latitude, lng: longitude };
 
         setCurrentPosition(newPosition);
@@ -161,10 +146,7 @@ export default function FlightTracking() {
           }
 
           // If within 0.1 NM of waypoint, move to next
-          if (
-            distance < 0.1 &&
-            currentWaypointIndex < route.waypoints.length - 1
-          ) {
+          if (distance < 0.1 && currentWaypointIndex < route.waypoints.length - 1) {
             setCurrentWaypointIndex(currentWaypointIndex + 1);
           }
         }
@@ -224,10 +206,7 @@ export default function FlightTracking() {
             {t("tracking.no_route.title", "No Route Selected")}
           </h2>
           <p className="text-header-secondary mb-6">
-            {t(
-              "tracking.no_route.desc",
-              "Please select a route to start tracking"
-            )}
+            {t("tracking.no_route.desc", "Please select a route to start tracking")}
           </p>
           <Link to={createPageUrl("home")}>
             <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600">
@@ -241,9 +220,7 @@ export default function FlightTracking() {
 
   const mapCenter =
     currentPosition ||
-    (route.waypoints[0]
-      ? [route.waypoints[0].lat, route.waypoints[0].lng]
-      : [41.5209, 2.105]);
+    (route.waypoints[0] ? [route.waypoints[0].lat, route.waypoints[0].lng] : [41.5209, 2.105]);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
@@ -359,9 +336,7 @@ export default function FlightTracking() {
               <div className="bg-gradient-to-r from-emerald-500 to-teal-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Plane className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-3xl font-bold text-header mb-2">
-                Flight Complete!
-              </h3>
+              <h3 className="text-3xl font-bold text-header mb-2">Flight Complete!</h3>
               <p className="text-header-secondary mb-6">You've reached all waypoints</p>
               <Button
                 onClick={stopTracking}

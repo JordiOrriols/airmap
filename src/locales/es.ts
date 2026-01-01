@@ -16,8 +16,7 @@ export const es: Locale = {
 
     "planner.route_control.title": "Control de ruta",
     "planner.route_control.route_name": "Nombre de la ruta",
-    "planner.route_control.route_name_placeholder":
-      "Introduce el nombre de la ruta...",
+    "planner.route_control.route_name_placeholder": "Introduce el nombre de la ruta...",
     "planner.route_control.cruise_speed": "Velocidad de crucero",
     "planner.route_control.edit_mode_on": "Modo edición: ON",
     "planner.route_control.move_mode_on": "Modo mover: ON",
@@ -29,8 +28,7 @@ export const es: Locale = {
     "planner.route_control.clear": "Borrar ruta",
 
     "planner.route_info.title": "Información de la ruta",
-    "planner.import_error":
-      "Error al importar la ruta. Revisa el formato del archivo.",
+    "planner.import_error": "Error al importar la ruta. Revisa el formato del archivo.",
     "route.imported_name": "Ruta importada",
 
     // Route card
@@ -43,10 +41,8 @@ export const es: Locale = {
     "tracking.go_to_routes": "Ir a rutas",
     "tracking.start_tracking": "Iniciar seguimiento",
     "tracking.stop_tracking": "Detener seguimiento",
-    "tracking.geolocation_unsupported":
-      "La geolocalización no es compatible con tu navegador",
-    "tracking.unable_get_location":
-      "No se puede obtener tu ubicación. Revisa los permisos.",
+    "tracking.geolocation_unsupported": "La geolocalización no es compatible con tu navegador",
+    "tracking.unable_get_location": "No se puede obtener tu ubicación. Revisa los permisos.",
     "tracking.status.in_progress": "Vuelo en curso",
     "tracking.status.ready": "Listo para empezar",
     "tracking.flight_complete.title": "¡Vuelo completado!",

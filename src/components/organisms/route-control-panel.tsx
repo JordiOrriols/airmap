@@ -14,13 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import WaypointListPanel from "./waypoints-list-panel";
 import { useTranslation } from "react-i18next";
 
@@ -80,10 +74,7 @@ export default function RouteControlPanel({
           <Input
             value={routeName}
             onChange={(e) => setRouteName(e.target.value)}
-            placeholder={t(
-              "planner.route_control.route_name_placeholder",
-              "Enter route name...",
-            )}
+            placeholder={t("planner.route_control.route_name_placeholder", "Enter route name...")}
             className="bg-input-app border-input-app text-input-app placeholder:text-app-muted backdrop-blur-sm"
           />
         </div>
@@ -104,9 +95,7 @@ export default function RouteControlPanel({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="knots">
-                  {t("unit.knots", "Knots")}
-                </SelectItem>
+                <SelectItem value="knots">{t("unit.knots", "Knots")}</SelectItem>
                 <SelectItem value="kmh">{t("unit.kmh", "Km/h")}</SelectItem>
               </SelectContent>
             </Select>
@@ -117,8 +106,8 @@ export default function RouteControlPanel({
           <Button
             onClick={toggleEditMode}
             className={`w-full backdrop-blur-sm transition-all duration-300 border ${
-              isEditMode 
-                ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-emerald-400/30" 
+              isEditMode
+                ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-emerald-400/30"
                 : "bg-input-app border-app-secondary text-input-app hover:bg-button-ghost"
             }`}
           >
@@ -139,8 +128,8 @@ export default function RouteControlPanel({
             onClick={() => setShowAirspace(!showAirspace)}
             variant="outline"
             className={`w-full backdrop-blur-sm transition-all duration-300 ${
-              showAirspace 
-                ? "bg-blue-500/30 border-blue-400/40 text-white" 
+              showAirspace
+                ? "bg-blue-500/30 border-blue-400/40 text-white"
                 : "bg-input-app border-app-secondary text-input-app hover:bg-button-ghost"
             }`}
           >

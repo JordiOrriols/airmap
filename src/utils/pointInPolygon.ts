@@ -11,7 +11,7 @@ export function pointInPolygon(lat, lng, polygon) {
     const yj = polygon[j][0];
     const xj = polygon[j][1];
 
-    const intersect = (yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0) + xi;
+    const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0) + xi;
     if (intersect) inside = !inside;
   }
   return inside;

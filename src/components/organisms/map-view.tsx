@@ -47,8 +47,7 @@ function MapClickHandler({
 }) {
   useMapEvents({
     click: (e) => {
-      if (allowMapClick && onMapClick)
-        onMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
+      if (allowMapClick && onMapClick) onMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
     },
   });
   return null;
@@ -142,15 +141,10 @@ export default function MapView({
       >
         <TileLayer url={tileUrl} attribution={tileAttribution} />
 
-        <MapClickHandler
-          allowMapClick={allowMapClick}
-          onMapClick={onMapClick}
-        />
+        <MapClickHandler allowMapClick={allowMapClick} onMapClick={onMapClick} />
         <MapController center={currentPosition || center} />
 
-        {showAirspace && (
-          <AirspaceLayer visible={true} reloadTrigger={airspaceReloadTrigger} />
-        )}
+        {showAirspace && <AirspaceLayer visible={true} reloadTrigger={airspaceReloadTrigger} />}
 
         {showWaypoints &&
           waypoints.map((wp, idx) => (

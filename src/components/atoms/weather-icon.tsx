@@ -21,9 +21,7 @@ export default function WeatherIcon({ condition, size = "md" }) {
     const lower = condition?.toLowerCase() || "";
 
     if (lower.includes("thunder") || lower.includes("storm")) {
-      return (
-        <CloudLightning className={`${sizeClasses[size]} text-yellow-300`} />
-      );
+      return <CloudLightning className={`${sizeClasses[size]} text-yellow-300`} />;
     }
     if (lower.includes("rain") || lower.includes("shower")) {
       return <CloudRain className={`${sizeClasses[size]} text-blue-300`} />;

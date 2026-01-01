@@ -69,8 +69,8 @@ export default function TrackingControlPanel({
             onClick={() => setShowAirspace(!showAirspace)}
             variant="outline"
             className={`w-full backdrop-blur-sm transition-all duration-300 ${
-              showAirspace 
-                ? "bg-blue-500/30 border-blue-400/40 text-white" 
+              showAirspace
+                ? "bg-blue-500/30 border-blue-400/40 text-white"
                 : "bg-input-app border-app-secondary text-input-app hover:bg-button-ghost"
             }`}
           >
@@ -84,11 +84,7 @@ export default function TrackingControlPanel({
 
         {weatherLocation && (
           <div className="mt-4">
-            <WeatherPanel
-              location={weatherLocation}
-              forecastMode={false}
-              compact={false}
-            />
+            <WeatherPanel location={weatherLocation} forecastMode={false} compact={false} />
           </div>
         )}
       </div>

@@ -20,9 +20,7 @@ export default function RouteStatsCard({
             {t("route_stats.total_distance", "Total Distance")}
           </span>
         </div>
-        <p className="text-2xl font-bold text-stat-distance">
-          {totalDistance.toFixed(1)}
-        </p>
+        <p className="text-2xl font-bold text-stat-distance">{totalDistance.toFixed(1)}</p>
         <p className="text-xs text-app-tertiary">
           {t("route_stats.nautical_miles", "nautical miles")}
         </p>

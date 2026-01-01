@@ -29,9 +29,7 @@ export default function WaypointCard({
             {index + 1}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-app-primary font-medium text-sm truncate">
-              {waypoint.name}
-            </p>
+            <p className="text-app-primary font-medium text-sm truncate">{waypoint.name}</p>
             <p className="text-app-secondary text-xs">
               {waypoint.lat.toFixed(4)}°, {waypoint.lng.toFixed(4)}°
             </p>

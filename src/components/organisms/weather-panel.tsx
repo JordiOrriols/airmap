@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Loader2, Calendar, Clock } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import WeatherCard from "../molecules/weather-card";
 import { useTranslation } from "react-i18next";
 import { useCurrentWeather, useWeatherForecast } from "../../api/weather";
@@ -25,9 +19,7 @@ export default function WeatherPanel({
   const currentWeatherQuery = useCurrentWeather(location, !forecastMode);
   const forecastQuery = useWeatherForecast(location, forecastMode);
 
-  const loading = forecastMode
-    ? forecastQuery.isLoading
-    : currentWeatherQuery.isLoading;
+  const loading = forecastMode ? forecastQuery.isLoading : currentWeatherQuery.isLoading;
 
   useEffect(() => {
     if (forecastMode && forecastQuery.data) {
@@ -57,9 +49,7 @@ export default function WeatherPanel({
     const closest = selectedDayData.reduce((prev: any, curr: any) => {
       const prevHour = prev.hour || 0;
       const currHour = curr.hour || 0;
-      return Math.abs(currHour - hourNum) < Math.abs(prevHour - hourNum)
-        ? curr
-        : prev;
+      return Math.abs(currHour - hourNum) < Math.abs(prevHour - hourNum) ? curr : prev;
     });
 
     setWeather(closest);
@@ -74,12 +64,12 @@ export default function WeatherPanel({
           index === 0
             ? t("date.today", "Today")
             : index === 1
-            ? t("date.tomorrow", "Tomorrow")
-            : date.toLocaleDateString("en-US", {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-              }),
+              ? t("date.tomorrow", "Tomorrow")
+              : date.toLocaleDateString("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                }),
       };
     });
   };
@@ -99,9 +89,7 @@ export default function WeatherPanel({
           </div>
         )}
 
-        {!loading && weather && (
-          <WeatherCard weather={weather} compact={true} />
-        )}
+        {!loading && weather && <WeatherCard weather={weather} compact={true} />}
       </div>
     );
   }
@@ -167,9 +155,7 @@ export default function WeatherPanel({
       {!loading && !weather && (
         <div className="text-center text-app-secondary py-8">
           <p>{t("weather.no_data", "Weather data unavailable")}</p>
-          <p className="text-xs mt-2">
-            {t("weather.check_api", "Check API key configuration")}
-          </p>
+          <p className="text-xs mt-2">{t("weather.check_api", "Check API key configuration")}</p>
         </div>
       )}
     </div>

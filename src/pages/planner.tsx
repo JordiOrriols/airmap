@@ -54,8 +54,7 @@ import { useAirspaces, processAirspaceForPIP } from "../api/openaip";
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
@@ -166,19 +165,12 @@ export default function FlightPlanner() {
     reader.onload = (e) => {
       try {
         const importedData = JSON.parse(e.target.result);
-        setRouteName(
-          importedData.name || t("route.imported_name", "Imported Route")
-        );
+        setRouteName(importedData.name || t("route.imported_name", "Imported Route"));
         setWaypoints(importedData.waypoints || []);
         setCruiseSpeed(importedData.cruiseSpeed || 120);
         setSpeedUnit(importedData.speedUnit || "knots");
       } catch (error) {
-        alert(
-          t(
-            "planner.import_error",
-            "Error importing route. Please check the file format."
-          )
-        );
+        alert(t("planner.import_error", "Error importing route. Please check the file format."));
       }
     };
     reader.readAsText(file);
@@ -246,10 +238,7 @@ export default function FlightPlanner() {
   }, [waypoints]);
 
   // Fetch airspaces using react-query
-  const { data: airspacesData } = useAirspaces(
-    waypointsBbox,
-    showAirspace && waypoints.length > 0
-  );
+  const { data: airspacesData } = useAirspaces(waypointsBbox, showAirspace && waypoints.length > 0);
 
   // Compute per-waypoint VFR upper limits
   useEffect(() => {
@@ -299,12 +288,7 @@ export default function FlightPlanner() {
   const routeSegments = waypoints.slice(0, -1).map((wp, index) => {
     const nextWp = waypoints[index + 1];
     const bearing = geoCalculateBearing(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
-    const distance = geoCalculateDistance(
-      wp.lat,
-      wp.lng,
-      nextWp.lat,
-      nextWp.lng
-    );
+    const distance = geoCalculateDistance(wp.lat, wp.lng, nextWp.lat, nextWp.lng);
     const speedInKnots = speedToKnots(cruiseSpeed, speedUnit);
     return {
       from: wp.name,
@@ -317,14 +301,8 @@ export default function FlightPlanner() {
     };
   });
 
-  const totalDistance = routeSegments.reduce(
-    (sum, seg) => sum + parseFloat(seg.distance),
-    0
-  );
-  const totalTime = routeSegments.reduce(
-    (sum, seg) => sum + parseFloat(seg.time),
-    0
-  );
+  const totalDistance = routeSegments.reduce((sum, seg) => sum + parseFloat(seg.distance), 0);
+  const totalTime = routeSegments.reduce((sum, seg) => sum + parseFloat(seg.time), 0);
 
   const formatTime = (minutes) => {
     const hours = Math.floor(minutes / 60);
@@ -405,9 +383,7 @@ export default function FlightPlanner() {
         interactive={true}
         allowMapClick={isEditMode}
         onMapClick={(latlng) => handleMapClick(latlng)}
-        onMarkerDrag={(index, lat, lng) =>
-          updateWaypointPosition(index, lat, lng)
-        }
+        onMarkerDrag={(index, lat, lng) => updateWaypointPosition(index, lat, lng)}
         waypointIcon={waypointIcon}
       />
 

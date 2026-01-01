@@ -34,9 +34,7 @@ export default function NextWaypointPanel({
         <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-2xl p-5">
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h3 className="text-2xl font-bold text-app-primary mb-1">
-                {waypoint.name}
-              </h3>
+              <h3 className="text-2xl font-bold text-app-primary mb-1">{waypoint.name}</h3>
               <p className="text-sm text-app-secondary">
                 {t("next_waypoint.waypoint_of", {
                   index: currentIndex + 1,

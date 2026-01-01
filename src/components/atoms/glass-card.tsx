@@ -1,12 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-export default function GlassCard({
-  children,
-  className = "",
-  animate = false,
-  ...props
-}) {
+export default function GlassCard({ children, className = "", animate = false, ...props }) {
   const baseClasses =
     "bg-card-app backdrop-blur-xs border border-app-secondary rounded-3xl shadow-card";
 

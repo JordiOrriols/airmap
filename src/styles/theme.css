@@ -4,27 +4,32 @@
   /* Background colors */
   --app-bg-primary: rgb(240 249 255);
   --app-bg-secondary: rgb(255 255 255);
-  --app-bg-overlay: linear-gradient(to bottom right, rgb(215 233 247 / 0.7), rgb(220 232 242 / 0.6), rgb(231 241 253 / 0.7));
-  
+  --app-bg-overlay: linear-gradient(
+    to bottom right,
+    rgb(215 233 247 / 0.7),
+    rgb(220 232 242 / 0.6),
+    rgb(231 241 253 / 0.7)
+  );
+
   /* Card colors */
   --app-card-bg: rgb(255 255 255 / 0.8);
   --app-card-hover: rgb(255 255 255 / 0.95);
   --app-card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  
+
   /* Text colors */
   --app-text-primary: rgb(31 41 55);
   --app-text-secondary: rgb(75 85 99);
   --app-text-tertiary: rgb(107 114 128);
   --app-text-muted: rgb(156 163 175);
-  
+
   /* Border colors */
   --app-border-primary: rgb(203 213 225);
   --app-border-secondary: rgb(203 213 225 / 0.5);
-  
+
   /* Button colors */
   --app-button-ghost-text: rgb(75 85 99);
   --app-button-ghost-hover: rgb(243 244 246);
-  
+
   /* Stat card colors - unified */
   --app-stat-bg: rgb(243 244 246);
   --app-stat-border: rgb(209 213 219 / 0.6);
@@ -32,17 +37,17 @@
   --app-stat-distance-text: rgb(31 41 55);
   --app-stat-time-icon: rgb(107 114 128);
   --app-stat-time-text: rgb(31 41 55);
-  
+
   /* Header colors */
   --app-header-bg: rgb(255 255 255 / 0.7);
   --app-header-text: rgb(31 41 55);
   --app-header-text-secondary: rgb(75 85 99);
-  
+
   /* Input/Select colors */
   --app-input-bg: rgb(243 244 246 / 0.8);
   --app-input-border: rgb(203 213 225 / 0.5);
   --app-input-text: rgb(31 41 55);
-  
+
   /* Empty state / Create card colors */
   --app-create-card-bg: rgb(15 23 42 / 0.7);
   --app-create-card-hover: rgb(30 41 59 / 0.7);
@@ -54,27 +59,32 @@
   /* Background colors */
   --app-bg-primary: rgb(15 23 42);
   --app-bg-secondary: rgb(30 41 59);
-  --app-bg-overlay: linear-gradient(to bottom right, rgb(15 23 42 / 0.9), rgb(30 41 59 / 0.85), rgb(51 65 85 / 0.9));
-  
+  --app-bg-overlay: linear-gradient(
+    to bottom right,
+    rgb(15 23 42 / 0.9),
+    rgb(30 41 59 / 0.85),
+    rgb(51 65 85 / 0.9)
+  );
+
   /* Card colors */
   --app-card-bg: rgb(30 41 59 / 0.8);
   --app-card-hover: rgb(51 65 85 / 0.9);
   --app-card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
-  
+
   /* Text colors */
   --app-text-primary: rgb(255 255 255);
   --app-text-secondary: rgb(226 232 240);
   --app-text-tertiary: rgb(203 213 225);
   --app-text-muted: rgb(148 163 184);
-  
+
   /* Border colors */
   --app-border-primary: rgb(100 116 139);
   --app-border-secondary: rgb(100 116 139 / 0.4);
-  
+
   /* Button colors */
   --app-button-ghost-text: rgb(226 232 240);
   --app-button-ghost-hover: rgb(51 65 85);
-  
+
   /* Stat card colors - unified */
   --app-stat-bg: rgb(51 65 85);
   --app-stat-border: rgb(148 163 184 / 0.6);
@@ -82,17 +92,17 @@
   --app-stat-distance-text: rgb(255 255 255);
   --app-stat-time-icon: rgb(148 163 184);
   --app-stat-time-text: rgb(255 255 255);
-  
+
   /* Header colors */
   --app-header-bg: rgb(30 41 59 / 0.9);
   --app-header-text: rgb(255 255 255);
   --app-header-text-secondary: rgb(255 255 255 / 0.7);
-  
+
   /* Input/Select colors */
   --app-input-bg: rgb(30 41 59 / 0.7);
   --app-input-border: rgb(100 116 139 / 0.4);
   --app-input-text: rgb(255 255 255);
-  
+
   /* Empty state / Create card colors */
   --app-create-card-bg: rgb(30 41 59 / 0.8);
   --app-create-card-hover: rgb(51 65 85 / 0.8);

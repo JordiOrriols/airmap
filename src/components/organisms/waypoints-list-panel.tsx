@@ -31,11 +31,7 @@ export default function WaypointListPanel({ waypoints, onRemove, onReorder, vfrs
                     index={index}
                   >
                     {(provided, snapshot) => (
-                      <div
-                        className={
-                          snapshot.isDragging ? "shadow-2xl scale-105" : ""
-                        }
-                      >
+                      <div className={snapshot.isDragging ? "shadow-2xl scale-105" : ""}>
                         <WaypointCard
                           waypoint={wp}
                           index={index}

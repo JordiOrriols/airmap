@@ -9,13 +9,7 @@ import MapView from "../organisms/map-view";
 import { getMapCenterAndZoom, calculateRouteStats } from "../../utils/geo";
 import RouteActionsMenu from "./route-actions-menu";
 
-export default function RouteCard({
-  route,
-  index,
-  onDelete,
-  startHref,
-  editHref,
-}) {
+export default function RouteCard({ route, index, onDelete, startHref, editHref }) {
   const { t } = useTranslation();
 
   const formatTime = (minutes) => {
@@ -113,12 +107,8 @@ export default function RouteCard({
                 {t("route_stats.total_distance", "Distance")}
               </span>
             </div>
-            <p className="text-lg font-bold text-stat-distance">
-              {totalDistance.toFixed(1)}
-            </p>
-            <p className="text-xs text-app-tertiary">
-              {t("route_stats.nautical_miles", "NM")}
-            </p>
+            <p className="text-lg font-bold text-stat-distance">{totalDistance.toFixed(1)}</p>
+            <p className="text-xs text-app-tertiary">{t("route_stats.nautical_miles", "NM")}</p>
           </div>
 
           <div className="bg-stat-card backdrop-blur-sm border border-stat-card rounded-xl p-3">
@@ -128,9 +118,7 @@ export default function RouteCard({
                 {t("route_stats.flight_time", "Time")}
               </span>
             </div>
-            <p className="text-lg font-bold text-stat-time">
-              {formatTime(totalTime)}
-            </p>
+            <p className="text-lg font-bold text-stat-time">{formatTime(totalTime)}</p>
             <p className="text-xs text-app-tertiary">
               {route.cruiseSpeed} {route.speedUnit}
             </p>

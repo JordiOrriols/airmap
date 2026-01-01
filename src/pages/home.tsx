@@ -145,7 +145,7 @@ export default function Home() {
                 />
               </motion.div>
             ))}
-            
+
             {/* Create New Route Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -184,10 +184,7 @@ export default function Home() {
                 {t("home.no_routes_yet", "No routes yet")}
               </h3>
               <p className="text-create-card-secondary mb-6 max-w-md">
-                {t(
-                  "home.create_first_desc",
-                  "Create your first flight route to get started"
-                )}
+                {t("home.create_first_desc", "Create your first flight route to get started")}
               </p>
               <Button
                 onClick={createNewRoute}

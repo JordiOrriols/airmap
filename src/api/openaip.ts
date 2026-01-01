@@ -127,7 +127,7 @@ export const processAirspaceForPIP = (airspaces: Airspace[]): Airspace[] => {
  */
 export const fetchAirspaces = async (bbox: string): Promise<Airspace[]> => {
   const url = `${OPENAIP_API_URL}/airspaces?page=1&limit=1000&bbox=${bbox}`;
-  
+
   const response = await fetch(url, {
     headers: {
       "x-openaip-api-key": OPENAIP_API_KEY,
@@ -147,7 +147,7 @@ export const fetchAirspaces = async (bbox: string): Promise<Airspace[]> => {
  */
 export const fetchAirports = async (bbox: string): Promise<Airport[]> => {
   const url = `${OPENAIP_API_URL}/airports?page=1&limit=1000&bbox=${bbox}`;
-  
+
   const response = await fetch(url, {
     headers: {
       "x-openaip-api-key": OPENAIP_API_KEY,
@@ -166,10 +166,7 @@ export const fetchAirports = async (bbox: string): Promise<Airport[]> => {
  * Fetch both airspaces and airports for a bounding box
  */
 export const fetchAirspaceData = async (bbox: string) => {
-  const [airspaces, airports] = await Promise.all([
-    fetchAirspaces(bbox),
-    fetchAirports(bbox),
-  ]);
+  const [airspaces, airports] = await Promise.all([fetchAirspaces(bbox), fetchAirports(bbox)]);
 
   return { airspaces, airports };
 };

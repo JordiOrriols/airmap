@@ -24,9 +24,7 @@ export default function WeatherCard({ weather, compact = false }) {
           <div className="flex items-center gap-3">
             <WeatherIcon condition={weather.condition} size="md" />
             <div>
-              <p className="text-app-primary font-bold text-lg">
-                {weather.temp}°C
-              </p>
+              <p className="text-app-primary font-bold text-lg">{weather.temp}°C</p>
               <p className="text-app-secondary text-xs">{weather.condition}</p>
             </div>
           </div>
@@ -36,9 +34,7 @@ export default function WeatherCard({ weather, compact = false }) {
               <span>{weather.windSpeed} kt</span>
             </div>
             {weather.windGust > weather.windSpeed && (
-              <div className="text-orange-300 text-xs">
-                Gusts {weather.windGust} kt
-              </div>
+              <div className="text-orange-300 text-xs">Gusts {weather.windGust} kt</div>
             )}
           </div>
         </div>
@@ -52,9 +48,7 @@ export default function WeatherCard({ weather, compact = false }) {
         <div className="flex items-center gap-3">
           <WeatherIcon condition={weather.condition} size="lg" />
           <div>
-            <p className="text-app-primary font-bold text-2xl">
-              {weather.temp}°C
-            </p>
+            <p className="text-app-primary font-bold text-2xl">{weather.temp}°C</p>
             <p className="text-app-secondary text-sm">{weather.condition}</p>
           </div>
         </div>
