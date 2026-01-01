@@ -98,30 +98,50 @@ export const processAirspaceData = (
 /**
  * Process airspace data for point-in-polygon checks
  */
-export const processAirspaceForPIP = (airspaces: Airspace[]): Airspace[] => {
-  return airspaces
-    .map((as) => {
-      try {
-        let coords: number[][] | null = null;
-        if (as.geometry && as.geometry.coordinates) {
-          if (as.geometry.type === "Polygon") {
-            coords = as.geometry.coordinates[0].map((c) => [c[1], c[0]]);
-          } else if (as.geometry.type === "MultiPolygon") {
-            coords = as.geometry.coordinates[0][0].map((c) => [c[1], c[0]]);
-          }
+export const processAirspaceForPIP = (
+  airspaces: Airspace[]
+): (Airspace & { polygon: number[][] })[] => {
+  const processed: (Airspace & { polygon: number[][] })[] = [];
+
+  airspaces.forEach((as) => {
+    try {
+      if (!as.geometry || !as.geometry.coordinates) return;
+
+      let coords: number[][] | null = null;
+
+      if (as.geometry.type === "Polygon") {
+        const ring = as.geometry.coordinates[0];
+        if (Array.isArray(ring)) {
+          const mapped = ring
+            .map((c) => (Array.isArray(c) && c.length >= 2 ? [c[1], c[0]] : null))
+            .filter((c): c is [number, number] => c !== null);
+          coords = mapped.length ? mapped : null;
         }
-        const vfrUpperFeet = toFeet(as.lowerLimit);
-        return {
-          ...as,
-          polygon: coords,
-          vfrUpperFeet,
-        };
-      } catch (err) {
-        console.warn("Error processing airspace geometry:", err);
-        return null;
+      } else if (as.geometry.type === "MultiPolygon") {
+        const firstRing = Array.isArray(as.geometry.coordinates[0])
+          ? (as.geometry.coordinates[0] as number[][][])[0]
+          : null;
+        if (Array.isArray(firstRing)) {
+          const mapped = firstRing
+            .map((c) => (Array.isArray(c) && c.length >= 2 ? [c[1], c[0]] : null))
+            .filter((c): c is [number, number] => c !== null);
+          coords = mapped.length ? mapped : null;
+        }
       }
-    })
-    .filter((as): as is Airspace => as !== null && as.polygon !== null);
+
+      if (!coords) return;
+      const vfrUpperFeet = toFeet(as.lowerLimit);
+      processed.push({
+        ...as,
+        polygon: coords,
+        vfrUpperFeet,
+      });
+    } catch (err) {
+      console.warn("Error processing airspace geometry:", err);
+    }
+  });
+
+  return processed;
 };
 
 /**

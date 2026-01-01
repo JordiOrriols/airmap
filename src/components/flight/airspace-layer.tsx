@@ -206,9 +206,14 @@ export default function AirspaceLayer({ visible = true, reloadTrigger = 0 }) {
 
       {/* Render airports as circle markers */}
       {airports.map((airport) => {
-        if (!airport.geometry || !airport.geometry.coordinates) return null;
-        const [lng, lat] = airport.geometry.coordinates;
-        const isMajor = airport.type === "major" || airport.type === "MAJOR";
+        const coords = airport.geometry?.coordinates;
+        if (!coords || coords.length < 2) return null;
+
+        const [lng, lat] = coords;
+        if (lat === undefined || lng === undefined) return null;
+
+        const typeLabel = `${airport.type ?? ""}`.toUpperCase();
+        const isMajor = typeLabel === "MAJOR";
         const radius = isMajor ? 8 : 5;
         const color = isMajor ? "#FF6B00" : "#00CCFF";
 
@@ -238,9 +243,9 @@ export default function AirspaceLayer({ visible = true, reloadTrigger = 0 }) {
                   {airport.name}
                 </h3>
                 <div style={{ fontSize: "12px", lineHeight: "1.5" }}>
-                  {airport.icao && (
+                  {airport.icaoCode && (
                     <div style={{ marginBottom: "4px" }}>
-                      <strong>ICAO:</strong> {airport.icao}
+                      <strong>ICAO:</strong> {airport.icaoCode}
                     </div>
                   )}
                   {airport.iata && (
@@ -248,9 +253,9 @@ export default function AirspaceLayer({ visible = true, reloadTrigger = 0 }) {
                       <strong>IATA:</strong> {airport.iata}
                     </div>
                   )}
-                  {airport.elevation && (
+                  {airport.elevation?.value !== undefined && (
                     <div style={{ marginBottom: "4px" }}>
-                      <strong>Elevation:</strong> {airport.elevation} ft
+                      <strong>Elevation:</strong> {airport.elevation.value} ft
                     </div>
                   )}
                   {airport.type && (
