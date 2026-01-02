@@ -1,7 +1,15 @@
 import { describe, it, expect } from "vitest";
 import React from "react";
 import { render } from "@testing-library/react";
-import { Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent, CardFooter } from "./card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardAction,
+  CardContent,
+  CardFooter,
+} from "./card";
 
 describe("Card Components", () => {
   describe("Card", () => {
@@ -134,7 +142,7 @@ describe("Card Components", () => {
           <CardFooter>Footer</CardFooter>
         </Card>
       );
-      
+
       expect(container.querySelector("[data-slot='card']")).toBeInTheDocument();
       expect(container.querySelector("[data-slot='card-header']")).toBeInTheDocument();
       expect(container.querySelector("[data-slot='card-title']")).toBeInTheDocument();

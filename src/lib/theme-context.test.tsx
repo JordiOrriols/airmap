@@ -169,9 +169,7 @@ describe("Theme Context", () => {
         return null;
       };
 
-      expect(() => render(<TestComponent />)).toThrow(
-        "useTheme must be used within ThemeProvider"
-      );
+      expect(() => render(<TestComponent />)).toThrow("useTheme must be used within ThemeProvider");
     });
 
     it("should return theme object with all required properties", () => {
@@ -181,7 +179,8 @@ describe("Theme Context", () => {
           <div>
             {typeof themeContext.theme === "string" &&
               typeof themeContext.toggleTheme === "function" &&
-              typeof themeContext.setTheme === "function" && "valid"}
+              typeof themeContext.setTheme === "function" &&
+              "valid"}
           </div>
         );
       };

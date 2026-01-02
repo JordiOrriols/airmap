@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  toFeet,
-  processAirspaceData,
-  processAirspaceForPIP,
-} from "./openaip";
+import { toFeet, processAirspaceData, processAirspaceForPIP } from "./openaip";
 import type { Airspace, AirspaceLowerLimit } from "./openaip";
 
 describe("OpenAIP Utilities", () => {
@@ -104,7 +100,15 @@ describe("OpenAIP Utilities", () => {
       upperLimit: { value: 5000, unit: 1 },
       geometry: {
         type: "Polygon",
-        coordinates: [[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]],
+        coordinates: [
+          [
+            [0, 0],
+            [10, 0],
+            [10, 10],
+            [0, 10],
+            [0, 0],
+          ],
+        ],
       },
     };
 
@@ -117,7 +121,17 @@ describe("OpenAIP Utilities", () => {
       upperLimit: { value: 5000, unit: 1 },
       geometry: {
         type: "MultiPolygon",
-        coordinates: [[[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]]],
+        coordinates: [
+          [
+            [
+              [0, 0],
+              [10, 0],
+              [10, 10],
+              [0, 10],
+              [0, 0],
+            ],
+          ],
+        ],
       },
     };
 

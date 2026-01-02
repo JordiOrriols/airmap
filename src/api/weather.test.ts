@@ -1,8 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import {
-  fetchCurrentWeather,
-  fetchWeatherForecast,
-} from "./weather";
+import { fetchCurrentWeather, fetchWeatherForecast } from "./weather";
 
 describe("Weather API", () => {
   beforeEach(() => {
@@ -44,7 +41,7 @@ describe("Weather API", () => {
       );
 
       const data = await fetchCurrentWeather({ lat: 40.4168, lng: -3.7038 });
-      
+
       expect(data).toBeDefined();
       expect(data.temp).toBe(20);
       expect(data.condition).toBe("Clouds");
@@ -52,13 +49,11 @@ describe("Weather API", () => {
     });
 
     it("should throw on fetch errors", async () => {
-      global.fetch = vi.fn(() =>
-        Promise.reject(new Error("Network error"))
-      );
+      global.fetch = vi.fn(() => Promise.reject(new Error("Network error")));
 
-      await expect(
-        fetchCurrentWeather({ lat: 40.4168, lng: -3.7038 })
-      ).rejects.toThrow("Network error");
+      await expect(fetchCurrentWeather({ lat: 40.4168, lng: -3.7038 })).rejects.toThrow(
+        "Network error"
+      );
     });
 
     it("should throw on non-ok response", async () => {
@@ -70,9 +65,9 @@ describe("Weather API", () => {
         } as Response)
       );
 
-      await expect(
-        fetchCurrentWeather({ lat: 40.4168, lng: -3.7038 })
-      ).rejects.toThrow("Failed to fetch weather");
+      await expect(fetchCurrentWeather({ lat: 40.4168, lng: -3.7038 })).rejects.toThrow(
+        "Failed to fetch weather"
+      );
     });
 
     it("should include required latitude and longitude parameters", async () => {
@@ -92,7 +87,7 @@ describe("Weather API", () => {
       );
 
       await fetchCurrentWeather({ lat: 41.3874, lng: 2.169 });
-      
+
       const callUrl = (global.fetch as any).mock.calls[0][0];
       expect(callUrl).toContain("41.3874");
       expect(callUrl).toContain("2.169");
@@ -116,7 +111,7 @@ describe("Weather API", () => {
       );
 
       const data = await fetchCurrentWeather({ lat: 40.4168, lng: -3.7038 });
-      
+
       expect(data.temp).toBe(25);
       expect(data.feelsLike).toBe(23);
       expect(data.condition).toBe("Sunny");
@@ -182,7 +177,7 @@ describe("Weather API", () => {
       );
 
       const data = await fetchWeatherForecast({ lat: 40.4168, lng: -3.7038 });
-      
+
       expect(data).toBeDefined();
       expect(typeof data).toBe("object");
       const keys = Object.keys(data);
@@ -207,13 +202,11 @@ describe("Weather API", () => {
     });
 
     it("should throw on fetch errors in forecast", async () => {
-      global.fetch = vi.fn(() =>
-        Promise.reject(new Error("Network error"))
-      );
+      global.fetch = vi.fn(() => Promise.reject(new Error("Network error")));
 
-      await expect(
-        fetchWeatherForecast({ lat: 40.4168, lng: -3.7038 })
-      ).rejects.toThrow("Network error");
+      await expect(fetchWeatherForecast({ lat: 40.4168, lng: -3.7038 })).rejects.toThrow(
+        "Network error"
+      );
     });
 
     it("should throw on malformed forecast response missing list", async () => {
@@ -224,9 +217,7 @@ describe("Weather API", () => {
         } as Response)
       );
 
-      await expect(
-        fetchWeatherForecast({ lat: 40.4168, lng: -3.7038 })
-      ).rejects.toThrow();
+      await expect(fetchWeatherForecast({ lat: 40.4168, lng: -3.7038 })).rejects.toThrow();
     });
 
     it("should include latitude and longitude parameters", async () => {
@@ -240,7 +231,7 @@ describe("Weather API", () => {
       );
 
       await fetchWeatherForecast({ lat: 41.3874, lng: 2.169 });
-      
+
       const callUrl = (global.fetch as any).mock.calls[0][0];
       expect(callUrl).toContain("41.3874");
       expect(callUrl).toContain("2.169");

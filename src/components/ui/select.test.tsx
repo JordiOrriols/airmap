@@ -2,7 +2,18 @@ import { describe, it, expect } from "vitest";
 import React from "react";
 import { render } from "@testing-library/react";
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem, SelectLabel, SelectSeparator, SelectScrollUpButton, SelectScrollDownButton } from "./select";
+import {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+} from "./select";
 
 describe("Select Components", () => {
   describe("Select", () => {

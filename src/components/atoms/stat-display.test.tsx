@@ -8,30 +8,30 @@ describe("StatDisplay Component", () => {
   const mockIcon = Gauge;
 
   it("should render stat display with label and value", () => {
-    render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Speed"
-        value="120"
-        unit="knots"
-      />
-    );
+    render(<StatDisplay icon={mockIcon} label="Speed" value="120" unit="knots" />);
     expect(screen.getByText("Speed")).toBeInTheDocument();
     expect(screen.getByText("120")).toBeInTheDocument();
     expect(screen.getByText("knots")).toBeInTheDocument();
   });
 
   it.each([
-    { size: undefined, textSize: "text-3xl", padding: "p-4", rounded: "rounded-2xl", label: "default" },
-    { size: "compact" as const, textSize: "text-md", padding: "p-2", rounded: "rounded-md", label: "compact" },
+    {
+      size: undefined,
+      textSize: "text-3xl",
+      padding: "p-4",
+      rounded: "rounded-2xl",
+      label: "default",
+    },
+    {
+      size: "compact" as const,
+      textSize: "text-md",
+      padding: "p-2",
+      rounded: "rounded-md",
+      label: "compact",
+    },
   ])("should render with $label size", ({ size, textSize, padding, rounded }) => {
     const { container } = render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Test"
-        value="100"
-        size={size}
-      />
+      <StatDisplay icon={mockIcon} label="Test" value="100" size={size} />
     );
     const stat = container.querySelector("div");
     expect(stat?.className).toContain(padding);
@@ -41,13 +41,7 @@ describe("StatDisplay Component", () => {
   });
 
   it("should render with default icon color", () => {
-    const { container } = render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Heading"
-        value="180"
-      />
-    );
+    const { container } = render(<StatDisplay icon={mockIcon} label="Heading" value="180" />);
     const iconWrapper = container.querySelector(".flex.items-center");
     const iconSvg = iconWrapper?.querySelector("svg");
     expect(iconSvg).toBeInTheDocument();
@@ -57,12 +51,7 @@ describe("StatDisplay Component", () => {
 
   it("should render with custom icon color", () => {
     const { container } = render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Wind"
-        value="10"
-        iconColor="text-red-400"
-      />
+      <StatDisplay icon={mockIcon} label="Wind" value="10" iconColor="text-red-400" />
     );
     const iconWrapper = container.querySelector(".flex.items-center");
     const iconSvg = iconWrapper?.querySelector("svg");
@@ -72,13 +61,7 @@ describe("StatDisplay Component", () => {
   });
 
   it("should have correct base classes", () => {
-    const { container } = render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Test"
-        value="100"
-      />
-    );
+    const { container } = render(<StatDisplay icon={mockIcon} label="Test" value="100" />);
     const stat = container.querySelector("div");
     expect(stat).toHaveClass("bg-stat-card");
     expect(stat).toHaveClass("backdrop-blur-sm");
@@ -88,50 +71,25 @@ describe("StatDisplay Component", () => {
 
   it("should accept custom className", () => {
     const { container } = render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Custom"
-        value="99"
-        className="custom-class"
-      />
+      <StatDisplay icon={mockIcon} label="Custom" value="99" className="custom-class" />
     );
     const stat = container.querySelector("div");
     expect(stat).toHaveClass("custom-class");
   });
 
   it("should render without unit", () => {
-    render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Count"
-        value="5"
-      />
-    );
+    render(<StatDisplay icon={mockIcon} label="Count" value="5" />);
     expect(screen.getByText("Count")).toBeInTheDocument();
     expect(screen.getByText("5")).toBeInTheDocument();
   });
 
   it("should render with custom unit", () => {
-    render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Temperature"
-        value="25"
-        unit="°C"
-      />
-    );
+    render(<StatDisplay icon={mockIcon} label="Temperature" value="25" unit="°C" />);
     expect(screen.getByText("°C")).toBeInTheDocument();
   });
 
   it("should render with number value", () => {
-    render(
-      <StatDisplay
-        icon={mockIcon}
-        label="Pressure"
-        value={1013}
-        unit="mb"
-      />
-    );
+    render(<StatDisplay icon={mockIcon} label="Pressure" value={1013} unit="mb" />);
     expect(screen.getByText("1013")).toBeInTheDocument();
   });
 });
