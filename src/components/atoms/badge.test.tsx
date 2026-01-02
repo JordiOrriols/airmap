@@ -4,25 +4,15 @@ import { render, screen } from "@testing-library/react";
 import Badge from "./badge";
 
 describe("Badge Component", () => {
-  it("should render badge with default size", () => {
-    const { container } = render(<Badge>5</Badge>);
+  it.each([
+    { size: undefined, widthClass: "w-8", heightClass: "h-8", label: "default" },
+    { size: "sm" as const, widthClass: "w-7", heightClass: "h-7", label: "small" },
+    { size: "lg" as const, widthClass: "w-10", heightClass: "h-10", label: "large" },
+  ])("should render badge with $label size", ({ size, widthClass, heightClass }) => {
+    const { container } = render(<Badge size={size}>Badge</Badge>);
     const badge = container.querySelector("div");
-    expect(badge).toHaveClass("w-8");
-    expect(badge).toHaveClass("h-8");
-  });
-
-  it("should render badge with small size", () => {
-    const { container } = render(<Badge size="sm">1</Badge>);
-    const badge = container.querySelector("div");
-    expect(badge).toHaveClass("w-7");
-    expect(badge).toHaveClass("h-7");
-  });
-
-  it("should render badge with large size", () => {
-    const { container } = render(<Badge size="lg">10</Badge>);
-    const badge = container.querySelector("div");
-    expect(badge).toHaveClass("w-10");
-    expect(badge).toHaveClass("h-10");
+    expect(badge).toHaveClass(widthClass);
+    expect(badge).toHaveClass(heightClass);
   });
 
   it("should render badge with default gradient", () => {
@@ -61,16 +51,13 @@ describe("Badge Component", () => {
     expect(badge).toHaveClass("font-bold");
   });
 
-  it("should render with correct text size for small", () => {
-    const { container } = render(<Badge size="sm">S</Badge>);
+  it.each([
+    { size: "sm" as const, textClass: "text-xs" },
+    { size: "lg" as const, textClass: "text-lg" },
+  ])("should render with correct text size for $size", ({ size, textClass }) => {
+    const { container } = render(<Badge size={size}>Badge</Badge>);
     const badge = container.querySelector("div");
-    expect(badge?.className).toContain("text-xs");
-  });
-
-  it("should render with correct text size for large", () => {
-    const { container } = render(<Badge size="lg">L</Badge>);
-    const badge = container.querySelector("div");
-    expect(badge?.className).toContain("text-lg");
+    expect(badge?.className).toContain(textClass);
   });
 
   it("should render with empty children", () => {

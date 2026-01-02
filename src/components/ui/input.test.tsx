@@ -10,28 +10,15 @@ describe("Input Component", () => {
     expect(input).toBeInTheDocument();
   });
 
-  it("should render with default type", () => {
-    const { container } = render(<Input />);
+  it.each([
+    { type: undefined, expected: "text" },
+    { type: "email", expected: "email" },
+    { type: "password", expected: "password" },
+    { type: "number", expected: "number" },
+  ])("should render with $expected type", ({ type, expected }) => {
+    const { container } = render(<Input type={type as any} />);
     const input = container.querySelector("input") as HTMLInputElement;
-    expect(input.type).toBe("text");
-  });
-
-  it("should render with specified type", () => {
-    const { container } = render(<Input type="email" />);
-    const input = container.querySelector("input") as HTMLInputElement;
-    expect(input.type).toBe("email");
-  });
-
-  it("should render with password type", () => {
-    const { container } = render(<Input type="password" />);
-    const input = container.querySelector("input") as HTMLInputElement;
-    expect(input.type).toBe("password");
-  });
-
-  it("should render with number type", () => {
-    const { container } = render(<Input type="number" />);
-    const input = container.querySelector("input") as HTMLInputElement;
-    expect(input.type).toBe("number");
+    expect(input.type).toBe(expected);
   });
 
   it("should have data-slot attribute", () => {

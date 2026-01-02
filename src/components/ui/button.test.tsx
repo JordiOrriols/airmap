@@ -9,58 +9,27 @@ describe("Button Component", () => {
     expect(screen.getByText("Click me")).toBeInTheDocument();
   });
 
-  it("should render button with default variant", () => {
-    const { container } = render(<Button>Click me</Button>);
+  it.each([
+    { variant: undefined, expectedClass: "bg-primary", label: "default" },
+    { variant: "destructive" as const, expectedClass: "bg-destructive", label: "destructive" },
+    { variant: "outline" as const, expectedClass: "border", label: "outline" },
+    { variant: "ghost" as const, expectedClass: "hover:bg-accent", label: "ghost" },
+    { variant: "link" as const, expectedClass: "text-primary", label: "link" },
+    { variant: "secondary" as const, expectedClass: "bg-secondary", label: "secondary" },
+  ])("should render button with $label variant", ({ variant, expectedClass }) => {
+    const { container } = render(<Button variant={variant}>Button</Button>);
     const button = container.querySelector("button");
-    expect(button).toHaveClass("bg-primary");
+    expect(button).toHaveClass(expectedClass);
   });
 
-  it("should render button with destructive variant", () => {
-    const { container } = render(<Button variant="destructive">Delete</Button>);
+  it.each([
+    { size: "sm" as const, expectedClass: "h-8" },
+    { size: "lg" as const, expectedClass: "h-10" },
+    { size: "icon" as const, expectedClass: "size-9" },
+  ])("should render button with $size size", ({ size, expectedClass }) => {
+    const { container } = render(<Button size={size}>Button</Button>);
     const button = container.querySelector("button");
-    expect(button).toHaveClass("bg-destructive");
-  });
-
-  it("should render button with outline variant", () => {
-    const { container } = render(<Button variant="outline">Outline</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("border");
-  });
-
-  it("should render button with ghost variant", () => {
-    const { container } = render(<Button variant="ghost">Ghost</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("hover:bg-accent");
-  });
-
-  it("should render button with link variant", () => {
-    const { container } = render(<Button variant="link">Link</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("text-primary");
-  });
-
-  it("should render button with secondary variant", () => {
-    const { container } = render(<Button variant="secondary">Secondary</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("bg-secondary");
-  });
-
-  it("should render button with small size", () => {
-    const { container } = render(<Button size="sm">Small</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("h-8");
-  });
-
-  it("should render button with large size", () => {
-    const { container } = render(<Button size="lg">Large</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("h-10");
-  });
-
-  it("should render button with icon size", () => {
-    const { container } = render(<Button size="icon">+</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("size-9");
+    expect(button).toHaveClass(expectedClass);
   });
 
   it("should be disabled when disabled prop is passed", () => {
