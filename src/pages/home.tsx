@@ -149,7 +149,7 @@ export default function Home() {
                 <div className="bg-gradient-to-r from-emerald-500 to-teal-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Plus className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-create-card mb-2 group-hover:text-emerald-300 transition-colors">
+                <h3 className="text-xl font-bold text-create-card mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
                   {t("home.create", "Create New Route")}
                 </h3>
                 <p className="text-sm text-create-card-secondary">
