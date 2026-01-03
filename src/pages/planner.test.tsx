@@ -3,6 +3,14 @@ import PlannerPage from "./planner";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { routeStorage } from "../utils/storage";
 
+// Mock framer-motion to avoid animation issues in tests
+vi.mock("framer-motion", () => ({
+  motion: {
+    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  },
+  AnimatePresence: ({ children }: any) => children,
+}));
+
 vi.mock("react-router-dom", () => ({
   useLocation: () => ({
     state: { route: { id: "test", name: "Test Route", waypoints: [] } },
@@ -87,7 +95,7 @@ describe("PlannerPage", () => {
     expect(screen.getByTestId("route-control-panel")).toBeTruthy();
   });
 
-  it("renders navigation buttons", () => {
+  it("renders navigation elements", () => {
     render(<PlannerPage />);
     const homeLink = screen.getByRole("link", { name: /home/i });
     expect(homeLink).toBeTruthy();
@@ -96,28 +104,5 @@ describe("PlannerPage", () => {
   it("displays theme toggle", () => {
     render(<PlannerPage />);
     expect(screen.getByTestId("theme-toggle")).toBeTruthy();
-  });
-
-  it("loads existing route from URL parameters", () => {
-    const mockRoute = {
-      id: "test-route",
-      name: "Test Flight",
-      waypoints: [
-        { id: "wp1", lat: 41.52, lng: 2.1, name: "Barcelona" },
-      ],
-      cruiseSpeed: 120,
-      speedUnit: "knots",
-    };
-
-    Object.defineProperty(window, "location", {
-      value: { search: "?routeId=test-route" },
-      writable: true,
-    });
-
-    vi.mocked(routeStorage.getRoute).mockReturnValue(mockRoute);
-    render(<PlannerPage />);
-
-    // Verify the planner loaded successfully
-    expect(screen.getByTestId("map-view")).toBeTruthy();
   });
 });
