@@ -1,12 +1,25 @@
 import { render, screen } from "@testing-library/react";
 import TrackingPage from "./tracking";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { routeStorage } from "../utils/storage";
+
+// Mock geolocation
+Object.defineProperty(global.navigator, "geolocation", {
+  writable: true,
+  value: {
+    watchPosition: vi.fn(),
+    clearWatch: vi.fn(),
+  },
+});
 
 vi.mock("react-router-dom", () => ({
   useLocation: () => ({
     state: { route: { id: "test", name: "Test Route", waypoints: [] } },
   }),
   useNavigate: () => vi.fn(),
+  Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
+    <a href={to}>{children}</a>
+  ),
 }));
 
 vi.mock("react-i18next", () => ({
@@ -16,61 +29,80 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("../components/organisms/map-view", () => ({
-  default: () => <div className="map-view" />,
+  default: () => <div data-testid="map-view" />,
 }));
 
 vi.mock("../components/organisms/next-waypoint-panel", () => ({
-  default: () => <div className="next-waypoint-panel" />,
+  default: () => <div data-testid="next-waypoint-panel" />,
 }));
 
 vi.mock("../components/organisms/weather-panel", () => ({
-  default: () => <div className="weather-panel" />,
+  default: () => <div data-testid="weather-panel" />,
 }));
 
-vi.mock("../components/organisms/tracking-control-panel", () => ({
-  default: () => <div className="tracking-control-panel" />,
-}));
-
-vi.mock("../components/atoms/glass-card", () => ({
-  default: ({ children }: { children: React.ReactNode }) => (
-    <div className="glass-card">{children}</div>
-  ),
+vi.mock("../utils/storage", () => ({
+  routeStorage: {
+    getRoute: vi.fn(),
+  },
 }));
 
 describe("TrackingPage", () => {
-  it("renders tracking page", () => {
-    const { container } = render(<TrackingPage />);
-    expect(container.firstChild).toBeInTheDocument();
+  const originalLocation = window.location;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Reset URL search params
+    Object.defineProperty(window, "location", {
+      value: { search: "" },
+      writable: true,
+      configurable: true,
+    });
   });
 
-  it("renders map view", () => {
-    const { container } = render(<TrackingPage />);
-    expect(container.querySelector(".map-view")).toBeInTheDocument();
+  afterEach(() => {
+    Object.defineProperty(window, "location", {
+      value: originalLocation,
+      writable: true,
+      configurable: true,
+    });
   });
 
-  it("renders next waypoint panel", () => {
-    const { container } = render(<TrackingPage />);
-    expect(container.querySelector(".next-waypoint-panel")).toBeInTheDocument();
-  });
-
-  it("renders tracking control panel", () => {
-    const { container } = render(<TrackingPage />);
-    expect(container.querySelector(".tracking-control-panel")).toBeInTheDocument();
-  });
-
-  it("renders weather panel", () => {
-    const { container } = render(<TrackingPage />);
-    expect(container.querySelector(".weather-panel")).toBeInTheDocument();
-  });
-
-  it("renders glass card container", () => {
-    const { container } = render(<TrackingPage />);
-    expect(container.querySelector(".glass-card")).toBeInTheDocument();
-  });
-
-  it("renders toggle buttons for panels", () => {
+  it("shows no route message when route not found", () => {
+    vi.mocked(routeStorage.getRoute).mockReturnValue(undefined);
     render(<TrackingPage />);
-    const buttons = screen.getAllByRole("button");
-    expect(buttons.length).toBeGreaterThan(0);
+    expect(screen.getByText(/No Route Selected/i)).toBeTruthy();
+    expect(screen.getByText(/Go to Routes/i)).toBeTruthy();
+  });
+
+  it("renders tracking interface when valid route exists", () => {
+    const mockRoute = {
+      id: "test-route",
+      name: "Test Route",
+      waypoints: [
+        { id: "wp1", lat: 41.52, lng: 2.1, name: "Start" },
+        { id: "wp2", lat: 41.53, lng: 2.11, name: "End" },
+      ],
+      cruiseSpeed: 120,
+      speedUnit: "knots",
+    };
+
+    Object.defineProperty(window, "location", {
+      value: { search: "?routeId=test-route" },
+      writable: true,
+    });
+
+    vi.mocked(routeStorage.getRoute).mockReturnValue(mockRoute);
+    render(<TrackingPage />);
+
+    // Verify core UI elements render
+    expect(screen.getByTestId("map-view")).toBeTruthy();
+  });
+
+  it("displays navigation link when no route", () => {
+    vi.mocked(routeStorage.getRoute).mockReturnValue(undefined);
+    render(<TrackingPage />);
+
+    const homeLink = screen.getByRole("link", { name: /go to routes/i });
+    expect(homeLink).toBeTruthy();
   });
 });

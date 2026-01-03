@@ -4,15 +4,26 @@ import { describe, it, expect, vi } from "vitest";
 
 vi.mock("react-leaflet", () => ({
   MapContainer: ({ children }: { children: React.ReactNode }) => (
-    <div className="map-container">{children}</div>
+    <div data-testid="map-container">{children}</div>
   ),
-  TileLayer: () => <div className="tile-layer" />,
-  Marker: () => <div className="marker" />,
-  Popup: ({ children }: { children: React.ReactNode }) => <div className="popup">{children}</div>,
+  TileLayer: () => <div data-testid="tile-layer" />,
+  Marker: ({ children }: { children?: React.ReactNode }) => (
+    <div data-testid="marker">{children}</div>
+  ),
+  Popup: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="popup">{children}</div>
+  ),
+  Polyline: () => <div data-testid="polyline" />,
+  Circle: () => <div data-testid="circle" />,
+  useMapEvents: vi.fn(() => null),
+  useMap: vi.fn(() => ({
+    setView: vi.fn(),
+    getZoom: vi.fn(() => 13),
+  })),
 }));
 
-vi.mock("./airspace-layer", () => ({
-  default: () => <div className="airspace-layer" />,
+vi.mock("../flight/airspace-layer", () => ({
+  default: () => <div data-testid="airspace-layer" />,
 }));
 
 vi.mock("react-i18next", () => ({
@@ -23,43 +34,66 @@ vi.mock("react-i18next", () => ({
 
 describe("MapView", () => {
   const mockWaypoints = [
-    { id: "wp1", lat: 41.52, lng: 2.1, name: "Start" },
-    { id: "wp2", lat: 41.53, lng: 2.11, name: "End" },
+    { lat: 41.52, lng: 2.1 },
+    { lat: 41.53, lng: 2.11 },
   ];
 
   it("renders map container", () => {
-    const { container } = render(<MapView waypoints={mockWaypoints} />);
-    expect(container.querySelector(".map-container")).toBeInTheDocument();
+    const { getByTestId } = render(<MapView waypoints={mockWaypoints} />);
+    expect(getByTestId("map-container")).toBeTruthy();
   });
 
   it("renders tile layer", () => {
-    const { container } = render(<MapView waypoints={mockWaypoints} />);
-    expect(container.querySelector(".tile-layer")).toBeInTheDocument();
+    const { getByTestId } = render(<MapView waypoints={mockWaypoints} />);
+    expect(getByTestId("tile-layer")).toBeTruthy();
   });
 
-  it("renders airspace layer", () => {
-    const { container } = render(<MapView waypoints={mockWaypoints} />);
-    expect(container.querySelector(".airspace-layer")).toBeInTheDocument();
+  it("displays airspace layer when enabled", () => {
+    const { getByTestId } = render(
+      <MapView waypoints={mockWaypoints} showAirspace={true} />
+    );
+    expect(getByTestId("airspace-layer")).toBeTruthy();
   });
 
-  it("renders markers for waypoints", () => {
-    const { container } = render(<MapView waypoints={mockWaypoints} />);
-    const markers = container.querySelectorAll(".marker");
+  it("renders markers for each waypoint", () => {
+    const { getAllByTestId } = render(
+      <MapView waypoints={mockWaypoints} showWaypoints={true} />
+    );
+    const markers = getAllByTestId("marker");
     expect(markers.length).toBeGreaterThan(0);
   });
 
-  it("renders with empty waypoints", () => {
-    const { container } = render(<MapView waypoints={[]} />);
-    expect(container.querySelector(".map-container")).toBeInTheDocument();
+  it("renders with empty waypoints array", () => {
+    const { getByTestId } = render(<MapView waypoints={[]} />);
+    expect(getByTestId("map-container")).toBeTruthy();
   });
 
-  it("applies current waypoint styling when index provided", () => {
-    const { container } = render(<MapView waypoints={mockWaypoints} currentWaypointIndex={0} />);
-    expect(container.querySelector(".map-container")).toBeInTheDocument();
+  it("renders polyline connecting waypoints", () => {
+    const { getByTestId } = render(
+      <MapView waypoints={mockWaypoints} showPolyline={true} />
+    );
+    expect(getByTestId("polyline")).toBeTruthy();
   });
 
-  it("renders map with route tracking mode", () => {
-    const { container } = render(<MapView waypoints={mockWaypoints} currentWaypointIndex={1} />);
-    expect(container.querySelector(".map-container")).toBeInTheDocument();
+  it("displays current position when provided", () => {
+    const currentPos = { lat: 41.525, lng: 2.105 };
+    const { getAllByTestId } = render(
+      <MapView
+        waypoints={mockWaypoints}
+        currentPosition={currentPos}
+        showAircraft={true}
+      />
+    );
+    // Aircraft should be rendered as a marker
+    const markers = getAllByTestId("marker");
+    expect(markers.length).toBeGreaterThan(0);
+  });
+
+  it("uses custom center and zoom when provided", () => {
+    const customCenter = { lat: 40.7, lng: -74.0 };
+    const { getByTestId } = render(
+      <MapView waypoints={[]} center={customCenter} zoom={10} />
+    );
+    expect(getByTestId("map-container")).toBeTruthy();
   });
 });
