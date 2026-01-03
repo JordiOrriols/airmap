@@ -3,33 +3,28 @@ import StatGrid from "./stat-grid";
 import { describe, it, expect } from "vitest";
 
 describe("StatGrid", () => {
-  it("renders stat grid container", () => {
-    const { container } = render(
-      <StatGrid>
-        <div>Stat 1</div>
-      </StatGrid>
-    );
+  it("renders stat grid with items", () => {
+    const items = [
+      { key: "stat1", label: "Distance", value: "100", unit: "km" },
+      { key: "stat2", label: "Time", value: "2", unit: "h" },
+    ];
+    const { container } = render(<StatGrid items={items} />);
     expect(container.firstChild).toBeInTheDocument();
   });
 
-  it("renders children", () => {
-    render(
-      <StatGrid>
-        <div>Stat 1</div>
-        <div>Stat 2</div>
-      </StatGrid>
-    );
-    expect(screen.getByText("Stat 1")).toBeInTheDocument();
-    expect(screen.getByText("Stat 2")).toBeInTheDocument();
+  it("renders stat grid labels", () => {
+    const items = [
+      { key: "stat1", label: "Distance", value: "100", unit: "km" },
+    ];
+    render(<StatGrid items={items} />);
+    expect(screen.getByText("Distance")).toBeInTheDocument();
   });
 
-  it("applies grid styling", () => {
-    const { container } = render(
-      <StatGrid>
-        <div>Stat</div>
-      </StatGrid>
-    );
-    const element = container.firstChild;
-    expect(element).toHaveClass("grid", "gap-3");
+  it("renders stat grid values", () => {
+    const items = [
+      { key: "stat1", label: "Distance", value: "100", unit: "km" },
+    ];
+    render(<StatGrid items={items} />);
+    expect(screen.getByText("100")).toBeInTheDocument();
   });
 });
