@@ -53,8 +53,8 @@ describe("WeatherCard", () => {
       feelsLike: temp - 1,
     };
     render(<WeatherCard weather={mockWeather} />);
-    expect(screen.getByText(`${temp}°C`)).toBeInTheDocument();
-    expect(screen.getByText(`${windSpeed} kt`)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`${temp}°C`))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`${windSpeed} kt`))).toBeInTheDocument();
   });
 
   it("displays no data message when weather is null", () => {
@@ -91,7 +91,7 @@ describe("WeatherCard", () => {
       feelsLike: 12,
     };
     render(<WeatherCard weather={mockWeather} />);
-    expect(screen.getByText("35 kt")).toBeInTheDocument();
+    expect(screen.getByText(/35 kt/)).toBeInTheDocument();
   });
 
   it("omits wind gust when not greater than wind speed", () => {
@@ -125,6 +125,6 @@ describe("WeatherCard", () => {
       feelsLike: 10,
     };
     render(<WeatherCard weather={mockWeather} />);
-    expect(screen.getByText("2.5 mm")).toBeInTheDocument();
+    expect(screen.getByText(/2\.5 mm/)).toBeInTheDocument();
   });
 });

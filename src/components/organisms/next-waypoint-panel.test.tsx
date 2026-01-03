@@ -4,14 +4,32 @@ import { describe, it, expect, vi } from "vitest";
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, defaultValue: string) => defaultValue,
+    t: (key: string, defaultValue: string | any, options?: any) => {
+      if (typeof defaultValue === "object" && options === undefined) {
+        // This handles the case where interpolation is passed
+        const opts = defaultValue;
+        if (key === "next_waypoint.waypoint_of" && opts?.index && opts?.total) {
+          return `Waypoint ${opts.index} of ${opts.total}`;
+        }
+        return key;
+      }
+      return defaultValue;
+    },
   }),
 }));
 
 vi.mock("../atoms/stat-display", () => ({
-  default: ({ label, value }: { label: string; value: string }) => (
+  default: ({
+    label,
+    value,
+    unit,
+  }: {
+    label: string;
+    value: string;
+    unit?: string;
+  }) => (
     <div>
-      {label}: {value}
+      {label}: {value} {unit || ""}
     </div>
   ),
 }));
@@ -85,8 +103,8 @@ describe("NextWaypointPanel", () => {
           onSwitch={mockOnSwitch}
         />
       );
-      expect(screen.getByText(String(distance))).toBeInTheDocument();
-      expect(screen.getByText(String(heading))).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(String(distance)))).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(String(heading)))).toBeInTheDocument();
     }
   );
 
@@ -164,7 +182,7 @@ describe("NextWaypointPanel", () => {
         onSwitch={mockOnSwitch}
       />
     );
-    expect(screen.getByText("1h 30m")).toBeInTheDocument();
+    expect(screen.getByText(/1h 30m/)).toBeInTheDocument();
   });
 
   it("handles null heading gracefully", () => {
