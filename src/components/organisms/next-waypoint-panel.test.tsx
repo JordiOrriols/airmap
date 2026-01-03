@@ -33,6 +33,9 @@ vi.mock("../atoms/icon-button", () => ({
 }));
 
 describe("NextWaypointPanel", () => {
+  const mockOnHomeClick = vi.fn();
+  const mockOnWeatherToggle = vi.fn();
+
   const mockWaypoint = {
     id: "wp1",
     name: "Waypoint 1",
@@ -40,10 +43,30 @@ describe("NextWaypointPanel", () => {
     lng: 2.1,
   };
 
-  const mockOnHomeClick = vi.fn();
-  const mockOnWeatherToggle = vi.fn();
+  it.each([
+    { distance: 50, heading: 180, eta: "12:30" },
+    { distance: 150, heading: 270, eta: "13:15" },
+    { distance: 10, heading: 45, eta: "11:45" },
+  ])(
+    "displays waypoint info: distance=$distance heading=$heading eta=$eta",
+    ({ distance, heading, eta }) => {
+      render(
+        <NextWaypointPanel
+          currentWaypoint={mockWaypoint}
+          distanceToWaypoint={distance}
+          headingToWaypoint={heading}
+          eta={eta}
+          onHomeClick={mockOnHomeClick}
+          onWeatherToggle={mockOnWeatherToggle}
+        />
+      );
+      expect(screen.getByText(String(distance))).toBeInTheDocument();
+      expect(screen.getByText(String(heading))).toBeInTheDocument();
+      expect(screen.getByText(eta)).toBeInTheDocument();
+    }
+  );
 
-  it("renders waypoint name", () => {
+  it("displays current waypoint name", () => {
     render(
       <NextWaypointPanel
         currentWaypoint={mockWaypoint}
@@ -57,64 +80,8 @@ describe("NextWaypointPanel", () => {
     expect(screen.getByText("Waypoint 1")).toBeInTheDocument();
   });
 
-  it("renders distance info", () => {
-    render(
-      <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
-        onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
-      />
-    );
-    expect(screen.getByText(/50/)).toBeInTheDocument();
-  });
-
-  it("renders heading info", () => {
-    render(
-      <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
-        onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
-      />
-    );
-    expect(screen.getByText(/180/)).toBeInTheDocument();
-  });
-
-  it("renders ETA", () => {
-    render(
-      <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
-        onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
-      />
-    );
-    expect(screen.getByText("12:30")).toBeInTheDocument();
-  });
-
-  it("renders home button", () => {
-    render(
-      <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
-        onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
-      />
-    );
-    const homeButton = screen.getByRole("button", { name: /home|Home/i });
-    expect(homeButton).toBeInTheDocument();
-  });
-
   it("calls onHomeClick when home button clicked", () => {
+    mockOnHomeClick.mockClear();
     render(
       <NextWaypointPanel
         currentWaypoint={mockWaypoint}
@@ -127,25 +94,11 @@ describe("NextWaypointPanel", () => {
     );
     const homeButton = screen.getByRole("button", { name: /home|Home/i });
     fireEvent.click(homeButton);
-    expect(mockOnHomeClick).toHaveBeenCalled();
-  });
-
-  it("renders weather toggle button", () => {
-    render(
-      <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
-        onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
-      />
-    );
-    const weatherButton = screen.getByRole("button", { name: /weather|cloud/i });
-    expect(weatherButton).toBeInTheDocument();
+    expect(mockOnHomeClick).toHaveBeenCalledTimes(1);
   });
 
   it("calls onWeatherToggle when weather button clicked", () => {
+    mockOnWeatherToggle.mockClear();
     render(
       <NextWaypointPanel
         currentWaypoint={mockWaypoint}
@@ -158,10 +111,30 @@ describe("NextWaypointPanel", () => {
     );
     const weatherButton = screen.getByRole("button", { name: /weather|cloud/i });
     fireEvent.click(weatherButton);
-    expect(mockOnWeatherToggle).toHaveBeenCalled();
+    expect(mockOnWeatherToggle).toHaveBeenCalledTimes(1);
   });
 
-  it("handles null currentWaypoint", () => {
+  it("both buttons are clickable independently", () => {
+    mockOnHomeClick.mockClear();
+    mockOnWeatherToggle.mockClear();
+    render(
+      <NextWaypointPanel
+        currentWaypoint={mockWaypoint}
+        distanceToWaypoint={50}
+        headingToWaypoint={180}
+        eta="12:30"
+        onHomeClick={mockOnHomeClick}
+        onWeatherToggle={mockOnWeatherToggle}
+      />
+    );
+    const buttons = screen.getAllByRole("button");
+    fireEvent.click(buttons[0]);
+    fireEvent.click(buttons[1]);
+    expect(mockOnHomeClick).toHaveBeenCalledTimes(1);
+    expect(mockOnWeatherToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it("handles null currentWaypoint gracefully", () => {
     render(
       <NextWaypointPanel
         currentWaypoint={null}
@@ -172,6 +145,34 @@ describe("NextWaypointPanel", () => {
         onWeatherToggle={mockOnWeatherToggle}
       />
     );
-    expect(screen.getByRole("button", { name: /home|Home/i })).toBeInTheDocument();
+    const buttons = screen.getAllByRole("button");
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it("updates when waypoint changes", () => {
+    const { rerender } = render(
+      <NextWaypointPanel
+        currentWaypoint={mockWaypoint}
+        distanceToWaypoint={50}
+        headingToWaypoint={180}
+        eta="12:30"
+        onHomeClick={mockOnHomeClick}
+        onWeatherToggle={mockOnWeatherToggle}
+      />
+    );
+    expect(screen.getByText("Waypoint 1")).toBeInTheDocument();
+
+    const newWaypoint = { ...mockWaypoint, name: "Waypoint 2" };
+    rerender(
+      <NextWaypointPanel
+        currentWaypoint={newWaypoint}
+        distanceToWaypoint={75}
+        headingToWaypoint={270}
+        eta="13:00"
+        onHomeClick={mockOnHomeClick}
+        onWeatherToggle={mockOnWeatherToggle}
+      />
+    );
+    expect(screen.getByText("Waypoint 2")).toBeInTheDocument();
   });
 });

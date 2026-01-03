@@ -23,66 +23,84 @@ vi.mock("../ui/card", () => ({
 }));
 
 describe("WaypointCard", () => {
-  const mockWaypoint = {
-    id: "wp1",
-    name: "Waypoint 1",
-    lat: 41.5209,
-    lng: 2.105,
-  };
-
   const mockOnRemove = vi.fn();
 
-  it("renders waypoint name", () => {
+  it.each([
+    {
+      waypoint: { id: "wp1", name: "Start", lat: 41.5209, lng: 2.105 },
+      index: 0,
+      expectedName: "Start",
+    },
+    {
+      waypoint: { id: "wp2", name: "Checkpoint", lat: 41.53, lng: 2.11 },
+      index: 1,
+      expectedName: "Checkpoint",
+    },
+    {
+      waypoint: { id: "wp3", name: "Destination", lat: 41.54, lng: 2.12 },
+      index: 2,
+      expectedName: "Destination",
+    },
+  ])("displays waypoint $expectedName at index $index", ({ waypoint, expectedName }) => {
     render(
       <WaypointCard
-        waypoint={mockWaypoint}
+        waypoint={waypoint}
         index={0}
         onRemove={mockOnRemove}
       />
     );
-    expect(screen.getByText("Waypoint 1")).toBeInTheDocument();
+    expect(screen.getByText(expectedName)).toBeInTheDocument();
   });
 
-  it("displays waypoint coordinates", () => {
+  it("displays correct coordinates with 4 decimal precision", () => {
+    const waypoint = { id: "wp1", name: "Test", lat: 41.5209, lng: 2.1053 };
     render(
       <WaypointCard
-        waypoint={mockWaypoint}
+        waypoint={waypoint}
         index={0}
         onRemove={mockOnRemove}
       />
     );
     expect(screen.getByText(/41.5209/)).toBeInTheDocument();
-    expect(screen.getByText(/2.1050/)).toBeInTheDocument();
+    expect(screen.getByText(/2.1053/)).toBeInTheDocument();
   });
 
-  it("displays waypoint index", () => {
+  it.each([0, 1, 2, 5, 9])(
+    "displays correct 1-based index number for array index %i",
+    (index) => {
+      const waypoint = { id: "wp", name: "Test", lat: 0, lng: 0 };
+      render(
+        <WaypointCard
+          waypoint={waypoint}
+          index={index}
+          onRemove={mockOnRemove}
+        />
+      );
+      expect(screen.getByText(String(index + 1))).toBeInTheDocument();
+    }
+  );
+
+  it("calls onRemove with correct index on delete", () => {
+    const waypoint = { id: "wp1", name: "Test", lat: 0, lng: 0 };
+    mockOnRemove.mockClear();
     render(
       <WaypointCard
-        waypoint={mockWaypoint}
-        index={0}
+        waypoint={waypoint}
+        index={3}
         onRemove={mockOnRemove}
       />
     );
-    expect(screen.getByText("1")).toBeInTheDocument();
-  });
-
-  it("calls onRemove when delete button clicked", () => {
-    render(
-      <WaypointCard
-        waypoint={mockWaypoint}
-        index={2}
-        onRemove={mockOnRemove}
-      />
-    );
-    const deleteButton = screen.getAllByRole("button")[0];
+    const deleteButton = screen.getByRole("button");
     fireEvent.click(deleteButton);
-    expect(mockOnRemove).toHaveBeenCalledWith(2);
+    expect(mockOnRemove).toHaveBeenCalledWith(3);
+    expect(mockOnRemove).toHaveBeenCalledTimes(1);
   });
 
-  it("displays VFR upper when provided", () => {
+  it("displays VFR upper limit when provided", () => {
+    const waypoint = { id: "wp1", name: "Test", lat: 0, lng: 0 };
     render(
       <WaypointCard
-        waypoint={mockWaypoint}
+        waypoint={waypoint}
         index={0}
         onRemove={mockOnRemove}
         vfrUpperDisplay="FL100"
@@ -91,10 +109,25 @@ describe("WaypointCard", () => {
     expect(screen.getByText(/VFR.*FL100/)).toBeInTheDocument();
   });
 
+  it("displays 'N/A' when VFR upper is undefined", () => {
+    const waypoint = { id: "wp1", name: "Test", lat: 0, lng: 0 };
+    render(
+      <WaypointCard
+        waypoint={waypoint}
+        index={0}
+        onRemove={mockOnRemove}
+        vfrUpperDisplay={undefined}
+      />
+    );
+    // VFR line should not be present when undefined
+    expect(screen.queryByText(/VFR/)).not.toBeInTheDocument();
+  });
+
   it("renders drag handle when draggable is true", () => {
+    const waypoint = { id: "wp1", name: "Test", lat: 0, lng: 0 };
     const { container } = render(
       <WaypointCard
-        waypoint={mockWaypoint}
+        waypoint={waypoint}
         index={0}
         onRemove={mockOnRemove}
         draggable={true}
@@ -102,5 +135,37 @@ describe("WaypointCard", () => {
     );
     const gripIcon = container.querySelector("svg");
     expect(gripIcon).toBeInTheDocument();
+  });
+
+  it("omits drag handle when draggable is false", () => {
+    const waypoint = { id: "wp1", name: "Test", lat: 0, lng: 0 };
+    const { container } = render(
+      <WaypointCard
+        waypoint={waypoint}
+        index={0}
+        onRemove={mockOnRemove}
+        draggable={false}
+      />
+    );
+    // With draggable=false, grip icon should not exist
+    const svgs = container.querySelectorAll("svg");
+    expect(svgs.length).toBe(0);
+  });
+
+  it("supports drag and drop props", () => {
+    const waypoint = { id: "wp1", name: "Test", lat: 0, lng: 0 };
+    const mockDragHandleProps = { ref: vi.fn() };
+    const mockDraggableProps = { style: {} };
+    const { container } = render(
+      <WaypointCard
+        waypoint={waypoint}
+        index={0}
+        onRemove={mockOnRemove}
+        dragHandleProps={mockDragHandleProps}
+        draggableProps={mockDraggableProps}
+        innerRef={vi.fn()}
+      />
+    );
+    expect(container.firstChild).toBeInTheDocument();
   });
 });

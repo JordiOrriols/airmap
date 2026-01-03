@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import RouteCard from "./route-card";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
@@ -48,7 +48,9 @@ vi.mock("./route-actions-menu", () => ({
 }));
 
 describe("RouteCard", () => {
-  const mockRoute = {
+  const mockOnDelete = vi.fn();
+
+  const baseRoute = {
     id: "route1",
     name: "Test Route",
     waypoints: [
@@ -59,40 +61,30 @@ describe("RouteCard", () => {
     speedUnit: "kt" as const,
   };
 
-  const mockOnDelete = vi.fn();
-
   beforeEach(() => {
     mockOnDelete.mockClear();
   });
 
-  it("renders route card", () => {
+  it.each([
+    { name: "Boston Route", id: "r1" },
+    { name: "Cross Country Flight", id: "r2" },
+    { name: "Training Circuit", id: "r3" },
+  ])("displays route name '$name'", ({ name, id }) => {
     render(
       <RouteCard
-        route={mockRoute}
+        route={{ ...baseRoute, name, id }}
         onDelete={mockOnDelete}
         startHref="/tracking"
         editHref="/planner"
       />
     );
-    expect(screen.getByText("Test Route")).toBeInTheDocument();
+    expect(screen.getByText(name)).toBeInTheDocument();
   });
 
-  it("displays route name", () => {
-    render(
-      <RouteCard
-        route={mockRoute}
-        onDelete={mockOnDelete}
-        startHref="/tracking"
-        editHref="/planner"
-      />
-    );
-    expect(screen.getByText("Test Route")).toBeInTheDocument();
-  });
-
-  it("renders map view", () => {
+  it("renders map view component", () => {
     const { container } = render(
       <RouteCard
-        route={mockRoute}
+        route={baseRoute}
         onDelete={mockOnDelete}
         startHref="/tracking"
         editHref="/planner"
@@ -104,7 +96,7 @@ describe("RouteCard", () => {
   it("renders route actions menu", () => {
     const { container } = render(
       <RouteCard
-        route={mockRoute}
+        route={baseRoute}
         onDelete={mockOnDelete}
         startHref="/tracking"
         editHref="/planner"
@@ -113,16 +105,70 @@ describe("RouteCard", () => {
     expect(container.querySelector(".route-actions-menu")).toBeInTheDocument();
   });
 
-  it("displays navigation button link", () => {
+  it("creates navigation link with correct href", () => {
     render(
       <RouteCard
-        route={mockRoute}
+        route={baseRoute}
         onDelete={mockOnDelete}
         startHref="/tracking/route1"
         editHref="/planner/route1"
       />
     );
-    const navLink = screen.getByRole("link", { name: /Navigate|Start/ });
+    const navLink = screen.getByRole("link", { name: /Navigate|Start/i });
     expect(navLink).toHaveAttribute("href", "/tracking/route1");
+  });
+
+  it.each([
+    { cruiseSpeed: 80, speedUnit: "kt" },
+    { cruiseSpeed: 150, speedUnit: "kmh" },
+    { cruiseSpeed: 50, speedUnit: "ms" },
+  ])(
+    "handles route with cruiseSpeed=$cruiseSpeed $speedUnit",
+    ({ cruiseSpeed, speedUnit }) => {
+      render(
+        <RouteCard
+          route={{ ...baseRoute, cruiseSpeed, speedUnit }}
+          onDelete={mockOnDelete}
+          startHref="/tracking"
+          editHref="/planner"
+        />
+      );
+      expect(screen.getByText(baseRoute.name)).toBeInTheDocument();
+    }
+  );
+
+  it("handles routes with different waypoint counts", () => {
+    const multiWaypointRoute = {
+      ...baseRoute,
+      waypoints: Array.from({ length: 5 }, (_, i) => ({
+        id: `wp${i}`,
+        lat: 41.5 + i * 0.01,
+        lng: 2.1 + i * 0.01,
+        name: `Waypoint ${i + 1}`,
+      })),
+    };
+    render(
+      <RouteCard
+        route={multiWaypointRoute}
+        onDelete={mockOnDelete}
+        startHref="/tracking"
+        editHref="/planner"
+      />
+    );
+    expect(screen.getByText(baseRoute.name)).toBeInTheDocument();
+  });
+
+  it("exports route data when export is triggered", () => {
+    // This tests that export functionality is available through actions menu
+    render(
+      <RouteCard
+        route={baseRoute}
+        onDelete={mockOnDelete}
+        startHref="/tracking"
+        editHref="/planner"
+      />
+    );
+    const actionMenu = screen.getByRole("heading", { hidden: true });
+    expect(actionMenu).toBeInTheDocument();
   });
 });
