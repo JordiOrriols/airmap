@@ -9,9 +9,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("../ui/select", () => ({
-  Select: ({ children }: { children: React.ReactNode }) => (
-    <div className="select">{children}</div>
-  ),
+  Select: ({ children }: { children: React.ReactNode }) => <div className="select">{children}</div>,
   SelectContent: ({ children }: { children: React.ReactNode }) => (
     <div className="select-content">{children}</div>
   ),
@@ -23,9 +21,7 @@ vi.mock("../ui/select", () => ({
   SelectTrigger: ({ children }: { children: React.ReactNode }) => (
     <div className="select-trigger">{children}</div>
   ),
-  SelectValue: ({ placeholder }: { placeholder?: string }) => (
-    <span>{placeholder}</span>
-  ),
+  SelectValue: ({ placeholder }: { placeholder?: string }) => <span>{placeholder}</span>,
 }));
 
 vi.mock("../molecules/weather-card", () => ({
@@ -47,16 +43,12 @@ vi.mock("../../api/weather", () => ({
 
 describe("WeatherPanel", () => {
   it("renders weather panel", () => {
-    const { container } = render(
-      <WeatherPanel location={{ lat: 41.52, lng: 2.1 }} />
-    );
+    const { container } = render(<WeatherPanel location={{ lat: 41.52, lng: 2.1 }} />);
     expect(container.firstChild).toBeInTheDocument();
   });
 
   it("renders weather card", () => {
-    const { container } = render(
-      <WeatherPanel location={{ lat: 41.52, lng: 2.1 }} />
-    );
+    const { container } = render(<WeatherPanel location={{ lat: 41.52, lng: 2.1 }} />);
     expect(container.querySelector(".weather-card")).toBeInTheDocument();
   });
 
@@ -74,10 +66,7 @@ describe("WeatherPanel", () => {
 
   it("renders compact mode", () => {
     const { container } = render(
-      <WeatherPanel
-        location={{ lat: 41.52, lng: 2.1 }}
-        compact={true}
-      />
+      <WeatherPanel location={{ lat: 41.52, lng: 2.1 }} compact={true} />
     );
     expect(container.querySelector(".weather-card")).toBeInTheDocument();
   });

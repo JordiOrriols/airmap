@@ -40,20 +40,11 @@ vi.mock("../ui/input", () => ({
     value: string | number;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
-  }) => (
-    <input
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      type="text"
-    />
-  ),
+  }) => <input value={value} onChange={onChange} placeholder={placeholder} type="text" />,
 }));
 
 vi.mock("../ui/select", () => ({
-  Select: ({ children }: { children: React.ReactNode }) => (
-    <div className="select">{children}</div>
-  ),
+  Select: ({ children }: { children: React.ReactNode }) => <div className="select">{children}</div>,
   SelectContent: ({ children }: { children: React.ReactNode }) => (
     <div className="select-content">{children}</div>
   ),
@@ -65,9 +56,7 @@ vi.mock("../ui/select", () => ({
   SelectTrigger: ({ children }: { children: React.ReactNode }) => (
     <div className="select-trigger">{children}</div>
   ),
-  SelectValue: ({ placeholder }: { placeholder?: string }) => (
-    <span>{placeholder}</span>
-  ),
+  SelectValue: ({ placeholder }: { placeholder?: string }) => <span>{placeholder}</span>,
 }));
 
 vi.mock("./waypoints-list-panel", () => ({
@@ -89,9 +78,7 @@ describe("RouteControlPanel", () => {
     exportRoute: vi.fn(),
     importRoute: vi.fn(),
     clearRoute: vi.fn(),
-    waypoints: [
-      { id: "wp1", name: "Start", lat: 41.52, lng: 2.1 },
-    ],
+    waypoints: [{ id: "wp1", name: "Start", lat: 41.52, lng: 2.1 }],
     removeWaypoint: vi.fn(),
     reorderWaypoints: vi.fn(),
     fileInputRef: { current: null },

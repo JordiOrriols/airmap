@@ -13,9 +13,7 @@ describe("StatGrid", () => {
       expectedValues: ["100", "2"],
     },
     {
-      items: [
-        { key: "stat1", label: "Speed", value: "50", unit: "kt" },
-      ],
+      items: [{ key: "stat1", label: "Speed", value: "50", unit: "kt" }],
       expectedLabels: ["Speed"],
       expectedValues: ["50"],
     },
@@ -57,9 +55,7 @@ describe("StatGrid", () => {
 
   it("applies custom className to grid", () => {
     const items = [{ key: "stat1", label: "Test", value: "123" }];
-    const { container } = render(
-      <StatGrid items={items} className="custom-class" />
-    );
+    const { container } = render(<StatGrid items={items} className="custom-class" />);
     const gridDiv = container.firstChild;
     expect(gridDiv).toHaveClass("custom-class");
   });

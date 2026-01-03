@@ -31,11 +31,7 @@ describe("GradientIcon", () => {
   it("applies default gradient", () => {
     const { container } = render(<GradientIcon icon={MapPin} />);
     const wrapper = container.firstChild;
-    expect(wrapper).toHaveClass(
-      "bg-gradient-to-r",
-      "from-violet-500",
-      "to-purple-500"
-    );
+    expect(wrapper).toHaveClass("bg-gradient-to-r", "from-violet-500", "to-purple-500");
   });
 
   it("applies custom gradient", () => {
@@ -43,16 +39,11 @@ describe("GradientIcon", () => {
       <GradientIcon icon={MapPin} gradient="from-red-500 to-yellow-500" />
     );
     const wrapper = container.firstChild;
-    expect(wrapper).toHaveClass(
-      "from-red-500",
-      "to-yellow-500"
-    );
+    expect(wrapper).toHaveClass("from-red-500", "to-yellow-500");
   });
 
   it("renders different icons", () => {
-    const { rerender, container } = render(
-      <GradientIcon icon={MapPin} />
-    );
+    const { rerender, container } = render(<GradientIcon icon={MapPin} />);
     expect(container.querySelector("svg")).toBeInTheDocument();
 
     rerender(<GradientIcon icon={Home} />);

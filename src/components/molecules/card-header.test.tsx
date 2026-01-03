@@ -25,9 +25,7 @@ describe("CardHeader", () => {
   });
 
   it("applies custom className", () => {
-    const { container } = render(
-      <CardHeader title="Test" className="custom-class" />
-    );
+    const { container } = render(<CardHeader title="Test" className="custom-class" />);
     const element = container.firstChild;
     expect(element).toHaveClass("custom-class");
   });
@@ -39,12 +37,7 @@ describe("CardHeader", () => {
   });
 
   it("renders actions when provided", () => {
-    render(
-      <CardHeader
-        title="Test"
-        actions={<button>Action</button>}
-      />
-    );
+    render(<CardHeader title="Test" actions={<button>Action</button>} />);
     expect(screen.getByText("Action")).toBeInTheDocument();
   });
 });

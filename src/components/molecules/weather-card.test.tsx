@@ -40,25 +40,22 @@ describe("WeatherCard", () => {
       condition: "Stormy",
       description: "freezing stormy conditions",
     },
-  ])(
-    "displays weather information for $description",
-    ({ temp, windSpeed, condition }) => {
-      const mockWeather = {
-        condition,
-        temp,
-        windSpeed,
-        windGust: windSpeed + 5,
-        cloudCover: 50,
-        cloudBase: 3000,
-        visibility: 10,
-        precipitation: 0,
-        feelsLike: temp - 1,
-      };
-      render(<WeatherCard weather={mockWeather} />);
-      expect(screen.getByText(`${temp}°C`)).toBeInTheDocument();
-      expect(screen.getByText(`${windSpeed} kt`)).toBeInTheDocument();
-    }
-  );
+  ])("displays weather information for $description", ({ temp, windSpeed, condition }) => {
+    const mockWeather = {
+      condition,
+      temp,
+      windSpeed,
+      windGust: windSpeed + 5,
+      cloudCover: 50,
+      cloudBase: 3000,
+      visibility: 10,
+      precipitation: 0,
+      feelsLike: temp - 1,
+    };
+    render(<WeatherCard weather={mockWeather} />);
+    expect(screen.getByText(`${temp}°C`)).toBeInTheDocument();
+    expect(screen.getByText(`${windSpeed} kt`)).toBeInTheDocument();
+  });
 
   it("displays no data message when weather is null", () => {
     render(<WeatherCard weather={null} />);

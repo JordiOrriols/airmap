@@ -69,22 +69,19 @@ describe("WaypointCard", () => {
     expect(screen.getByText(/2.1053/)).toBeInTheDocument();
   });
 
-  it.each([0, 1, 2, 5, 9])(
-    "displays correct 1-based index number for array index %i",
-    (index) => {
-      const waypoint = { id: "wp", name: "Test", lat: 0, lng: 0 };
-      render(
-        <WaypointCard
-          waypoint={waypoint}
-          index={index}
-          onRemove={mockOnRemove}
-          innerRef={null}
-          vfrUpperDisplay={undefined}
-        />
-      );
-      expect(screen.getByText(String(index + 1))).toBeInTheDocument();
-    }
-  );
+  it.each([0, 1, 2, 5, 9])("displays correct 1-based index number for array index %i", (index) => {
+    const waypoint = { id: "wp", name: "Test", lat: 0, lng: 0 };
+    render(
+      <WaypointCard
+        waypoint={waypoint}
+        index={index}
+        onRemove={mockOnRemove}
+        innerRef={null}
+        vfrUpperDisplay={undefined}
+      />
+    );
+    expect(screen.getByText(String(index + 1))).toBeInTheDocument();
+  });
 
   it("calls onRemove with correct index on delete", () => {
     const waypoint = { id: "wp1", name: "Test", lat: 0, lng: 0 };

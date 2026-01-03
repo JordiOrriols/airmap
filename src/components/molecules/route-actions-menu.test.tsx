@@ -48,9 +48,7 @@ describe("RouteActionsMenu", () => {
   });
 
   it("renders menu icon", () => {
-    const { container } = render(
-      <RouteActionMenu route={mockRoute} actions={mockActions} />
-    );
+    const { container } = render(<RouteActionMenu route={mockRoute} actions={mockActions} />);
     const svg = container.querySelector("svg");
     expect(svg).toBeInTheDocument();
   });

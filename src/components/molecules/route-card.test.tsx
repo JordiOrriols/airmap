@@ -10,9 +10,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("../ui/card", () => ({
-  Card: ({ children }: { children: React.ReactNode }) => (
-    <div className="card">{children}</div>
-  ),
+  Card: ({ children }: { children: React.ReactNode }) => <div className="card">{children}</div>,
 }));
 
 vi.mock("../ui/button", () => ({
@@ -122,20 +120,17 @@ describe("RouteCard", () => {
   it.each([
     { cruiseSpeed: 80, speedUnit: "knots" as const },
     { cruiseSpeed: 150, speedUnit: "kmh" as const },
-  ])(
-    "handles route with cruiseSpeed=$cruiseSpeed $speedUnit",
-    ({ cruiseSpeed, speedUnit }) => {
-      render(
-        <RouteCard
-          route={{ ...baseRoute, cruiseSpeed, speedUnit }}
-          onDelete={mockOnDelete}
-          startHref="/tracking"
-          editHref="/planner"
-        />
-      );
-      expect(screen.getByText(baseRoute.name)).toBeInTheDocument();
-    }
-  );
+  ])("handles route with cruiseSpeed=$cruiseSpeed $speedUnit", ({ cruiseSpeed, speedUnit }) => {
+    render(
+      <RouteCard
+        route={{ ...baseRoute, cruiseSpeed, speedUnit }}
+        onDelete={mockOnDelete}
+        startHref="/tracking"
+        editHref="/planner"
+      />
+    );
+    expect(screen.getByText(baseRoute.name)).toBeInTheDocument();
+  });
 
   it("handles routes with different waypoint counts", () => {
     const multiWaypointRoute = {

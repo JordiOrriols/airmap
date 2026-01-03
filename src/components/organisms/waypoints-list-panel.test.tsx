@@ -23,14 +23,18 @@ vi.mock("../atoms/icon-button", () => ({
 }));
 
 vi.mock("../molecules/waypoint-card", () => ({
-  default: ({ waypoint, index, onRemove }: { waypoint: any; index: number; onRemove: (i: number) => void }) => (
+  default: ({
+    waypoint,
+    index,
+    onRemove,
+  }: {
+    waypoint: any;
+    index: number;
+    onRemove: (i: number) => void;
+  }) => (
     <div className="waypoint-card">
       <span>{waypoint.name}</span>
-      <button
-        onClick={() => onRemove(index)}
-        aria-label={`Remove ${waypoint.name}`}
-        type="button"
-      >
+      <button onClick={() => onRemove(index)} aria-label={`Remove ${waypoint.name}`} type="button">
         Remove
       </button>
     </div>

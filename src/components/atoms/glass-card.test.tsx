@@ -20,9 +20,7 @@ describe("GlassCard", () => {
   });
 
   it("applies custom className", () => {
-    const { container } = render(
-      <GlassCard className="custom-class">Test</GlassCard>
-    );
+    const { container } = render(<GlassCard className="custom-class">Test</GlassCard>);
     const element = container.firstChild;
     expect(element).toHaveClass("custom-class");
   });

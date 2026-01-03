@@ -28,52 +28,38 @@ describe("MapView", () => {
   ];
 
   it("renders map container", () => {
-    const { container } = render(
-      <MapView waypoints={mockWaypoints} />
-    );
+    const { container } = render(<MapView waypoints={mockWaypoints} />);
     expect(container.querySelector(".map-container")).toBeInTheDocument();
   });
 
   it("renders tile layer", () => {
-    const { container } = render(
-      <MapView waypoints={mockWaypoints} />
-    );
+    const { container } = render(<MapView waypoints={mockWaypoints} />);
     expect(container.querySelector(".tile-layer")).toBeInTheDocument();
   });
 
   it("renders airspace layer", () => {
-    const { container } = render(
-      <MapView waypoints={mockWaypoints} />
-    );
+    const { container } = render(<MapView waypoints={mockWaypoints} />);
     expect(container.querySelector(".airspace-layer")).toBeInTheDocument();
   });
 
   it("renders markers for waypoints", () => {
-    const { container } = render(
-      <MapView waypoints={mockWaypoints} />
-    );
+    const { container } = render(<MapView waypoints={mockWaypoints} />);
     const markers = container.querySelectorAll(".marker");
     expect(markers.length).toBeGreaterThan(0);
   });
 
   it("renders with empty waypoints", () => {
-    const { container } = render(
-      <MapView waypoints={[]} />
-    );
+    const { container } = render(<MapView waypoints={[]} />);
     expect(container.querySelector(".map-container")).toBeInTheDocument();
   });
 
   it("applies current waypoint styling when index provided", () => {
-    const { container } = render(
-      <MapView waypoints={mockWaypoints} currentWaypointIndex={0} />
-    );
+    const { container } = render(<MapView waypoints={mockWaypoints} currentWaypointIndex={0} />);
     expect(container.querySelector(".map-container")).toBeInTheDocument();
   });
 
   it("renders map with route tracking mode", () => {
-    const { container } = render(
-      <MapView waypoints={mockWaypoints} currentWaypointIndex={1} />
-    );
+    const { container } = render(<MapView waypoints={mockWaypoints} currentWaypointIndex={1} />);
     expect(container.querySelector(".map-container")).toBeInTheDocument();
   });
 });

@@ -18,7 +18,9 @@ vi.mock("../atoms/stat-display", () => ({
 
 vi.mock("../atoms/gradient-icon", () => ({
   default: ({ icon: Icon }: { icon: React.ComponentType }) => (
-    <div><Icon /></div>
+    <div>
+      <Icon />
+    </div>
   ),
 }));
 
@@ -29,9 +31,7 @@ vi.mock("../atoms/glass-card", () => ({
 }));
 
 vi.mock("../atoms/badge", () => ({
-  default: ({ children }: { children: React.ReactNode }) => (
-    <div className="badge">{children}</div>
-  ),
+  default: ({ children }: { children: React.ReactNode }) => <div className="badge">{children}</div>,
 }));
 
 vi.mock("../atoms/icon-button", () => ({

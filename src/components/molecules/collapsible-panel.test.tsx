@@ -35,23 +35,16 @@ describe("CollapsiblePanel", () => {
   it.each([
     { defaultCollapsed: false, expectContent: true },
     { defaultCollapsed: true, expectContent: false },
-  ])(
-    "respects defaultCollapsed=$defaultCollapsed",
-    ({ defaultCollapsed, expectContent }) => {
-      render(
-        <CollapsiblePanel
-          title="Panel"
-          icon={MapPin}
-          defaultCollapsed={defaultCollapsed}
-        >
-          Hidden Content
-        </CollapsiblePanel>
-      );
-      if (expectContent) {
-        expect(screen.getByText("Hidden Content")).toBeInTheDocument();
-      }
+  ])("respects defaultCollapsed=$defaultCollapsed", ({ defaultCollapsed, expectContent }) => {
+    render(
+      <CollapsiblePanel title="Panel" icon={MapPin} defaultCollapsed={defaultCollapsed}>
+        Hidden Content
+      </CollapsiblePanel>
+    );
+    if (expectContent) {
+      expect(screen.getByText("Hidden Content")).toBeInTheDocument();
     }
-  );
+  });
 
   it("toggles content visibility on button click", () => {
     render(
