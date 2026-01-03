@@ -330,7 +330,7 @@ export default function FlightPlanner() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          {!saved && <ThemeToggle />}
           {saved && (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
