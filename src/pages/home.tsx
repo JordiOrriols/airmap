@@ -80,7 +80,7 @@ export default function Home() {
           >
             <div className="flex items-center justify-center bg-header backdrop-blur-xl border border-app-secondary rounded-2xl px-5 py-3 shadow-lg w-full">
               <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-2 rounded-xl mr-3">
-                <Plane className="w-5 h-5 text-header" />
+                <Plane className="w-5 h-5 text-white" />
               </div>
               <div className="text-left flex-1">
                 <h1 className="text-xl font-semibold text-header">
