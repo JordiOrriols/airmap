@@ -112,6 +112,7 @@ describe("TrackingControlPanel", () => {
         weatherLocation={null}
       />
     );
+    // Component should still render without crashing
     expect(container.querySelector(".weather-panel")).toBeInTheDocument();
   });
 

@@ -147,9 +147,12 @@ describe("WaypointCard", () => {
         draggable={false}
       />
     );
-    // With draggable=false, grip icon should not exist
-    const svgs = container.querySelectorAll("svg");
-    expect(svgs.length).toBe(0);
+    // Find the delete button (should still be there)
+    const buttons = screen.getAllByRole("button");
+    expect(buttons.length).toBeGreaterThan(0);
+    // Grip icon should not exist
+    const gripElements = container.querySelectorAll("[class*='grip']");
+    expect(gripElements.length).toBe(0);
   });
 
   it("supports drag and drop props", () => {

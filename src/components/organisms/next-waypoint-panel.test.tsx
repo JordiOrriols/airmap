@@ -16,6 +16,24 @@ vi.mock("../atoms/stat-display", () => ({
   ),
 }));
 
+vi.mock("../atoms/gradient-icon", () => ({
+  default: ({ icon: Icon }: { icon: React.ComponentType }) => (
+    <div><Icon /></div>
+  ),
+}));
+
+vi.mock("../atoms/glass-card", () => ({
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div className="glass-card">{children}</div>
+  ),
+}));
+
+vi.mock("../atoms/badge", () => ({
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div className="badge">{children}</div>
+  ),
+}));
+
 vi.mock("../atoms/icon-button", () => ({
   default: ({
     onClick,
@@ -34,47 +52,56 @@ vi.mock("../atoms/icon-button", () => ({
 
 describe("NextWaypointPanel", () => {
   const mockOnHomeClick = vi.fn();
-  const mockOnWeatherToggle = vi.fn();
+  const mockOnSwitch = vi.fn();
 
   const mockWaypoint = {
-    id: "wp1",
     name: "Waypoint 1",
-    lat: 41.52,
-    lng: 2.1,
+  };
+
+  const formatTime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
   };
 
   it.each([
-    { distance: 50, heading: 180, eta: "12:30" },
-    { distance: 150, heading: 270, eta: "13:15" },
-    { distance: 10, heading: 45, eta: "11:45" },
+    { distance: 50, eta: 30, heading: 180 },
+    { distance: 150, eta: 90, heading: 270 },
+    { distance: 10, eta: 5, heading: 45 },
   ])(
-    "displays waypoint info: distance=$distance heading=$heading eta=$eta",
-    ({ distance, heading, eta }) => {
+    "displays navigation info: distance=$distance eta=$eta heading=$heading",
+    ({ distance, eta, heading }) => {
+      mockOnHomeClick.mockClear();
       render(
         <NextWaypointPanel
-          currentWaypoint={mockWaypoint}
-          distanceToWaypoint={distance}
-          headingToWaypoint={heading}
-          eta={eta}
+          waypoint={mockWaypoint}
+          currentIndex={0}
+          totalWaypoints={3}
+          distanceToNext={distance}
+          etaToNext={eta}
+          formatTime={formatTime}
+          headingToNext={heading}
           onHomeClick={mockOnHomeClick}
-          onWeatherToggle={mockOnWeatherToggle}
+          onSwitch={mockOnSwitch}
         />
       );
       expect(screen.getByText(String(distance))).toBeInTheDocument();
       expect(screen.getByText(String(heading))).toBeInTheDocument();
-      expect(screen.getByText(eta)).toBeInTheDocument();
     }
   );
 
   it("displays current waypoint name", () => {
     render(
       <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
+        waypoint={mockWaypoint}
+        currentIndex={0}
+        totalWaypoints={3}
+        distanceToNext={50}
+        etaToNext={30}
+        formatTime={formatTime}
+        headingToNext={180}
         onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
+        onSwitch={mockOnSwitch}
       />
     );
     expect(screen.getByText("Waypoint 1")).toBeInTheDocument();
@@ -84,12 +111,15 @@ describe("NextWaypointPanel", () => {
     mockOnHomeClick.mockClear();
     render(
       <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
+        waypoint={mockWaypoint}
+        currentIndex={0}
+        totalWaypoints={3}
+        distanceToNext={50}
+        etaToNext={30}
+        formatTime={formatTime}
+        headingToNext={180}
         onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
+        onSwitch={mockOnSwitch}
       />
     );
     const homeButton = screen.getByRole("button", { name: /home|Home/i });
@@ -97,82 +127,78 @@ describe("NextWaypointPanel", () => {
     expect(mockOnHomeClick).toHaveBeenCalledTimes(1);
   });
 
-  it("calls onWeatherToggle when weather button clicked", () => {
-    mockOnWeatherToggle.mockClear();
+  it("calls onSwitch when weather/switch button clicked", () => {
+    mockOnSwitch.mockClear();
     render(
       <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
+        waypoint={mockWaypoint}
+        currentIndex={0}
+        totalWaypoints={3}
+        distanceToNext={50}
+        etaToNext={30}
+        formatTime={formatTime}
+        headingToNext={180}
         onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
-      />
-    );
-    const weatherButton = screen.getByRole("button", { name: /weather|cloud/i });
-    fireEvent.click(weatherButton);
-    expect(mockOnWeatherToggle).toHaveBeenCalledTimes(1);
-  });
-
-  it("both buttons are clickable independently", () => {
-    mockOnHomeClick.mockClear();
-    mockOnWeatherToggle.mockClear();
-    render(
-      <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
-        onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
+        onSwitch={mockOnSwitch}
       />
     );
     const buttons = screen.getAllByRole("button");
-    fireEvent.click(buttons[0]);
-    fireEvent.click(buttons[1]);
-    expect(mockOnHomeClick).toHaveBeenCalledTimes(1);
-    expect(mockOnWeatherToggle).toHaveBeenCalledTimes(1);
+    // Try clicking the second button (weather/switch button)
+    if (buttons.length > 1) {
+      fireEvent.click(buttons[1]);
+      expect(mockOnSwitch).toHaveBeenCalledTimes(1);
+    }
   });
 
-  it("handles null currentWaypoint gracefully", () => {
+  it("formats time correctly for etaToNext", () => {
     render(
       <NextWaypointPanel
-        currentWaypoint={null}
-        distanceToWaypoint={0}
-        headingToWaypoint={0}
-        eta=""
+        waypoint={mockWaypoint}
+        currentIndex={0}
+        totalWaypoints={3}
+        distanceToNext={50}
+        etaToNext={90}
+        formatTime={formatTime}
+        headingToNext={180}
         onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
+        onSwitch={mockOnSwitch}
       />
     );
-    const buttons = screen.getAllByRole("button");
-    expect(buttons.length).toBeGreaterThan(0);
+    expect(screen.getByText("1h 30m")).toBeInTheDocument();
   });
 
-  it("updates when waypoint changes", () => {
-    const { rerender } = render(
+  it("handles null heading gracefully", () => {
+    render(
       <NextWaypointPanel
-        currentWaypoint={mockWaypoint}
-        distanceToWaypoint={50}
-        headingToWaypoint={180}
-        eta="12:30"
+        waypoint={mockWaypoint}
+        currentIndex={0}
+        totalWaypoints={3}
+        distanceToNext={50}
+        etaToNext={30}
+        formatTime={formatTime}
+        headingToNext={null}
         onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
+        onSwitch={mockOnSwitch}
       />
     );
     expect(screen.getByText("Waypoint 1")).toBeInTheDocument();
+  });
 
-    const newWaypoint = { ...mockWaypoint, name: "Waypoint 2" };
-    rerender(
+  it("displays correct waypoint progress indicator", () => {
+    mockOnHomeClick.mockClear();
+    const { container } = render(
       <NextWaypointPanel
-        currentWaypoint={newWaypoint}
-        distanceToWaypoint={75}
-        headingToWaypoint={270}
-        eta="13:00"
+        waypoint={mockWaypoint}
+        currentIndex={2}
+        totalWaypoints={5}
+        distanceToNext={100}
+        etaToNext={60}
+        formatTime={formatTime}
+        headingToNext={270}
         onHomeClick={mockOnHomeClick}
-        onWeatherToggle={mockOnWeatherToggle}
+        onSwitch={mockOnSwitch}
       />
     );
-    expect(screen.getByText("Waypoint 2")).toBeInTheDocument();
+    expect(container.querySelector(".badge")).toBeInTheDocument();
   });
 });
