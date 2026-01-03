@@ -106,21 +106,21 @@ describe("Geo Utilities", () => {
       const result = getMapCenterAndZoom([]);
       expect(result.center.lat).toBe(41.5209);
       expect(result.center.lng).toBe(2.105);
-      expect(result.zoom).toBe(8);
+      expect(result.zoom).toBe(11);
     });
 
     it("should return default center for undefined waypoints", () => {
       const result = getMapCenterAndZoom(undefined);
       expect(result.center.lat).toBe(41.5209);
       expect(result.center.lng).toBe(2.105);
-      expect(result.zoom).toBe(8);
+      expect(result.zoom).toBe(11);
     });
 
     it("should return correct center for single waypoint", () => {
       const result = getMapCenterAndZoom([{ lat: 41.3874, lng: 2.169 }]);
       expect(result.center.lat).toBe(41.3874);
       expect(result.center.lng).toBe(2.169);
-      expect(result.zoom).toBe(11);
+      expect(result.zoom).toBe(13);
     });
 
     it("should calculate center for multiple waypoints", () => {

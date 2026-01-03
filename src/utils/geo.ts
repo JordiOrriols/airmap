@@ -33,11 +33,11 @@ type LatLng = { lat: number; lng: number };
 
 export function getMapCenterAndZoom(waypoints?: LatLng[]) {
   if (!waypoints || waypoints.length === 0) {
-    return { center: { lat: 41.5209, lng: 2.105 }, zoom: 8 };
+    return { center: { lat: 41.5209, lng: 2.105 }, zoom: 11 };
   }
 
   if (waypoints.length === 1) {
-    return { center: waypoints[0], zoom: 11 };
+    return { center: waypoints[0], zoom: 13 };
   }
 
   // Calculate bounds to fit all waypoints
@@ -57,13 +57,13 @@ export function getMapCenterAndZoom(waypoints?: LatLng[]) {
   // Add 40% padding to bounds
   const maxDiff = Math.max(latDiff, lngDiff) * 1.4;
 
-  let zoom = 7;
-  if (maxDiff < 0.01) zoom = 12;
-  else if (maxDiff < 0.05) zoom = 10;
-  else if (maxDiff < 0.1) zoom = 9;
-  else if (maxDiff < 0.5) zoom = 8;
-  else if (maxDiff < 1) zoom = 7;
-  else if (maxDiff < 2) zoom = 6;
+  let zoom = 8;
+  if (maxDiff < 0.01) zoom = 14;
+  else if (maxDiff < 0.05) zoom = 12;
+  else if (maxDiff < 0.1) zoom = 11;
+  else if (maxDiff < 0.5) zoom = 10;
+  else if (maxDiff < 1) zoom = 9;
+  else if (maxDiff < 2) zoom = 8;
 
   return { center: { lat: centerLat, lng: centerLng }, zoom };
 }
