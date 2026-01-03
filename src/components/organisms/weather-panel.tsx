@@ -22,53 +22,39 @@ export default function WeatherPanel({
 
   const loading = forecastMode ? forecastQuery.isLoading : currentWeatherQuery.isLoading;
 
-  const updateSelectedWeatherFromForecast = useCallback(
-    (forecastData: ForecastData) => {
-      const days = Object.keys(forecastData);
-      if (days.length === 0) return;
-
-      const dayKey = days[selectedDay];
-      if (!dayKey) return;
-
-      const selectedDayData = forecastData[dayKey];
-      if (!selectedDayData || selectedDayData.length === 0) return;
-
-      // Find closest hour
-      const hourNum = parseInt(selectedHour, 10);
-      if (selectedDayData.length === 0) return;
-      const first = selectedDayData[0];
-      if (!first) return;
-      const closest = selectedDayData.reduce<WeatherData>((prev, curr) => {
-        const prevHour = prev.hour ?? 0;
-        const currHour = curr.hour ?? 0;
-        return Math.abs(currHour - hourNum) < Math.abs(prevHour - hourNum) ? curr : prev;
-      }, first);
-
-      setWeather(closest);
-    },
-    [selectedDay, selectedHour]
-  );
-
+  // Update weather when query data changes
   useEffect(() => {
     if (forecastMode && forecastQuery.data) {
-      const grouped = forecastQuery.data;
-      setForecast(grouped);
-      updateSelectedWeatherFromForecast(grouped);
+      setForecast(forecastQuery.data);
     } else if (!forecastMode && currentWeatherQuery.data) {
       setWeather(currentWeatherQuery.data);
     }
-  }, [
-    currentWeatherQuery.data,
-    forecastQuery.data,
-    forecastMode,
-    updateSelectedWeatherFromForecast,
-  ]);
+  }, [currentWeatherQuery.data, forecastQuery.data, forecastMode]);
 
+  // Update selected weather when forecast, day, or hour changes
   useEffect(() => {
-    if (forecastMode && Object.keys(forecast).length > 0) {
-      updateSelectedWeatherFromForecast(forecast);
-    }
-  }, [forecast, forecastMode, updateSelectedWeatherFromForecast]);
+    if (!forecastMode || Object.keys(forecast).length === 0) return;
+
+    const days = Object.keys(forecast);
+    const dayKey = days[selectedDay];
+    if (!dayKey) return;
+
+    const selectedDayData = forecast[dayKey];
+    if (!selectedDayData || selectedDayData.length === 0) return;
+
+    // Find closest hour
+    const hourNum = parseInt(selectedHour, 10);
+    const first = selectedDayData[0];
+    if (!first) return;
+
+    const closest = selectedDayData.reduce<WeatherData>((prev, curr) => {
+      const prevHour = prev.hour ?? 0;
+      const currHour = curr.hour ?? 0;
+      return Math.abs(currHour - hourNum) < Math.abs(prevHour - hourNum) ? curr : prev;
+    }, first);
+
+    setWeather(closest);
+  }, [forecast, forecastMode, selectedDay, selectedHour]);
 
   const getDayOptions = () => {
     return Object.keys(forecast).map((day, index) => {

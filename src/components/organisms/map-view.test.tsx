@@ -10,9 +10,7 @@ vi.mock("react-leaflet", () => ({
   Marker: ({ children }: { children?: React.ReactNode }) => (
     <div data-testid="marker">{children}</div>
   ),
-  Popup: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="popup">{children}</div>
-  ),
+  Popup: ({ children }: { children: React.ReactNode }) => <div data-testid="popup">{children}</div>,
   Polyline: () => <div data-testid="polyline" />,
   Circle: () => <div data-testid="circle" />,
   useMapEvents: vi.fn(() => null),
@@ -49,16 +47,12 @@ describe("MapView", () => {
   });
 
   it("displays airspace layer when enabled", () => {
-    const { getByTestId } = render(
-      <MapView waypoints={mockWaypoints} showAirspace={true} />
-    );
+    const { getByTestId } = render(<MapView waypoints={mockWaypoints} showAirspace={true} />);
     expect(getByTestId("airspace-layer")).toBeTruthy();
   });
 
   it("renders markers for each waypoint", () => {
-    const { getAllByTestId } = render(
-      <MapView waypoints={mockWaypoints} showWaypoints={true} />
-    );
+    const { getAllByTestId } = render(<MapView waypoints={mockWaypoints} showWaypoints={true} />);
     const markers = getAllByTestId("marker");
     expect(markers.length).toBeGreaterThan(0);
   });
@@ -69,20 +63,14 @@ describe("MapView", () => {
   });
 
   it("renders polyline connecting waypoints", () => {
-    const { getByTestId } = render(
-      <MapView waypoints={mockWaypoints} showPolyline={true} />
-    );
+    const { getByTestId } = render(<MapView waypoints={mockWaypoints} showPolyline={true} />);
     expect(getByTestId("polyline")).toBeTruthy();
   });
 
   it("displays current position when provided", () => {
     const currentPos = { lat: 41.525, lng: 2.105 };
     const { getAllByTestId } = render(
-      <MapView
-        waypoints={mockWaypoints}
-        currentPosition={currentPos}
-        showAircraft={true}
-      />
+      <MapView waypoints={mockWaypoints} currentPosition={currentPos} showAircraft={true} />
     );
     // Aircraft should be rendered as a marker
     const markers = getAllByTestId("marker");
@@ -91,9 +79,7 @@ describe("MapView", () => {
 
   it("uses custom center and zoom when provided", () => {
     const customCenter = { lat: 40.7, lng: -74.0 };
-    const { getByTestId } = render(
-      <MapView waypoints={[]} center={customCenter} zoom={10} />
-    );
+    const { getByTestId } = render(<MapView waypoints={[]} center={customCenter} zoom={10} />);
     expect(getByTestId("map-container")).toBeTruthy();
   });
 });

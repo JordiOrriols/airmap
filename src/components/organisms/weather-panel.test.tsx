@@ -1,4 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import WeatherPanel from "./weather-panel";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 vi.mock("lucide-react", () => ({
   Loader2: () => <div data-testid="loader" />,
@@ -13,42 +15,79 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("../ui/select", () => ({
-  Select: ({ children }: { children: React.ReactNode }) => <div data-testid="select">{children}</div>,
-  SelectContent: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="select-content">{children}</div>
-  ),
-  SelectItem: ({ children, value }: { children: React.ReactNode; value: string }) => (
-    <div data-testid="select-item" data-value={value}>
+  Select: ({ children, value, onValueChange }: any) => (
+    <div data-testid="select" data-value={value}>
       {children}
     </div>
   ),
-  SelectTrigger: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="select-trigger">{children}</div>
+  SelectContent: ({ children }: any) => <div data-testid="select-content">{children}</div>,
+  SelectItem: ({ children, value }: any) => (
+    <div data-testid={`select-item-${value}`}>{children}</div>
   ),
-  SelectValue: ({ placeholder }: { placeholder?: string }) => <span>{placeholder}</span>,
+  SelectTrigger: ({ children }: any) => <div data-testid="select-trigger">{children}</div>,
+  SelectValue: () => null,
 }));
 
 vi.mock("../molecules/weather-card", () => ({
-  default: () => <div data-testid="weather-card" />,
+  default: ({ weather }: any) => (
+    <div data-testid="weather-card">
+      {weather?.temperature && <span>{weather.temperature}°</span>}
+    </div>
+  ),
 }));
 
 vi.mock("../../api/weather", () => ({
-  useCurrentWeather: () => ({
-    data: { temperature: 20, condition: "clear" },
+  useCurrentWeather: vi.fn(() => ({
+    data: { temperature: 20, condition: "clear", humidity: 65, windSpeed: 10 },
     isLoading: false,
     error: null,
-  }),
-  useWeatherForecast: () => ({
+  })),
+  useWeatherForecast: vi.fn(() => ({
     data: {},
     isLoading: false,
     error: null,
-  }),
+  })),
 }));
 
 describe("WeatherPanel", () => {
-  it("component is properly mocked and importable", () => {
-    // Component has complex effect dependencies that cause hangs
-    // This test verifies the mocks are in place for other tests
-    expect(true).toBe(true);
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("renders weather card with current weather data", async () => {
+    render(<WeatherPanel location={{ lat: 41.52, lng: 2.1 }} />);
+
+    await waitFor(() => {
+      const weatherCard = screen.getByTestId("weather-card");
+      expect(weatherCard).toBeTruthy();
+      expect(weatherCard.textContent).toContain("20°");
+    });
+  });
+
+  it("uses default location when not provided", async () => {
+    render(<WeatherPanel />);
+
+    await waitFor(() => {
+      const weatherCard = screen.getByTestId("weather-card");
+      expect(weatherCard).toBeTruthy();
+    });
+  });
+
+  it("renders compact mode with weather card", async () => {
+    render(<WeatherPanel location={{ lat: 41.52, lng: 2.1 }} compact={true} />);
+
+    await waitFor(() => {
+      const weatherCard = screen.getByTestId("weather-card");
+      expect(weatherCard).toBeTruthy();
+    });
+  });
+
+  it("renders non-compact mode with default location", async () => {
+    render(<WeatherPanel />);
+
+    await waitFor(() => {
+      const weatherCard = screen.getByTestId("weather-card");
+      expect(weatherCard).toBeTruthy();
+    });
   });
 });
