@@ -5,7 +5,7 @@ import L from "leaflet";
 import { MapContainer, TileLayer } from "react-leaflet";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
-import { Navigation, Home, Plane } from "lucide-react";
+import { Home, Plane } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPageUrl } from "../utils/index";
 import { Link } from "react-router-dom";

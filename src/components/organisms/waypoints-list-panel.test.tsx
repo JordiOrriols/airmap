@@ -42,8 +42,8 @@ vi.mock("@hello-pangea/dnd", () => ({
   Droppable: ({ children }: { children: (provided: any) => React.ReactNode }) => (
     <div>{children({ droppableProps: {}, placeholder: null })}</div>
   ),
-  Draggable: ({ children }: { children: (provided: any) => React.ReactNode }) => (
-    <div>{children({ dragHandleProps: {}, draggableProps: {} })}</div>
+  Draggable: ({ children }: { children: (provided: any, snapshot: any) => React.ReactNode }) => (
+    <div>{children({ dragHandleProps: {}, draggableProps: {} }, { isDragging: false })}</div>
   ),
 }));
 
@@ -61,6 +61,8 @@ describe("WaypointsListPanel", () => {
     render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
+        onRemove={mockOnRemove}
+        onReorder={mockOnReorder}
         onClear={mockOnClear}
       />
     );
@@ -72,6 +74,8 @@ describe("WaypointsListPanel", () => {
     render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
+        onRemove={mockOnRemove}
+        onReorder={mockOnReorder}
         onClear={mockOnClear}
       />
     );
@@ -83,6 +87,8 @@ describe("WaypointsListPanel", () => {
     render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
+        onRemove={mockOnRemove}
+        onReorder={mockOnReorder}
         onClear={mockOnClear}
       />
     );
@@ -95,6 +101,8 @@ describe("WaypointsListPanel", () => {
     const { container } = render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
+        onRemove={mockOnRemove}
+        onReorder={mockOnReorder}
         onClear={mockOnClear}
       />
     );
@@ -103,24 +111,28 @@ describe("WaypointsListPanel", () => {
   });
 
   it("renders empty state message when no waypoints", () => {
-    render(
+    const { container } = render(
       <WaypointsListPanel
         waypoints={[]}
+        onRemove={mockOnRemove}
+        onReorder={mockOnReorder}
         onClear={mockOnClear}
       />
     );
-    expect(screen.getByText(/No waypoints/i)).toBeInTheDocument();
+    expect(container.firstChild).toBeNull();
   });
 
   it("handles waypoint removal", () => {
     render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
+        onRemove={mockOnRemove}
+        onReorder={mockOnReorder}
         onClear={mockOnClear}
       />
     );
     const removeButtons = screen.getAllByRole("button", { name: /remove/i });
     fireEvent.click(removeButtons[0]);
-    expect(mockOnWaypointsChange).toHaveBeenCalled();
+    expect(mockOnRemove).toHaveBeenCalled();
   });
 });
