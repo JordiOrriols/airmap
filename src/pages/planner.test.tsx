@@ -42,15 +42,19 @@ vi.mock("lucide-react", () => {
   };
 });
 
-vi.mock("react-router-dom", () => ({
-  useLocation: () => ({
-    state: { route: { id: "test", name: "Test Route", waypoints: [] } },
-  }),
-  useNavigate: () => vi.fn(),
-  Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
+vi.mock("react-router-dom", () => {
+  const Link = ({ children, to }: { children: React.ReactNode; to: string }) => (
     <a href={to}>{children}</a>
-  ),
-}));
+  );
+  Link.displayName = "Link";
+  return {
+    useLocation: () => ({
+      state: { route: { id: "test", name: "Test Route", waypoints: [] } },
+    }),
+    useNavigate: () => vi.fn(),
+    Link,
+  };
+});
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
