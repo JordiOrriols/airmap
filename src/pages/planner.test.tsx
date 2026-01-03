@@ -25,20 +25,24 @@ vi.mock("leaflet", () => {
 });
 
 vi.mock("lucide-react", () => {
-  const createIcon = () => () => <div />;
+  const createIcon = (name: string) => {
+    const Icon = () => <div />;
+    Icon.displayName = name;
+    return Icon;
+  };
   return {
-    Plane: createIcon(),
-    Home: createIcon(),
-    Check: createIcon(),
-    CloudSun: createIcon(),
-    Route: createIcon(),
-    ChevronDown: createIcon(),
-    ChevronUp: createIcon(),
-    Plus: createIcon(),
-    Trash2: createIcon(),
-    Download: createIcon(),
-    Upload: createIcon(),
-    MapPin: createIcon(),
+    Plane: createIcon("Plane"),
+    Home: createIcon("Home"),
+    Check: createIcon("Check"),
+    CloudSun: createIcon("CloudSun"),
+    Route: createIcon("Route"),
+    ChevronDown: createIcon("ChevronDown"),
+    ChevronUp: createIcon("ChevronUp"),
+    Plus: createIcon("Plus"),
+    Trash2: createIcon("Trash2"),
+    Download: createIcon("Download"),
+    Upload: createIcon("Upload"),
+    MapPin: createIcon("MapPin"),
   };
 });
 
