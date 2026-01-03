@@ -159,34 +159,6 @@ export default function Home() {
             </motion.div>
           </AnimatePresence>
         </div>
-
-        {/* Empty State */}
-        {routes.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-20"
-          >
-            <div className="bg-create-card backdrop-blur-xl border border-app-secondary rounded-3xl px-12 py-16 inline-block">
-              <div className="bg-gradient-to-r from-pink-500 to-purple-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Plane className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-create-card mb-3">
-                {t("home.no_routes_yet", "No routes yet")}
-              </h3>
-              <p className="text-create-card-secondary mb-6 max-w-md">
-                {t("home.create_first_desc", "Create your first flight route to get started")}
-              </p>
-              <Button
-                onClick={createNewRoute}
-                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
-              >
-                <Plus className="w-5 h-5 mr-2" />
-                {t("home.create_first", "Create First Route")}
-              </Button>
-            </div>
-          </motion.div>
-        )}
       </div>
     </div>
   );

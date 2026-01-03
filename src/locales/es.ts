@@ -107,10 +107,6 @@ export const es: Locale = {
     "date.today": "Hoy",
     "date.tomorrow": "Mañana",
 
-    // Home additional
-    "home.no_routes_yet": "Aún no hay rutas",
-    "home.create_first_desc": "Crea tu primera ruta de vuelo para comenzar",
-
     // Generic
     "action.ok": "OK",
     "action.cancel": "Cancelar",

@@ -109,10 +109,6 @@ export const en: Locale = {
     "date.today": "Today",
     "date.tomorrow": "Tomorrow",
 
-    // Home additional
-    "home.no_routes_yet": "No routes yet",
-    "home.create_first_desc": "Create your first flight route to get started",
-
     // Generic
     "action.ok": "OK",
     "action.cancel": "Cancel",

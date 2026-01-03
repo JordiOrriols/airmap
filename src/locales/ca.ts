@@ -107,10 +107,6 @@ export const ca: Locale = {
     "date.today": "Avui",
     "date.tomorrow": "Demà",
 
-    // Home additional
-    "home.no_routes_yet": "Encara no hi ha rutes",
-    "home.create_first_desc": "Crea la teva primera ruta de vol per començar",
-
     // Generic
     "action.ok": "OK",
     "action.cancel": "Cancel·lar",
