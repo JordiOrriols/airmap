@@ -15,6 +15,7 @@ import { routeStorage } from "../utils/storage";
 import GlassCard from "../components/atoms/glass-card";
 import WeatherPanel from "../components/organisms/weather-panel";
 import { CloudSun, MapPin } from "lucide-react";
+import IconButton from "../components/atoms/icon-button";
 import {
   calculateDistance as geoCalculateDistance,
   calculateBearing as geoCalculateBearing,
@@ -307,20 +308,16 @@ export default function FlightTracking() {
                     </h2>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button
+                    <IconButton
+                      icon={Home}
                       onClick={() => (window.location.href = createPageUrl("home"))}
-                      aria-label={t("tracking.go_home", "Go Home")}
-                      className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
-                    >
-                      <Home className="w-4 h-4" />
-                    </button>
-                    <button
+                      ariaLabel={t("tracking.go_home", "Go Home")}
+                    />
+                    <IconButton
+                      icon={MapPin}
                       onClick={() => setActivePanel("next")}
-                      aria-label={t("tracking.show_next", "Show Next Waypoint")}
-                      className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
-                    >
-                      <MapPin className="w-4 h-4" />
-                    </button>
+                      ariaLabel={t("tracking.show_next", "Show Next Waypoint")}
+                    />
                   </div>
                 </div>
                 <WeatherPanel location={weatherLocation} forecastMode={false} compact={true} />

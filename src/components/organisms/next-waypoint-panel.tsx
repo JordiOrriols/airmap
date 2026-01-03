@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { MapPin, Clock, TrendingUp, CloudSun, Home } from "lucide-react";
 import GradientIcon from "../atoms/gradient-icon";
 import GlassCard from "../atoms/glass-card";
+import IconButton from "../atoms/icon-button";
 import StatDisplay from "../atoms/stat-display";
 import Badge from "../atoms/badge";
 import { Navigation } from "lucide-react";
@@ -43,22 +44,18 @@ export default function NextWaypointPanel({
         </div>
         <div className="flex items-center gap-2">
           {onHomeClick && (
-            <button
+            <IconButton
+              icon={Home}
               onClick={onHomeClick}
-              aria-label={t("tracking.go_home", "Go Home")}
-              className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
-            >
-              <Home className="w-4 h-4" />
-            </button>
+              ariaLabel={t("tracking.go_home", "Go Home")}
+            />
           )}
           {onSwitch && (
-            <button
+            <IconButton
+              icon={CloudSun}
               onClick={onSwitch}
-              aria-label={t("next_waypoint.show_weather", "Show Weather")}
-              className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
-            >
-              <CloudSun className="w-4 h-4" />
-            </button>
+              ariaLabel={t("next_waypoint.show_weather", "Show Weather")}
+            />
           )}
         </div>
       </div>
