@@ -131,8 +131,8 @@ export default function Home() {
                 <RouteCard
                   route={route}
                   onDelete={deleteRoute}
-                  startHref={createPageUrl(`tracker?routeId=${route.id}`)}
-                  editHref={createPageUrl(`planner?routeId=${route.id}`)}
+                  startHref={`/tracker?routeId=${route.id}`}
+                  editHref={`/planner?routeId=${route.id}`}
                 />
               </motion.div>
             ))}

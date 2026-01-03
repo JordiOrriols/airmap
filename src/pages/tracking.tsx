@@ -8,6 +8,7 @@ import { Card } from "../components/ui/card";
 import { Home, Plane } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPageUrl } from "../utils/index";
+import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import NextWaypointPanel from "../components/organisms/next-waypoint-panel";
 import GradientIcon from "../components/atoms/gradient-icon";
@@ -63,10 +64,11 @@ export default function FlightTracking() {
   const watchIdRef = useRef<number | null>(null);
   const lastPositionRef = useRef<LatLng | null>(null);
 
+  const [searchParams] = useSearchParams();
+
   useEffect(() => {
     // Load route from URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const routeId = urlParams.get("routeId");
+    const routeId = searchParams.get("routeId");
 
     if (routeId) {
       const foundRoute = routeStorage.getRoute(routeId) as RouteData | undefined;
@@ -74,7 +76,7 @@ export default function FlightTracking() {
         setRoute(foundRoute);
       }
     }
-  }, []);
+  }, [searchParams]);
 
   // Geospatial helpers moved to `src/utils/geo.ts` and imported as geoCalculateDistance/geoCalculateBearing
   const startTracking = useCallback(() => {

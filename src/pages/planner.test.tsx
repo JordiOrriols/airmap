@@ -56,6 +56,7 @@ vi.mock("react-router-dom", () => {
       state: { route: { id: "test", name: "Test Route", waypoints: [] } },
     }),
     useNavigate: () => vi.fn(),
+    useSearchParams: () => [new URLSearchParams()],
     Link,
   };
 });

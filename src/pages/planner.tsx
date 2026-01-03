@@ -6,7 +6,7 @@ import { Button } from "../components/ui/button";
 import { Plane, Home, Check, CloudSun, Route } from "lucide-react";
 import { motion } from "framer-motion";
 import { createPageUrl } from "../utils/index";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { pointInPolygon } from "../utils/pointInPolygon";
 import WeatherPanel from "../components/organisms/weather-panel";
 import CollapsiblePanel from "../components/molecules/collapsible-panel";
@@ -62,16 +62,17 @@ export default function FlightPlanner() {
     }
   }, []);
 
+  const [searchParams] = useSearchParams();
+
   useEffect(() => {
     // Get route ID from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get("routeId");
+    const id = searchParams.get("routeId");
 
     if (id) {
       setRouteId(id);
       loadRoute(id);
     }
-  }, [loadRoute]);
+  }, [searchParams, loadRoute]);
 
   const saveRoute = useCallback(() => {
     if (!routeId) return;

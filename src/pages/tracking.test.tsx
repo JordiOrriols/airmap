@@ -12,15 +12,19 @@ Object.defineProperty(global.navigator, "geolocation", {
   },
 });
 
-vi.mock("react-router-dom", () => ({
-  useLocation: () => ({
-    state: { route: { id: "test", name: "Test Route", waypoints: [] } },
-  }),
-  useNavigate: () => vi.fn(),
-  Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
-    <a href={to}>{children}</a>
-  ),
-}));
+vi.mock("react-router-dom", () => {
+  const mockSearchParams = new URLSearchParams("routeId=test-route");
+  return {
+    useLocation: () => ({
+      state: { route: { id: "test", name: "Test Route", waypoints: [] } },
+    }),
+    useNavigate: () => vi.fn(),
+    useSearchParams: () => [mockSearchParams],
+    Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
+      <a href={to}>{children}</a>
+    ),
+  };
+});
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
