@@ -271,6 +271,7 @@ export default function FlightTracking() {
         showPolyline={route.waypoints.length > 1}
         interactive={true}
         aircraftIcon={aircraftIcon}
+        currentWaypointIndex={currentWaypointIndex}
       />
 
       {/* Header */}

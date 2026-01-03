@@ -34,6 +34,7 @@ type MapViewProps = {
   activeWaypointIcon?: L.DivIcon;
   upcomingWaypointIcon?: L.DivIcon;
   aircraftIcon?: (rotation?: number) => L.DivIcon;
+  currentWaypointIndex?: number; // For tracking mode to color waypoints
   tileUrl?: string;
   tileAttribution?: string;
 };
@@ -81,19 +82,42 @@ export default function MapView({
   waypointIcon,
   upcomingWaypointIcon,
   aircraftIcon,
+  currentWaypointIndex,
   tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   tileAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }: MapViewProps) {
   const getWaypointIconWithNumber = (index: number) => {
+    // Determine color based on waypoint status
+    let backgroundColor = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"; // Default: upcoming (blue)
+    let size = 32;
+    let borderWidth = 3;
+    let animation = "";
+
+    if (currentWaypointIndex !== undefined) {
+      if (index < currentWaypointIndex) {
+        // Passed waypoint - gray
+        backgroundColor = "#9ca3af";
+        size = 28;
+      } else if (index === currentWaypointIndex) {
+        // Current waypoint - orange/red with pulse
+        backgroundColor = "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)";
+        size = 36;
+        borderWidth = 4;
+        animation = "animation: pulse 2s infinite;";
+      }
+      // else: upcoming waypoint (default blue)
+    }
+
     return new L.DivIcon({
       className: "custom-waypoint-marker-with-number",
-      html: `<div style="position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+      html: `<div style="position: relative; width: ${size}px; height: ${size}px; display: flex; align-items: center; justify-content: center;">
+        <div style="background: ${backgroundColor}; width: ${size}px; height: ${size}px; border-radius: 50%; border: ${borderWidth}px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; ${animation}">
           <span style="color: white; font-weight: bold; font-size: 14px; font-family: Arial, sans-serif;">${index + 1}</span>
         </div>
-      </div>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
+      </div>
+      <style>@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }</style>`,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
     });
   };
 
