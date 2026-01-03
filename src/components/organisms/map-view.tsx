@@ -29,10 +29,6 @@ type MapViewProps = {
   allowMapClick?: boolean; // allow adding markers via map click
   onMapClick?: ((latlng: LatLng) => void) | undefined;
   onMarkerDrag?: (index: number, lat: number, lng: number) => void;
-  waypointIcon?: L.DivIcon;
-  passedWaypointIcon?: L.DivIcon;
-  activeWaypointIcon?: L.DivIcon;
-  upcomingWaypointIcon?: L.DivIcon;
   aircraftIcon?: (rotation?: number) => L.DivIcon;
   currentWaypointIndex?: number; // For tracking mode to color waypoints
   tileUrl?: string;
@@ -79,8 +75,6 @@ export default function MapView({
   allowMapClick = false,
   onMapClick,
   onMarkerDrag,
-  waypointIcon,
-  upcomingWaypointIcon,
   aircraftIcon,
   currentWaypointIndex,
   tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -164,7 +158,7 @@ export default function MapView({
             <Marker
               key={idx}
               position={[wp.lat, wp.lng] as [number, number]}
-              icon={waypointIcon ?? upcomingWaypointIcon ?? getWaypointIconWithNumber(idx)}
+              icon={getWaypointIconWithNumber(idx)}
               draggable={Boolean(onMarkerDrag)}
               eventHandlers={{
                 dragend: (e) => {
