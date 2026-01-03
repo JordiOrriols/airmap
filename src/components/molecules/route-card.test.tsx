@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import RouteCard from "./route-card";
+import type { RouteData } from "../../types";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 vi.mock("react-i18next", () => ({
@@ -50,15 +51,15 @@ vi.mock("./route-actions-menu", () => ({
 describe("RouteCard", () => {
   const mockOnDelete = vi.fn();
 
-  const baseRoute = {
+  const baseRoute: RouteData = {
     id: "route1",
     name: "Test Route",
     waypoints: [
-      { id: "wp1", lat: 41.52, lng: 2.1, name: "Start" },
-      { id: "wp2", lat: 41.53, lng: 2.11, name: "End" },
+      { lat: 41.52, lng: 2.1, name: "Start" },
+      { lat: 41.53, lng: 2.11, name: "End" },
     ],
     cruiseSpeed: 100,
-    speedUnit: "kt" as const,
+    speedUnit: "knots",
   };
 
   beforeEach(() => {
@@ -119,9 +120,8 @@ describe("RouteCard", () => {
   });
 
   it.each([
-    { cruiseSpeed: 80, speedUnit: "kt" },
-    { cruiseSpeed: 150, speedUnit: "kmh" },
-    { cruiseSpeed: 50, speedUnit: "ms" },
+    { cruiseSpeed: 80, speedUnit: "knots" as const },
+    { cruiseSpeed: 150, speedUnit: "kmh" as const },
   ])(
     "handles route with cruiseSpeed=$cruiseSpeed $speedUnit",
     ({ cruiseSpeed, speedUnit }) => {

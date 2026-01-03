@@ -139,8 +139,8 @@ describe("Route Storage", () => {
       routeStorage.saveRoute(route2);
       const routes = routeStorage.getAllRoutes();
       expect(routes.length).toBe(2);
-      expect(routes.some((r) => r.id === "route-1" && r.name === "Route 1")).toBe(true);
-      expect(routes.some((r) => r.id === "route-2" && r.name === "Route 2")).toBe(true);
+      expect(routes.some((r: RouteData) => r.id === "route-1" && r.name === "Route 1")).toBe(true);
+      expect(routes.some((r: RouteData) => r.id === "route-2" && r.name === "Route 2")).toBe(true);
     });
 
     it("should return routes in consistent order", () => {

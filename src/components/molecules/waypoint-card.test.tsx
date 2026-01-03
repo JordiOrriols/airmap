@@ -47,6 +47,8 @@ describe("WaypointCard", () => {
         waypoint={waypoint}
         index={0}
         onRemove={mockOnRemove}
+        innerRef={null}
+        vfrUpperDisplay={undefined}
       />
     );
     expect(screen.getByText(expectedName)).toBeInTheDocument();
@@ -59,6 +61,8 @@ describe("WaypointCard", () => {
         waypoint={waypoint}
         index={0}
         onRemove={mockOnRemove}
+        innerRef={null}
+        vfrUpperDisplay={undefined}
       />
     );
     expect(screen.getByText(/41.5209/)).toBeInTheDocument();
@@ -74,6 +78,8 @@ describe("WaypointCard", () => {
           waypoint={waypoint}
           index={index}
           onRemove={mockOnRemove}
+          innerRef={null}
+          vfrUpperDisplay={undefined}
         />
       );
       expect(screen.getByText(String(index + 1))).toBeInTheDocument();
@@ -88,6 +94,8 @@ describe("WaypointCard", () => {
         waypoint={waypoint}
         index={3}
         onRemove={mockOnRemove}
+        innerRef={null}
+        vfrUpperDisplay={undefined}
       />
     );
     const deleteButton = screen.getByRole("button");
@@ -104,6 +112,7 @@ describe("WaypointCard", () => {
         index={0}
         onRemove={mockOnRemove}
         vfrUpperDisplay="FL100"
+        innerRef={null}
       />
     );
     expect(screen.getByText(/VFR.*FL100/)).toBeInTheDocument();
@@ -117,6 +126,7 @@ describe("WaypointCard", () => {
         index={0}
         onRemove={mockOnRemove}
         vfrUpperDisplay={undefined}
+        innerRef={null}
       />
     );
     // VFR line should not be present when undefined
@@ -131,6 +141,8 @@ describe("WaypointCard", () => {
         index={0}
         onRemove={mockOnRemove}
         draggable={true}
+        innerRef={null}
+        vfrUpperDisplay={undefined}
       />
     );
     const gripIcon = container.querySelector("svg");
@@ -145,6 +157,8 @@ describe("WaypointCard", () => {
         index={0}
         onRemove={mockOnRemove}
         draggable={false}
+        innerRef={null}
+        vfrUpperDisplay={undefined}
       />
     );
     // Find the delete button (should still be there)
@@ -167,6 +181,7 @@ describe("WaypointCard", () => {
         dragHandleProps={mockDragHandleProps}
         draggableProps={mockDraggableProps}
         innerRef={vi.fn()}
+        vfrUpperDisplay={undefined}
       />
     );
     expect(container.firstChild).toBeInTheDocument();

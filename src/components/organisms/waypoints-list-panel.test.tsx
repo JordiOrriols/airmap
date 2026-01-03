@@ -43,24 +43,24 @@ vi.mock("@hello-pangea/dnd", () => ({
     <div>{children({ droppableProps: {}, placeholder: null })}</div>
   ),
   Draggable: ({ children }: { children: (provided: any) => React.ReactNode }) => (
-    <div>{children({ dragHandleProps: {}, draggableProps: {} }, null)}</div>
+    <div>{children({ dragHandleProps: {}, draggableProps: {} })}</div>
   ),
 }));
 
 describe("WaypointsListPanel", () => {
   const mockWaypoints = [
-    { id: "wp1", name: "Start", lat: 41.52, lng: 2.1 },
-    { id: "wp2", name: "Waypoint 2", lat: 41.53, lng: 2.11 },
+    { lat: 41.52, lng: 2.1, name: "Start" },
+    { lat: 41.53, lng: 2.11, name: "Waypoint 2" },
   ];
 
-  const mockOnWaypointsChange = vi.fn();
+  const mockOnRemove = vi.fn();
+  const mockOnReorder = vi.fn();
   const mockOnClear = vi.fn();
 
   it("renders waypoints list", () => {
     render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
-        onWaypointsChange={mockOnWaypointsChange}
         onClear={mockOnClear}
       />
     );
@@ -72,7 +72,6 @@ describe("WaypointsListPanel", () => {
     render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
-        onWaypointsChange={mockOnWaypointsChange}
         onClear={mockOnClear}
       />
     );
@@ -84,7 +83,6 @@ describe("WaypointsListPanel", () => {
     render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
-        onWaypointsChange={mockOnWaypointsChange}
         onClear={mockOnClear}
       />
     );
@@ -97,7 +95,6 @@ describe("WaypointsListPanel", () => {
     const { container } = render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
-        onWaypointsChange={mockOnWaypointsChange}
         onClear={mockOnClear}
       />
     );
@@ -109,7 +106,6 @@ describe("WaypointsListPanel", () => {
     render(
       <WaypointsListPanel
         waypoints={[]}
-        onWaypointsChange={mockOnWaypointsChange}
         onClear={mockOnClear}
       />
     );
@@ -120,7 +116,6 @@ describe("WaypointsListPanel", () => {
     render(
       <WaypointsListPanel
         waypoints={mockWaypoints}
-        onWaypointsChange={mockOnWaypointsChange}
         onClear={mockOnClear}
       />
     );

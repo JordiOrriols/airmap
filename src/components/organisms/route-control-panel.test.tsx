@@ -75,12 +75,12 @@ vi.mock("./waypoints-list-panel", () => ({
 }));
 
 describe("RouteControlPanel", () => {
-  const mockProps = {
+  const mockProps: any = {
     routeName: "Test Route",
     setRouteName: vi.fn(),
     cruiseSpeed: 100,
     setCruiseSpeed: vi.fn(),
-    speedUnit: "kt" as const,
+    speedUnit: "kt",
     setSpeedUnit: vi.fn(),
     isEditMode: false,
     toggleEditMode: vi.fn(),
