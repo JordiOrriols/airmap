@@ -1,12 +1,11 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { MapPin, Clock, TrendingUp, CloudSun, Home } from "lucide-react";
+import { MapPin, Clock, TrendingUp, CloudSun, Home, Navigation } from "lucide-react";
 import GradientIcon from "../atoms/gradient-icon";
 import GlassCard from "../atoms/glass-card";
 import IconButton from "../atoms/icon-button";
-import StatDisplay from "../atoms/stat-display";
+import StatGrid from "../molecules/stat-grid";
 import Badge from "../atoms/badge";
-import { Navigation } from "lucide-react";
 
 type NextWaypointPanelProps = {
   waypoint: { name: string };
@@ -76,30 +75,33 @@ export default function NextWaypointPanel({
           </Badge>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 pt-3 border-t border-app-secondary">
-          <StatDisplay
-            icon={TrendingUp}
-            label={t("next_waypoint.distance", "Distance")}
-            value={`${distanceToNext.toFixed(1)}`}
-            unit={t("unit.nm", "NM")}
-            iconColor="text-cyan-300"
-            size="compact"
-          />
-
-          <StatDisplay
-            icon={Clock}
-            label={t("next_waypoint.eta", "ETA")}
-            value={formatTime(etaToNext)}
-            iconColor="text-purple-300"
-            size="compact"
-          />
-
-          <StatDisplay
-            icon={Navigation}
-            label={t("next_waypoint.heading", "Heading")}
-            value={headingToNext !== null ? `${headingToNext.toFixed(0)}°` : "--"}
-            iconColor="text-emerald-300"
-            size="compact"
+        <div className="pt-3 border-t border-app-secondary">
+          <StatGrid
+            items={[
+              {
+                key: "distance",
+                icon: TrendingUp,
+                label: t("next_waypoint.distance", "Distance"),
+                value: distanceToNext.toFixed(1),
+                unit: t("unit.nm", "NM"),
+                className: "text-cyan-300",
+              },
+              {
+                key: "eta",
+                icon: Clock,
+                label: t("next_waypoint.eta", "ETA"),
+                value: formatTime(etaToNext),
+                className: "text-purple-300",
+              },
+              {
+                key: "heading",
+                icon: Navigation,
+                label: t("next_waypoint.heading", "Heading"),
+                value: headingToNext !== null ? `${headingToNext.toFixed(0)}°` : "--",
+                className: "text-emerald-300",
+              },
+            ]}
+            columns={3}
           />
         </div>
       </div>
@@ -121,6 +123,5 @@ export default function NextWaypointPanel({
           />
         </div>
       </div>
-    </GlassCard>
-  );
+    </GlassCard>  );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Wind, Droplets, Thermometer, Eye, Cloud } from "lucide-react";
 import WeatherIcon from "../atoms/weather-icon";
-import StatDisplay from "../atoms/stat-display";
+import StatGrid from "./stat-grid";
 import { useTranslation } from "react-i18next";
 
 export default function WeatherCard({ weather, compact = false }) {
@@ -41,6 +41,62 @@ export default function WeatherCard({ weather, compact = false }) {
     );
   }
 
+  // Build stats array with conditional items
+  const weatherStats = [
+    {
+      key: "wind",
+      icon: Wind,
+      label: t("weather.wind", "Wind"),
+      value: `${weather.windSpeed} kt`,
+      className: "text-cyan-300",
+    },
+    ...(weather.windGust > weather.windSpeed
+      ? [
+          {
+            key: "gusts",
+            icon: Wind,
+            label: t("weather.gusts", "Gusts"),
+            value: `${weather.windGust} kt`,
+            className: "text-orange-300",
+          },
+        ]
+      : []),
+    {
+      key: "clouds",
+      icon: Cloud,
+      label: t("weather.clouds", "Clouds"),
+      value: weather.cloudBase
+        ? `${weather.cloudCover}% (${weather.cloudBase} ft)`
+        : `${weather.cloudCover}%`,
+      className: "text-gray-300",
+    },
+    {
+      key: "visibility",
+      icon: Eye,
+      label: t("weather.visibility", "Visibility"),
+      value: `${weather.visibility} km`,
+      className: "text-blue-300",
+    },
+    ...(weather.precipitation > 0
+      ? [
+          {
+            key: "rain",
+            icon: Droplets,
+            label: t("weather.rain", "Precipitation"),
+            value: `${weather.precipitation} mm`,
+            className: "text-blue-400",
+          },
+        ]
+      : []),
+    {
+      key: "feelsLike",
+      icon: Thermometer,
+      label: t("weather.feels_like", "Feels Like"),
+      value: `${weather.feelsLike}°C`,
+      className: "text-red-300",
+    },
+  ];
+
   return (
     <>
       <div className="flex items-center justify-between mb-4">
@@ -53,63 +109,7 @@ export default function WeatherCard({ weather, compact = false }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-        <StatDisplay
-          icon={Wind}
-          label={t("weather.wind", "Wind")}
-          value={`${weather.windSpeed} kt`}
-          iconColor="text-cyan-300"
-          size="compact"
-        />
-
-        {weather.windGust > weather.windSpeed && (
-          <StatDisplay
-            icon={Wind}
-            label={t("weather.gusts", "Gusts")}
-            value={`${weather.windGust} kt`}
-            iconColor="text-orange-300"
-            size="compact"
-          />
-        )}
-
-        <StatDisplay
-          icon={Cloud}
-          label={t("weather.clouds", "Clouds")}
-          value={
-            weather.cloudBase
-              ? `${weather.cloudCover}% (${weather.cloudBase} ft)`
-              : `${weather.cloudCover}%`
-          }
-          iconColor="text-gray-300"
-          size="compact"
-        />
-
-        <StatDisplay
-          icon={Eye}
-          label={t("weather.visibility", "Visibility")}
-          value={`${weather.visibility} km`}
-          iconColor="text-blue-300"
-          size="compact"
-        />
-
-        {weather.precipitation > 0 && (
-          <StatDisplay
-            icon={Droplets}
-            label={t("weather.rain", "Precipitation")}
-            value={`${weather.precipitation} mm`}
-            iconColor="text-blue-400"
-            size="compact"
-          />
-        )}
-
-        <StatDisplay
-          icon={Thermometer}
-          label={t("weather.feels_like", "Feels Like")}
-          value={`${weather.feelsLike}°C`}
-          iconColor="text-red-300"
-          size="compact"
-        />
-      </div>
+      <StatGrid items={weatherStats} columns={3} />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Navigation, Clock, TrendingUp } from "lucide-react";
-import StatDisplay from "../atoms/stat-display";
+import StatGrid from "./stat-grid";
 import { useTranslation } from "react-i18next";
 import Badge from "../atoms/badge";
 import { Card } from "../ui/card";
@@ -34,29 +34,33 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 pt-3 border-t border-app-secondary">
-          <StatDisplay
-            icon={Navigation}
-            label={t("stat.heading", "Heading")}
-            value={`${segment.bearing}°`}
-            iconColor="text-cyan-300"
-            size="compact"
-          />
-
-          <StatDisplay
-            icon={TrendingUp}
-            label={t("stat.distance", "Distance")}
-            value={`${segment.distance} ${t("unit.nm", "NM")}`}
-            iconColor="text-emerald-300"
-            size="compact"
-          />
-
-          <StatDisplay
-            icon={Clock}
-            label={t("stat.time", "Time")}
-            value={formatTime(parseFloat(segment.time))}
-            iconColor="text-purple-300"
-            size="compact"
+        <div className="pt-3 border-t border-app-secondary">
+          <StatGrid
+            items={[
+              {
+                key: "bearing",
+                icon: Navigation,
+                label: t("stat.heading", "Heading"),
+                value: `${segment.bearing}°`,
+                className: "text-cyan-300",
+              },
+              {
+                key: "distance",
+                icon: TrendingUp,
+                label: t("stat.distance", "Distance"),
+                value: segment.distance,
+                unit: t("unit.nm", "NM"),
+                className: "text-emerald-300",
+              },
+              {
+                key: "time",
+                icon: Clock,
+                label: t("stat.time", "Time"),
+                value: formatTime(parseFloat(segment.time)),
+                className: "text-purple-300",
+              },
+            ]}
+            columns={3}
           />
         </div>
       </Card>
