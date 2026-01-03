@@ -4,7 +4,6 @@ import StatDisplay from "../atoms/stat-display";
 import { Navigation, TrendingUp } from "lucide-react";
 import WeatherPanel from "./weather-panel";
 import { useTranslation } from "react-i18next";
-import GlassCard from "../atoms/glass-card";
 
 type Props = {
   currentHeading: number;

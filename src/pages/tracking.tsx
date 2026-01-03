@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import MapView from "../components/organisms/map-view";
 import L from "leaflet";
@@ -97,17 +97,8 @@ export default function FlightTracking() {
     }
   }, []);
 
-  // Auto-start tracking once a route is loaded
-  useEffect(() => {
-    if (route && !isTracking) {
-      startTracking();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [route]);
-
   // Geospatial helpers moved to `src/utils/geo.ts` and imported as geoCalculateDistance/geoCalculateBearing
-
-  const startTracking = () => {
+  const startTracking = useCallback(() => {
     if (!navigator.geolocation) {
       alert(t("tracking.geolocation_unsupported", "Geolocation is not supported by your browser"));
       return;
@@ -182,7 +173,14 @@ export default function FlightTracking() {
         timeout: 5000,
       }
     );
-  };
+  }, [t, route, currentWaypointIndex]);
+
+  // Auto-start tracking once a route is loaded
+  useEffect(() => {
+    if (route && !isTracking) {
+      startTracking();
+    }
+  }, [route, isTracking, startTracking]);
 
   const stopTracking = () => {
     if (watchIdRef.current !== null) {
@@ -331,7 +329,7 @@ export default function FlightTracking() {
 
               {currentWaypointIndex < route.waypoints.length && (
                 <NextWaypointPanel
-                  waypoint={route.waypoints[currentWaypointIndex]}
+                  waypoint={route.waypoints[currentWaypointIndex]!}
                   currentIndex={currentWaypointIndex}
                   totalWaypoints={route.waypoints.length}
                   distanceToNext={distanceToNext}
