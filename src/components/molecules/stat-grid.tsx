@@ -8,18 +8,34 @@ type StatItem = {
   value?: React.ReactNode;
   unit?: React.ReactNode;
   className?: string;
+  iconColor?: string;
 };
 
 type StatGridProps = {
   items: StatItem[];
   columns?: number;
   className?: string;
+  compact?: boolean;
 };
 
-export default function StatGrid({ items, columns = 2, className = "" }: StatGridProps) {
-  const cols = `grid-cols-${columns}`;
+export default function StatGrid({
+  items,
+  columns = 2,
+  className = "",
+  compact = true,
+}: StatGridProps) {
+  const colsMap = {
+    1: "grid-cols-1",
+    2: "grid-cols-2",
+    3: "grid-cols-3",
+    4: "grid-cols-4",
+    5: "grid-cols-5",
+    6: "grid-cols-6",
+  };
+  const colsClass = colsMap[columns as keyof typeof colsMap] || `grid-cols-${columns}`;
+
   return (
-    <div className={`grid ${cols} gap-3 ${className}`}>
+    <div className={`grid ${colsClass} gap-3 ${className}`}>
       {items.map((it, idx) => (
         <StatDisplay
           key={it.key ?? idx}
@@ -28,6 +44,8 @@ export default function StatGrid({ items, columns = 2, className = "" }: StatGri
           value={it.value}
           unit={it.unit}
           className={it.className ?? ""}
+          iconColor={it.iconColor ?? "text-cyan-300"}
+          size={compact ? "compact" : "large"}
         />
       ))}
     </div>

@@ -42,7 +42,7 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
                 icon: Navigation,
                 label: t("stat.heading", "Heading"),
                 value: `${segment.bearing}°`,
-                className: "text-cyan-300",
+                iconColor: "text-cyan-300",
               },
               {
                 key: "distance",
@@ -50,14 +50,14 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
                 label: t("stat.distance", "Distance"),
                 value: segment.distance,
                 unit: t("unit.nm", "NM"),
-                className: "text-emerald-300",
+                iconColor: "text-emerald-300",
               },
               {
                 key: "time",
                 icon: Clock,
                 label: t("stat.time", "Time"),
                 value: formatTime(parseFloat(segment.time)),
-                className: "text-purple-300",
+                iconColor: "text-purple-300",
               },
             ]}
             columns={3}

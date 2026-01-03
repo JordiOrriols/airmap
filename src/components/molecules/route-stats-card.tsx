@@ -34,6 +34,7 @@ export default function RouteStatsCard({
         },
       ]}
       columns={2}
+      compact={false}
     />
   );
 }

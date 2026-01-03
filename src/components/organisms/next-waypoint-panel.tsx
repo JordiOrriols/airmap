@@ -84,21 +84,21 @@ export default function NextWaypointPanel({
                 label: t("next_waypoint.distance", "Distance"),
                 value: distanceToNext.toFixed(1),
                 unit: t("unit.nm", "NM"),
-                className: "text-cyan-300",
+                iconColor: "text-cyan-300",
               },
               {
                 key: "eta",
                 icon: Clock,
                 label: t("next_waypoint.eta", "ETA"),
                 value: formatTime(etaToNext),
-                className: "text-purple-300",
+                iconColor: "text-purple-300",
               },
               {
                 key: "heading",
                 icon: Navigation,
                 label: t("next_waypoint.heading", "Heading"),
                 value: headingToNext !== null ? `${headingToNext.toFixed(0)}°` : "--",
-                className: "text-emerald-300",
+                iconColor: "text-emerald-300",
               },
             ]}
             columns={3}
@@ -123,5 +123,6 @@ export default function NextWaypointPanel({
           />
         </div>
       </div>
-    </GlassCard>  );
+    </GlassCard>
+  );
 }

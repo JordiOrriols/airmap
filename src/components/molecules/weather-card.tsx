@@ -48,7 +48,7 @@ export default function WeatherCard({ weather, compact = false }) {
       icon: Wind,
       label: t("weather.wind", "Wind"),
       value: `${weather.windSpeed} kt`,
-      className: "text-cyan-300",
+      iconColor: "text-cyan-300",
     },
     ...(weather.windGust > weather.windSpeed
       ? [
@@ -57,7 +57,7 @@ export default function WeatherCard({ weather, compact = false }) {
             icon: Wind,
             label: t("weather.gusts", "Gusts"),
             value: `${weather.windGust} kt`,
-            className: "text-orange-300",
+            iconColor: "text-orange-300",
           },
         ]
       : []),
@@ -68,14 +68,14 @@ export default function WeatherCard({ weather, compact = false }) {
       value: weather.cloudBase
         ? `${weather.cloudCover}% (${weather.cloudBase} ft)`
         : `${weather.cloudCover}%`,
-      className: "text-gray-300",
+      iconColor: "text-gray-300",
     },
     {
       key: "visibility",
       icon: Eye,
       label: t("weather.visibility", "Visibility"),
       value: `${weather.visibility} km`,
-      className: "text-blue-300",
+      iconColor: "text-blue-300",
     },
     ...(weather.precipitation > 0
       ? [
@@ -84,7 +84,7 @@ export default function WeatherCard({ weather, compact = false }) {
             icon: Droplets,
             label: t("weather.rain", "Precipitation"),
             value: `${weather.precipitation} mm`,
-            className: "text-blue-400",
+            iconColor: "text-blue-400",
           },
         ]
       : []),
@@ -93,7 +93,7 @@ export default function WeatherCard({ weather, compact = false }) {
       icon: Thermometer,
       label: t("weather.feels_like", "Feels Like"),
       value: `${weather.feelsLike}°C`,
-      className: "text-red-300",
+      iconColor: "text-red-300",
     },
   ];
 
