@@ -8,7 +8,15 @@ describe("StatDisplay Component", () => {
   const mockIcon = Gauge;
 
   it("should render stat display with label and value", () => {
-    render(<StatDisplay icon={mockIcon} label="Speed" value="120" unitSymbol="kt" additionalInfo="cruise speed" />);
+    render(
+      <StatDisplay
+        icon={mockIcon}
+        label="Speed"
+        value="120"
+        unitSymbol="kt"
+        additionalInfo="cruise speed"
+      />
+    );
     expect(screen.getByText("Speed")).toBeInTheDocument();
     expect(screen.getByText("120")).toBeInTheDocument();
     expect(screen.getByText("kt")).toBeInTheDocument();

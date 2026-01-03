@@ -36,11 +36,11 @@ export default function StatDisplay({
       </div>
       <div className="flex items-baseline gap-1">
         <p className={`${valueSize} font-bold text-app-primary`}>{value}</p>
-        {unitSymbol && (
-          <p className="text-xs text-gray-400 font-medium">{unitSymbol}</p>
-        )}
+        {unitSymbol && <p className="text-xs text-gray-400 font-medium">{unitSymbol}</p>}
       </div>
-      {additionalInfo && !isCompact && <p className="text-xs text-app-tertiary mt-2">{additionalInfo}</p>}
+      {additionalInfo && !isCompact && (
+        <p className="text-xs text-app-tertiary mt-2">{additionalInfo}</p>
+      )}
     </div>
   );
 }

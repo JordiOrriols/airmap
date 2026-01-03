@@ -13,14 +13,24 @@ vi.mock("../atoms/weather-icon", () => ({
 }));
 
 vi.mock("../atoms/stat-display", () => ({
-  default: ({ label, value, unitSymbol, additionalInfo }: { label: string; value: string; unitSymbol?: string; additionalInfo?: string }) => (
+  default: ({
+    label,
+    value,
+    unitSymbol,
+    additionalInfo,
+  }: {
+    label: string;
+    value: string;
+    unitSymbol?: string;
+    additionalInfo?: string;
+  }) => (
     <div>
       {label}: {value}
       {unitSymbol && <span>{unitSymbol}</span>}
       {additionalInfo && <span>{additionalInfo}</span>}
     </div>
   ),
-}))
+}));
 
 describe("WeatherCard", () => {
   it.each([
