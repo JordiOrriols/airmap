@@ -124,7 +124,7 @@ describe("RouteControlPanel", () => {
 
   it("renders edit toggle button", () => {
     render(<RouteControlPanel {...mockProps} />);
-    const editButton = screen.getByRole("button", { name: /edit/i });
+    const editButton = screen.getByRole("button", { name: /mode/i });
     expect(editButton).toBeInTheDocument();
   });
 

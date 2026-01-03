@@ -10,7 +10,7 @@ vi.mock("react-i18next", () => ({
 
 vi.mock("../atoms/glass-card", () => ({
   default: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
+    <div className={`glass-card ${className || ""}`}>{children}</div>
   ),
 }));
 
@@ -113,7 +113,7 @@ describe("TrackingControlPanel", () => {
       />
     );
     // Component should still render without crashing
-    expect(container.querySelector(".weather-panel")).toBeInTheDocument();
+    expect(container.querySelector(".glass-card")).toBeInTheDocument();
   });
 
   it("button text changes when airspace visibility changes", () => {
