@@ -76,9 +76,9 @@ export default function FlightTracking() {
   const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [currentHeading, setCurrentHeading] = useState(0);
   const [currentWaypointIndex, setCurrentWaypointIndex] = useState(0);
-  const [speed, setSpeed] = useState(0);
   const [distanceToNext, setDistanceToNext] = useState(0);
   const [etaToNext, setEtaToNext] = useState(0);
+  const [headingToNext, setHeadingToNext] = useState<number | null>(null);
   const [showAirspace, setShowAirspace] = useState(true);
   const [weatherLocation, setWeatherLocation] = useState<LatLng | null>(null);
   const watchIdRef = useRef<number | null>(null);
@@ -133,7 +133,6 @@ export default function FlightTracking() {
 
         // Convert speed from m/s to knots (1 m/s = 1.94384 knots)
         const speedInKnots = gpsSpeed ? gpsSpeed * 1.94384 : 0;
-        setSpeed(speedInKnots);
 
         // Check waypoint proximity and update current waypoint
         if (route && route.waypoints[currentWaypointIndex]) {
@@ -145,6 +144,14 @@ export default function FlightTracking() {
             nextWaypoint.lng
           );
           setDistanceToNext(distance);
+
+          const bearingToNext = geoCalculateBearing(
+            latitude,
+            longitude,
+            nextWaypoint.lat,
+            nextWaypoint.lng
+          );
+          setHeadingToNext(bearingToNext);
 
           // Calculate ETA in minutes
           if (speedInKnots > 0) {
@@ -191,6 +198,19 @@ export default function FlightTracking() {
     setIsAcquiring(false);
   };
 
+  // Fallback heading when we don't have a GPS fix yet
+  useEffect(() => {
+    if (!route) return;
+    const nextWaypoint = route.waypoints[currentWaypointIndex];
+    if (!nextWaypoint) return;
+
+    if (!currentPosition) {
+      const from = route.waypoints[Math.max(0, currentWaypointIndex - 1)] ?? nextWaypoint;
+      const bearing = geoCalculateBearing(from.lat, from.lng, nextWaypoint.lat, nextWaypoint.lng);
+      setHeadingToNext(bearing);
+    }
+  }, [route, currentWaypointIndex, currentPosition]);
+
   useEffect(() => {
     return () => {
       if (watchIdRef.current !== null) {
@@ -229,7 +249,7 @@ export default function FlightTracking() {
 
   const mapCenter: [number, number] = currentPosition
     ? [currentPosition.lat, currentPosition.lng]
-    : route.waypoints[0]
+    : route?.waypoints[0]
       ? [route.waypoints[0].lat, route.waypoints[0].lng]
       : [41.5209, 2.105];
 
@@ -310,18 +330,17 @@ export default function FlightTracking() {
       </motion.div>
 
       {/* Status / Panels */}
-      <div className="absolute top-28 left-1/2 -translate-x-1/2 z-20 w-[min(1100px,calc(100%-32px))]">
+      <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20 w-[min(820px,calc(100%-24px))]">
         {isAcquiring ? (
-          <GlassCard className="p-8 flex items-center justify-center gap-3 text-app-secondary text-sm">
+          <GlassCard className="p-6 flex items-center justify-center gap-2 text-app-secondary text-sm">
             <span className="inline-block h-5 w-5 rounded-full border-2 border-app-secondary border-t-transparent animate-spin"></span>
             {t("tracking.requesting_location", "Requesting location...")}
           </GlassCard>
         ) : (
-          <GlassCard className="p-6">
-            <div className="grid gap-6 lg:grid-cols-2">
+          <GlassCard className="p-4">
+            <div className="grid gap-3 lg:grid-cols-2">
               <TrackingControlPanel
                 currentHeading={currentHeading}
-                speed={speed}
                 showAirspace={showAirspace}
                 setShowAirspace={setShowAirspace}
                 weatherLocation={weatherLocation}
@@ -335,6 +354,7 @@ export default function FlightTracking() {
                   distanceToNext={distanceToNext}
                   etaToNext={etaToNext}
                   formatTime={formatTime}
+                  headingToNext={headingToNext}
                 />
               )}
             </div>

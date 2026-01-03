@@ -5,6 +5,7 @@ import GradientIcon from "../atoms/gradient-icon";
 import GlassCard from "../atoms/glass-card";
 import StatDisplay from "../atoms/stat-display";
 import Badge from "../atoms/badge";
+import { Navigation } from "lucide-react";
 
 type NextWaypointPanelProps = {
   waypoint: { name: string };
@@ -13,6 +14,7 @@ type NextWaypointPanelProps = {
   distanceToNext: number;
   etaToNext: number;
   formatTime: (minutes: number) => string;
+  headingToNext: number | null;
 };
 
 export default function NextWaypointPanel({
@@ -22,41 +24,43 @@ export default function NextWaypointPanel({
   distanceToNext,
   etaToNext,
   formatTime,
+  headingToNext,
 }: NextWaypointPanelProps) {
   const { t } = useTranslation();
 
   return (
-    <GlassCard className="p-6">
-      <div className="flex items-center gap-3 mb-4">
+    <GlassCard className="p-4">
+      <div className="flex items-center gap-2 mb-3">
         <GradientIcon icon={MapPin} gradient="from-orange-500 to-red-500" />
-        <h2 className="text-xl font-bold text-app-primary">
+        <h2 className="text-lg font-bold text-app-primary">
           {t("next_waypoint.title", "Next Waypoint")}
         </h2>
       </div>
 
-      <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-2xl p-5">
-        <div className="flex items-start justify-between mb-4">
+      <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-xl p-4">
+        <div className="flex items-start justify-between mb-3">
           <div>
-            <h3 className="text-2xl font-bold text-app-primary mb-1">{waypoint.name}</h3>
-            <p className="text-sm text-app-secondary">
+            <h3 className="text-xl font-bold text-app-primary mb-0.5">{waypoint.name}</h3>
+            <p className="text-xs text-app-secondary">
               {t("next_waypoint.waypoint_of", {
                 index: currentIndex + 1,
                 total: totalWaypoints,
               })}
             </p>
           </div>
-          <Badge size="lg" gradient="from-orange-500 to-red-500">
+          <Badge size="md" gradient="from-orange-500 to-red-500">
             {currentIndex + 1}
           </Badge>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 pt-3 border-t border-app-secondary">
+        <div className="grid grid-cols-2 gap-2 pt-3 border-t border-app-secondary">
           <StatDisplay
             icon={TrendingUp}
             label={t("next_waypoint.distance", "Distance")}
             value={`${distanceToNext.toFixed(1)}`}
             unit={t("unit.nm", "NM")}
             iconColor="text-cyan-300"
+            size="compact"
           />
 
           <StatDisplay
@@ -64,12 +68,21 @@ export default function NextWaypointPanel({
             label={t("next_waypoint.eta", "ETA")}
             value={formatTime(etaToNext)}
             iconColor="text-purple-300"
+            size="compact"
+          />
+
+          <StatDisplay
+            icon={Navigation}
+            label={t("next_waypoint.heading", "Heading")}
+            value={headingToNext !== null ? `${headingToNext.toFixed(0)}°` : "--"}
+            iconColor="text-emerald-300"
+            size="compact"
           />
         </div>
       </div>
 
-      <div className="mt-4">
-        <div className="flex justify-between text-sm text-app-secondary mb-2">
+      <div className="mt-3">
+        <div className="flex justify-between text-xs text-app-secondary mb-2">
           <span>{t("next_waypoint.progress", "Progress")}</span>
           <span>
             {t("next_waypoint.waypoints_status", {
@@ -78,7 +91,7 @@ export default function NextWaypointPanel({
             })}
           </span>
         </div>
-        <div className="w-full bg-input-app rounded-full h-3 overflow-hidden border border-app-secondary">
+        <div className="w-full bg-input-app rounded-full h-2 overflow-hidden border border-app-secondary">
           <div
             className="bg-gradient-to-r from-emerald-500 to-teal-500 h-full transition-all duration-500"
             style={{ width: `${(currentIndex / totalWaypoints) * 100}%` }}
