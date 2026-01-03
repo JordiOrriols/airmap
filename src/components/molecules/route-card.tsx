@@ -108,30 +108,29 @@ export default function RouteCard({ route, onDelete, startHref, editHref }: Rout
           <RouteActionsMenu route={route} actions={actions} />
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          <StatGrid
-            items={[
-              {
-                key: "distance",
-                icon: Route,
-                label: t("route_stats.total_distance", "Distance"),
-                value: totalDistance.toFixed(1),
-                unitSymbol: "NM",
-                iconColor: "text-stat-distance-icon",
-              },
-              {
-                key: "time",
-                icon: Timer,
-                label: t("route_stats.flight_time", "Time"),
-                value: formatTime(totalTime),
-                additionalInfo: `${route.cruiseSpeed} ${route.speedUnit}`,
-                iconColor: "text-stat-time-icon",
-              },
-            ]}
-            columns={2}
-            compact={true}
-          />
-        </div>
+        <StatGrid
+          className="mb-4"
+          items={[
+            {
+              key: "distance",
+              icon: Route,
+              label: t("route_stats.total_distance", "Distance"),
+              value: totalDistance.toFixed(1),
+              unitSymbol: "NM",
+              iconColor: "text-stat-distance-icon",
+            },
+            {
+              key: "time",
+              icon: Timer,
+              label: t("route_stats.flight_time", "Time"),
+              value: formatTime(totalTime),
+              additionalInfo: `${route.cruiseSpeed} ${route.speedUnit}`,
+              iconColor: "text-stat-time-icon",
+            },
+          ]}
+          columns={2}
+          compact={true}
+        />
 
         <div className="mt-4 pt-4 border-t border-app-primary space-y-2">
           <Link to={startHref}>
