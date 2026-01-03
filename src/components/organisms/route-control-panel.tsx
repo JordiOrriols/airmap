@@ -1,17 +1,7 @@
 import React from "react";
 import type { RefObject } from "react";
 import CollapsiblePanel from "../molecules/collapsible-panel";
-import {
-  Navigation,
-  Trash2,
-  Download,
-  Upload,
-  Edit3,
-  MousePointer,
-  Eye,
-  EyeOff,
-  RefreshCw,
-} from "lucide-react";
+import { Navigation, Download, Upload, Edit3, MousePointer, Eye, EyeOff, RefreshCw } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
@@ -179,17 +169,6 @@ export default function RouteControlPanel({
             {t("planner.route_control.import", "Import")}
           </Button>
         </div>
-
-        <Button
-          onClick={clearRoute}
-          variant="outline"
-          className="w-full bg-input-app border-app-secondary text-input-app hover:bg-red-500/30 hover:border-red-400/40 backdrop-blur-sm transition-all"
-          disabled={waypoints.length === 0}
-        >
-          <Trash2 className="w-4 h-4 mr-2" />
-          {t("planner.route_control.clear", "Clear Route")}
-        </Button>
-
         <input
           ref={fileInputRef}
           type="file"
@@ -202,6 +181,7 @@ export default function RouteControlPanel({
           waypoints={waypoints}
           onRemove={removeWaypoint}
           onReorder={reorderWaypoints}
+          onClear={clearRoute}
         />
       </div>
     </CollapsiblePanel>

@@ -1,15 +1,17 @@
 import React from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, Trash2 } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd";
 import WaypointCard from "../molecules/waypoint-card";
 import { useTranslation } from "react-i18next";
 import type { Waypoint } from "../../types";
+import { Button } from "../ui/button";
 
 type WaypointListPanelProps = {
   waypoints: Waypoint[];
   onRemove: (index: number) => void;
   onReorder: (startIndex: number, endIndex: number) => void;
   vfrs?: (string | null)[];
+  onClear?: () => void;
 };
 
 export default function WaypointListPanel({
@@ -17,6 +19,7 @@ export default function WaypointListPanel({
   onRemove,
   onReorder,
   vfrs = [],
+  onClear,
 }: WaypointListPanelProps) {
   const { t } = useTranslation();
   if (waypoints.length === 0) return null;
@@ -28,10 +31,23 @@ export default function WaypointListPanel({
 
   return (
     <div className="mt-6 pt-6 border-t border-app-secondary">
-      <h3 className="text-sm font-semibold text-app-primary mb-3 flex items-center gap-2">
-        <MapPin className="w-4 h-4" />
-        {t("waypoints.title", "Waypoints")} ({waypoints.length})
-      </h3>
+      <div className="flex items-center justify-between mb-3 gap-2">
+        <h3 className="text-sm font-semibold text-app-primary flex items-center gap-2">
+          <MapPin className="w-4 h-4" />
+          {t("waypoints.title", "Waypoints")} ({waypoints.length})
+        </h3>
+        {onClear && (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t("planner.route_control.clear", "Clear Route")}
+            className="text-app-muted hover:text-red-400 hover:bg-red-500/10"
+            onClick={onClear}
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        )}
+      </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="waypoints">
           {(provided) => (
