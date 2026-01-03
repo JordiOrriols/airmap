@@ -44,29 +44,6 @@ const aircraftIcon = (rotation = 0) =>
     iconAnchor: [20, 20],
   });
 
-// Waypoint icons
-const passedWaypointIcon = new L.DivIcon({
-  className: "custom-waypoint-marker",
-  html: `<div style="background: #10b981; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>`,
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
-});
-
-const activeWaypointIcon = new L.DivIcon({
-  className: "custom-waypoint-marker",
-  html: `<div style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); width: 28px; height: 28px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 16px rgba(0,0,0,0.4); animation: pulse 2s infinite;"></div>
-  <style>@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }</style>`,
-  iconSize: [28, 28],
-  iconAnchor: [14, 14],
-});
-
-const upcomingWaypointIcon = new L.DivIcon({
-  className: "custom-waypoint-marker",
-  html: `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>`,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
-});
-
 // MapController removed; centering handled by `MapView` component
 
 export default function FlightTracking() {
@@ -293,10 +270,6 @@ export default function FlightTracking() {
         showAircraft={true}
         showPolyline={route.waypoints.length > 1}
         interactive={true}
-        // For tracking the icons, we reuse existing icon creators if available
-        waypointIcon={upcomingWaypointIcon}
-        passedWaypointIcon={passedWaypointIcon}
-        activeWaypointIcon={activeWaypointIcon}
         aircraftIcon={aircraftIcon}
       />
 

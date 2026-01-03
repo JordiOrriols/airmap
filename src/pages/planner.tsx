@@ -33,14 +33,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-// Custom waypoint icon (kept for passing to MapView)
-const waypointIcon = new L.DivIcon({
-  className: "custom-waypoint-marker",
-  html: `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>`,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
-});
-
 export default function FlightPlanner() {
   const [routeId, setRouteId] = useState<string | null>(null);
   const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
@@ -380,7 +372,6 @@ export default function FlightPlanner() {
         allowMapClick={isEditMode}
         onMapClick={(latlng) => handleMapClick(latlng)}
         onMarkerDrag={(index, lat, lng) => updateWaypointPosition(index, lat, lng)}
-        waypointIcon={waypointIcon}
       />
 
       {/* Simple left sidebar with collapsible panels */}
