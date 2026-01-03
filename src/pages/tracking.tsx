@@ -274,36 +274,6 @@ export default function FlightTracking() {
         currentWaypointIndex={currentWaypointIndex}
       />
 
-      {/* Header */}
-      <motion.div
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="absolute top-6 left-1/2 transform -translate-x-1/2 z-20"
-      >
-        <div className="bg-header backdrop-blur-xl border border-app-secondary rounded-2xl px-8 py-4 shadow-card">
-          <div className="flex items-center gap-4">
-            <Link to={createPageUrl("home")}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-header-secondary hover:text-header hover:bg-button-ghost rounded-xl"
-              >
-                <Home className="w-5 h-5" />
-              </Button>
-            </Link>
-            <GradientIcon icon={Navigation} size="lg" />
-            <div>
-              <h1 className="text-2xl font-bold text-header">{route.name}</h1>
-              <p className="text-sm text-header-secondary">
-                {isTracking
-                  ? t("tracking.status.in_progress", "Flight in progress")
-                  : t("tracking.status.ready", "Ready to start")}
-              </p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
       {/* Status / Panels */}
       <div className="absolute bottom-6 left-6 z-20 w-[50vw] max-w-[520px] min-w-[280px]">
         {isAcquiring ? (
@@ -323,6 +293,7 @@ export default function FlightTracking() {
                 formatTime={formatTime}
                 headingToNext={headingToNext}
                 onSwitch={() => setActivePanel("weather")}
+                onHomeClick={() => (window.location.href = createPageUrl("home"))}
               />
             )}
 
@@ -335,13 +306,22 @@ export default function FlightTracking() {
                       {t("tracking.weather", "Weather")}
                     </h2>
                   </div>
-                  <button
-                    onClick={() => setActivePanel("next")}
-                    aria-label={t("tracking.show_next", "Show Next Waypoint")}
-                    className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
-                  >
-                    <MapPin className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => (window.location.href = createPageUrl("home"))}
+                      aria-label={t("tracking.go_home", "Go Home")}
+                      className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
+                    >
+                      <Home className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setActivePanel("next")}
+                      aria-label={t("tracking.show_next", "Show Next Waypoint")}
+                      className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
+                    >
+                      <MapPin className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
                 <WeatherPanel location={weatherLocation} forecastMode={false} compact={true} />
               </GlassCard>

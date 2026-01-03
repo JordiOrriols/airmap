@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { MapPin, Clock, TrendingUp, CloudSun } from "lucide-react";
+import { MapPin, Clock, TrendingUp, CloudSun, Home } from "lucide-react";
 import GradientIcon from "../atoms/gradient-icon";
 import GlassCard from "../atoms/glass-card";
 import StatDisplay from "../atoms/stat-display";
@@ -16,6 +16,7 @@ type NextWaypointPanelProps = {
   formatTime: (minutes: number) => string;
   headingToNext: number | null;
   onSwitch?: () => void;
+  onHomeClick?: () => void;
 };
 
 export default function NextWaypointPanel({
@@ -27,6 +28,7 @@ export default function NextWaypointPanel({
   formatTime,
   headingToNext,
   onSwitch,
+  onHomeClick,
 }: NextWaypointPanelProps) {
   const { t } = useTranslation();
 
@@ -39,15 +41,26 @@ export default function NextWaypointPanel({
             {t("next_waypoint.title", "Next Waypoint")}
           </h2>
         </div>
-        {onSwitch && (
-          <button
-            onClick={onSwitch}
-            aria-label={t("next_waypoint.show_weather", "Show Weather")}
-            className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
-          >
-            <CloudSun className="w-4 h-4" />
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {onHomeClick && (
+            <button
+              onClick={onHomeClick}
+              aria-label={t("tracking.go_home", "Go Home")}
+              className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
+            >
+              <Home className="w-4 h-4" />
+            </button>
+          )}
+          {onSwitch && (
+            <button
+              onClick={onSwitch}
+              aria-label={t("next_waypoint.show_weather", "Show Weather")}
+              className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
+            >
+              <CloudSun className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-xl p-4">
