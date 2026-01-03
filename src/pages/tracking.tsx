@@ -13,6 +13,7 @@ import NextWaypointPanel from "../components/organisms/next-waypoint-panel";
 import GradientIcon from "../components/atoms/gradient-icon";
 import { routeStorage } from "../utils/storage";
 import TrackingControlPanel from "../components/organisms/tracking-control-panel";
+import GlassCard from "../components/atoms/glass-card";
 import {
   calculateDistance as geoCalculateDistance,
   calculateBearing as geoCalculateBearing,
@@ -71,6 +72,7 @@ export default function FlightTracking() {
   const { t } = useTranslation();
   const [route, setRoute] = useState<RouteData | null>(null);
   const [isTracking, setIsTracking] = useState(false);
+  const [isAcquiring, setIsAcquiring] = useState(false);
   const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [currentHeading, setCurrentHeading] = useState(0);
   const [currentWaypointIndex, setCurrentWaypointIndex] = useState(0);
@@ -95,6 +97,14 @@ export default function FlightTracking() {
     }
   }, []);
 
+  // Auto-start tracking once a route is loaded
+  useEffect(() => {
+    if (route && !isTracking) {
+      startTracking();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route]);
+
   // Geospatial helpers moved to `src/utils/geo.ts` and imported as geoCalculateDistance/geoCalculateBearing
 
   const startTracking = () => {
@@ -104,6 +114,7 @@ export default function FlightTracking() {
     }
 
     setIsTracking(true);
+    setIsAcquiring(true);
 
     watchIdRef.current = navigator.geolocation.watchPosition(
       (position) => {
@@ -111,6 +122,7 @@ export default function FlightTracking() {
         const newPosition: LatLng = { lat: latitude, lng: longitude };
 
         setCurrentPosition(newPosition);
+        setIsAcquiring(false);
         setWeatherLocation(newPosition);
 
         // Calculate heading from movement if GPS heading not available
@@ -156,6 +168,7 @@ export default function FlightTracking() {
       },
       (error) => {
         console.error("Error getting location:", error);
+        setIsAcquiring(false);
         alert(
           t(
             "tracking.unable_get_location",
@@ -177,6 +190,7 @@ export default function FlightTracking() {
       watchIdRef.current = null;
     }
     setIsTracking(false);
+    setIsAcquiring(false);
   };
 
   useEffect(() => {
@@ -297,31 +311,38 @@ export default function FlightTracking() {
         </div>
       </motion.div>
 
-      {/* Control Panel (extracted) */}
-      <TrackingControlPanel
-        isTracking={isTracking}
-        startTracking={startTracking}
-        stopTracking={stopTracking}
-        currentHeading={currentHeading}
-        speed={speed}
-        showAirspace={showAirspace}
-        setShowAirspace={setShowAirspace}
-        weatherLocation={weatherLocation}
-      />
+      {/* Status / Panels */}
+      <div className="absolute top-28 left-1/2 -translate-x-1/2 z-20 w-[min(1100px,calc(100%-32px))]">
+        {isAcquiring ? (
+          <GlassCard className="p-8 flex items-center justify-center gap-3 text-app-secondary text-sm">
+            <span className="inline-block h-5 w-5 rounded-full border-2 border-app-secondary border-t-transparent animate-spin"></span>
+            {t("tracking.requesting_location", "Requesting location...")}
+          </GlassCard>
+        ) : (
+          <GlassCard className="p-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <TrackingControlPanel
+                currentHeading={currentHeading}
+                speed={speed}
+                showAirspace={showAirspace}
+                setShowAirspace={setShowAirspace}
+                weatherLocation={weatherLocation}
+              />
 
-      {/* Next Waypoint Panel */}
-      <AnimatePresence>
-        {currentWaypointIndex < route.waypoints.length && (
-          <NextWaypointPanel
-            waypoint={route.waypoints[currentWaypointIndex]}
-            currentIndex={currentWaypointIndex}
-            totalWaypoints={route.waypoints.length}
-            distanceToNext={distanceToNext}
-            etaToNext={etaToNext}
-            formatTime={formatTime}
-          />
+              {currentWaypointIndex < route.waypoints.length && (
+                <NextWaypointPanel
+                  waypoint={route.waypoints[currentWaypointIndex]}
+                  currentIndex={currentWaypointIndex}
+                  totalWaypoints={route.waypoints.length}
+                  distanceToNext={distanceToNext}
+                  etaToNext={etaToNext}
+                  formatTime={formatTime}
+                />
+              )}
+            </div>
+          </GlassCard>
         )}
-      </AnimatePresence>
+      </div>
 
       {/* Completion Message */}
       <AnimatePresence>
