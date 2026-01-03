@@ -34,6 +34,7 @@ export const ca: Locale = {
     // Route card
     "route.start_flight": "Iniciar vol",
     "route.edit_route": "Editar ruta",
+    "route.waypoints_count": "{{count}} punts de ruta",
 
     // Tracking
     "tracking.no_route.title": "Cap ruta seleccionada",

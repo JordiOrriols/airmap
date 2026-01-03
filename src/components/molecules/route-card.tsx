@@ -117,6 +117,9 @@ export default function RouteCard({ route, onDelete, startHref, editHref }: Rout
               label: t("route_stats.total_distance", "Distance"),
               value: totalDistance.toFixed(1),
               unitSymbol: "NM",
+              additionalInfo: t("route.waypoints_count", "{{count}} waypoints", {
+                count: route.waypoints.length,
+              }),
               iconColor: "text-stat-distance-icon",
             },
             {
@@ -129,7 +132,7 @@ export default function RouteCard({ route, onDelete, startHref, editHref }: Rout
             },
           ]}
           columns={2}
-          compact={true}
+          compact={false}
         />
 
         <div className="mt-4 pt-4 border-t border-app-primary space-y-2">
