@@ -3,6 +3,7 @@
 ## Overview
 
 This folder contains setup and configuration for core libraries:
+
 - **React Query** - Server state & data fetching
 - **i18n** - Internationalization (translations)
 - **Theme Context** - Dark/light mode management
@@ -34,26 +35,26 @@ Multi-language support using i18next.
 ### Supported Languages
 
 | Code | Language |
-|------|----------|
-| `en` | English |
-| `es` | Spanish |
-| `ca` | Catalan |
+| ---- | -------- |
+| `en` | English  |
+| `es` | Spanish  |
+| `ca` | Catalan  |
 
 ### Configuration
 
 ```typescript
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import en from '@/locales/en';
-import es from '@/locales/es';
-import ca from '@/locales/ca';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import en from "@/locales/en";
+import es from "@/locales/es";
+import ca from "@/locales/ca";
 
 i18n.use(initReactI18next).init({
   resources: { en, es, ca },
-  lng: localStorage.getItem('language') || 'en',
-  fallbackLng: 'en',
-  ns: ['translation'],
-  defaultNS: 'translation',
+  lng: localStorage.getItem("language") || "en",
+  fallbackLng: "en",
+  ns: ["translation"],
+  defaultNS: "translation",
   interpolation: {
     escapeValue: false,
   },
@@ -82,20 +83,20 @@ locales/
 export const en = {
   translation: {
     app: {
-      title: 'AirMap',
-      description: 'Flight planning made simple',
+      title: "AirMap",
+      description: "Flight planning made simple",
     },
     navigation: {
-      home: 'Home',
-      planner: 'Route Planner',
-      tracking: 'Flight Tracking',
+      home: "Home",
+      planner: "Route Planner",
+      tracking: "Flight Tracking",
     },
     route: {
-      name: 'Route Name',
-      create: 'Create Route',
-      edit: 'Edit Route',
-      delete: 'Delete Route',
-      noRoutes: 'No routes yet',
+      name: "Route Name",
+      create: "Create Route",
+      edit: "Edit Route",
+      delete: "Delete Route",
+      noRoutes: "No routes yet",
     },
     // ... nested structure for organization
   },
@@ -125,11 +126,11 @@ export const Header = () => {
 
 ```typescript
 // Using dot notation for nested access
-t('navigation.planner')  // "Route Planner"
-t('route.create')        // "Create Route"
+t("navigation.planner"); // "Route Planner"
+t("route.create"); // "Create Route"
 
 // Or use nested object structure
-t('route.noRoutes')      // "No routes yet"
+t("route.noRoutes"); // "No routes yet"
 ```
 
 #### With Interpolation
@@ -150,12 +151,12 @@ export const RouteInfo = ({ route }: Props) => {
 
   return (
     <div>
-      <p>{t('distance', { 
-        value: route.distance.toFixed(1), 
-        unit: 'nm' 
+      <p>{t('distance', {
+        value: route.distance.toFixed(1),
+        unit: 'nm'
       })}</p>
-      <p>{t('eta', { 
-        time: route.estimatedTime 
+      <p>{t('eta', {
+        time: route.estimatedTime
       })}</p>
     </div>
   );
@@ -188,12 +189,14 @@ export const LanguageSwitcher = () => {
 ### Translation Best Practices
 
 1. **Use Keys Consistently**
+
    ```typescript
    ✅ t('route.edit')    // Clear hierarchy
    ❌ t('editRoute')     // Harder to maintain
    ```
 
 2. **Namespace Related Strings**
+
    ```typescript
    // Group by feature
    route: {
@@ -204,14 +207,16 @@ export const LanguageSwitcher = () => {
    ```
 
 3. **Extract Magic Strings**
+
    ```typescript
    ❌ if (status === 'pending') { }
    ✅ if (status === ROUTE_STATUS.PENDING) { }
-   
+
    // Translation key: 'route.status.pending'
    ```
 
 4. **Handle Pluralization**
+
    ```typescript
    // locales/en.ts
    routes: {
@@ -295,12 +300,12 @@ export const useTheme = () => {
   --color-text-primary: #000000;
   --color-text-secondary: #666666;
   --color-border: #e0e0e0;
-  
+
   --color-primary: #007bff;
   --color-success: #28a745;
   --color-warning: #ffc107;
   --color-error: #dc3545;
-  
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -313,12 +318,12 @@ export const useTheme = () => {
   --color-text-primary: #ffffff;
   --color-text-secondary: #a0a0a0;
   --color-border: #444444;
-  
+
   --color-primary: #4a9eff;
   --color-success: #51cf66;
   --color-warning: #ffd43b;
   --color-error: #ff6b6b;
-  
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
@@ -366,9 +371,7 @@ Or use Tailwind's dark mode:
 
 ```tsx
 <div className="bg-white dark:bg-slate-900">
-  <p className="text-black dark:text-white">
-    Content
-  </p>
+  <p className="text-black dark:text-white">Content</p>
 </div>
 ```
 
@@ -439,16 +442,15 @@ Centralized React Query configuration.
 ### Configuration
 
 ```typescript
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,        // 5 minutes
-      gcTime: 10 * 60 * 1000,          // 10 minutes
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
       retry: 1,
-      retryDelay: (attemptIndex) => 
-        Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     },
   },
 });
@@ -518,10 +520,10 @@ export const sleep = (ms: number): Promise<void>
 ### Usage Examples
 
 ```typescript
-import { formatDate, debounce, sleep } from '@/lib/utils';
+import { formatDate, debounce, sleep } from "@/lib/utils";
 
 // Format date
-const dateStr = formatDate(new Date(), 'YYYY-MM-DD HH:mm');
+const dateStr = formatDate(new Date(), "YYYY-MM-DD HH:mm");
 
 // Debounced search
 const debouncedSearch = debounce((query: string) => {
@@ -563,13 +565,13 @@ render(
 ### Mocking i18n
 
 ```typescript
-import i18next from 'i18next';
+import i18next from "i18next";
 
 beforeEach(() => {
-  i18next.changeLanguage('en');
+  i18next.changeLanguage("en");
 });
 
-vi.mock('react-i18next', () => ({
+vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => key,
     i18n: { changeLanguage: vi.fn() },
@@ -620,4 +622,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 - **React i18next**: https://react.i18next.com/
 - **React Query**: https://tanstack.com/query/latest
 - **Tailwind CSS**: https://tailwindcss.com/
-

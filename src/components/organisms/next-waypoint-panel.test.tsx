@@ -19,15 +19,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("../atoms/stat-display", () => ({
-  default: ({
-    label,
-    value,
-    unit,
-  }: {
-    label: string;
-    value: string;
-    unit?: string;
-  }) => (
+  default: ({ label, value, unit }: { label: string; value: string; unit?: string }) => (
     <div>
       {label}: {value} {unit || ""}
     </div>

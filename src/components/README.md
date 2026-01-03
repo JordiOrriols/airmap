@@ -19,20 +19,21 @@ Smallest reusable components. **Should not depend on other components.**
 
 ### Examples
 
-| Component | Purpose | Props |
-|-----------|---------|-------|
-| `Badge` | Label/tag display | `children`, `gradient`, `size` |
-| `GlassCard` | Frosted glass container | `children`, `className` |
-| `GradientIcon` | Icon with gradient | `icon`, `gradient` |
-| `IconButton` | Icon-only button | `icon`, `onClick`, `ariaLabel` |
-| `ScrollContainer` | Scrollable wrapper | `children`, `className` |
-| `StatDisplay` | Labeled value | `label`, `value`, `unit`, `icon` |
-| `ThemeToggle` | Dark/light mode switch | `isDark`, `onToggle` |
-| `WeatherIcon` | Weather condition icon | `condition`, `size` |
+| Component         | Purpose                 | Props                            |
+| ----------------- | ----------------------- | -------------------------------- |
+| `Badge`           | Label/tag display       | `children`, `gradient`, `size`   |
+| `GlassCard`       | Frosted glass container | `children`, `className`          |
+| `GradientIcon`    | Icon with gradient      | `icon`, `gradient`               |
+| `IconButton`      | Icon-only button        | `icon`, `onClick`, `ariaLabel`   |
+| `ScrollContainer` | Scrollable wrapper      | `children`, `className`          |
+| `StatDisplay`     | Labeled value           | `label`, `value`, `unit`, `icon` |
+| `ThemeToggle`     | Dark/light mode switch  | `isDark`, `onToggle`             |
+| `WeatherIcon`     | Weather condition icon  | `condition`, `size`              |
 
 ### Atom Guidelines
 
 ✅ **DO**:
+
 - Single responsibility
 - Accept style props (`className`)
 - Export plain HTML semantics
@@ -41,6 +42,7 @@ Smallest reusable components. **Should not depend on other components.**
 - Have no business logic
 
 ❌ **DON'T**:
+
 - Import other components
 - Manage state (except UI state)
 - Make API calls
@@ -96,19 +98,20 @@ Combine 2-3 atoms into reusable patterns. **May have local state or callbacks.**
 
 ### Examples
 
-| Component | Purpose | Uses |
-|-----------|---------|------|
-| `CardHeader` | Header section | Badge, Gradient Icon |
-| `CollapsiblePanel` | Expandable section | Button, Content |
-| `RouteActionsMenu` | Dropdown menu | Button, Menu items |
-| `RouteCard` | Route summary | Badge, Stats, Button |
-| `StatGrid` | Multiple stats | StatDisplay atoms |
-| `WaypointCard` | Waypoint display | Badge, Icon Button, Content |
-| `WeatherCard` | Weather summary | Icon, Temperature, Conditions |
+| Component          | Purpose            | Uses                          |
+| ------------------ | ------------------ | ----------------------------- |
+| `CardHeader`       | Header section     | Badge, Gradient Icon          |
+| `CollapsiblePanel` | Expandable section | Button, Content               |
+| `RouteActionsMenu` | Dropdown menu      | Button, Menu items            |
+| `RouteCard`        | Route summary      | Badge, Stats, Button          |
+| `StatGrid`         | Multiple stats     | StatDisplay atoms             |
+| `WaypointCard`     | Waypoint display   | Badge, Icon Button, Content   |
+| `WeatherCard`      | Weather summary    | Icon, Temperature, Conditions |
 
 ### Molecule Guidelines
 
 ✅ **DO**:
+
 - Combine atoms purposefully
 - Have clear, focused purpose
 - Accept callback props
@@ -116,6 +119,7 @@ Combine 2-3 atoms into reusable patterns. **May have local state or callbacks.**
 - Be testable and reusable
 
 ❌ **DON'T**:
+
 - Directly call APIs
 - Manage complex application state
 - Have too many props (>8)
@@ -148,7 +152,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({
   onDelete,
 }) => {
   return (
-    <div 
+    <div
       className={`route-card ${isSelected ? 'selected' : ''}`}
       onClick={() => onSelect?.(route.id)}
     >
@@ -168,18 +172,19 @@ Complex domain-specific components combining molecules. **May handle data fetchi
 
 ### Examples
 
-| Component | Purpose | Responsibility |
-|-----------|---------|-----------------|
-| `MapView` | Interactive map | Map rendering, waypoint markers |
-| `NextWaypointPanel` | Next waypoint info | Display navigation data |
-| `RouteControlPanel` | Route editing | Form, validation, updates |
-| `TrackingControlPanel` | Tracking controls | Control UI for tracking |
-| `WaypointsListPanel` | Waypoint list | Drag/drop, add/remove |
-| `WeatherPanel` | Weather display | Weather data display |
+| Component              | Purpose            | Responsibility                  |
+| ---------------------- | ------------------ | ------------------------------- |
+| `MapView`              | Interactive map    | Map rendering, waypoint markers |
+| `NextWaypointPanel`    | Next waypoint info | Display navigation data         |
+| `RouteControlPanel`    | Route editing      | Form, validation, updates       |
+| `TrackingControlPanel` | Tracking controls  | Control UI for tracking         |
+| `WaypointsListPanel`   | Waypoint list      | Drag/drop, add/remove           |
+| `WeatherPanel`         | Weather display    | Weather data display            |
 
 ### Organism Guidelines
 
 ✅ **DO**:
+
 - Manage state and side effects
 - Handle data fetching with React Query
 - Compose multiple molecules
@@ -187,6 +192,7 @@ Complex domain-specific components combining molecules. **May handle data fetchi
 - Have clear API contract
 
 ❌ **DON'T**:
+
 - Put page-level logic here
 - Make organisms depend on other organisms
 - Render multiple unrelated features
@@ -227,11 +233,11 @@ export const RouteControlPanel: React.FC<RouteControlPanelProps> = ({
   return (
     <GlassCard>
       <div>
-        <input 
-          value={name} 
+        <input
+          value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <input 
+        <input
           type="number"
           value={speed}
           onChange={(e) => setSpeed(Number(e.target.value))}
@@ -297,7 +303,7 @@ interface MyComponentProps {
   isLoading?: boolean;
   isDisabled?: boolean;
   isSelected?: boolean;
-  status?: 'idle' | 'loading' | 'success' | 'error';
+  status?: "idle" | "loading" | "success" | "error";
 }
 ```
 
@@ -305,10 +311,10 @@ interface MyComponentProps {
 
 ```typescript
 interface MyComponentProps {
-  title: string;              // Required
-  subtitle?: string;          // Optional
-  onSubmit?: () => void;      // Optional callback
-  isOpen: boolean;            // Required boolean
+  title: string; // Required
+  subtitle?: string; // Optional
+  onSubmit?: () => void; // Optional callback
+  isOpen: boolean; // Required boolean
 }
 ```
 
@@ -358,17 +364,17 @@ it('shows selected state', () => {
 it('saves route with updated data', async () => {
   const onSave = vi.fn();
   render(
-    <RouteControlPanel 
-      route={mockRoute} 
+    <RouteControlPanel
+      route={mockRoute}
       onSave={onSave}
     />
   );
-  
+
   fireEvent.change(screen.getByLabelText(/name/i), {
     target: { value: 'New Name' }
   });
   fireEvent.click(screen.getByText(/save/i));
-  
+
   await waitFor(() => {
     expect(onSave).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'New Name' })
@@ -404,12 +410,12 @@ Components can be documented in Storybook (if set up):
 
 ```typescript
 // MyComponent.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { MyComponent } from './MyComponent';
+import type { Meta, StoryObj } from "@storybook/react";
+import { MyComponent } from "./MyComponent";
 
 const meta = {
   component: MyComponent,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof MyComponent>;
 
 export default meta;
@@ -417,7 +423,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    title: 'Hello World',
+    title: "Hello World",
   },
 };
 ```
@@ -427,31 +433,35 @@ export const Default: Story = {
 ## 🎯 Best Practices Summary
 
 ### Naming
+
 - Use descriptive names: `RouteCard` not `RC`
 - PascalCase for components: `WaypointCard.tsx`
 - Avoid generic names: ❌ `Item`, ❌ `Panel`
 
 ### Organization
+
 - One component per file
 - Companion test file alongside
 - index.ts for exports
 - Related assets in same folder
 
 ### Props
+
 - Keep prop interfaces small (<8 props)
 - Mark optional props clearly
 - Document prop purposes
 - Use discriminated unions for variants
 
 ### Styling
+
 - Use Tailwind classes
 - Support dark mode via theme
 - Keep styles in component file (not external CSS)
 - Consistent spacing/sizing system
 
 ### Reusability
+
 - Extract logic to hooks
 - Make components composition-friendly
 - Avoid business logic in components
 - Pass data/callbacks, not implementation
-

@@ -3,6 +3,7 @@
 ## Overview
 
 The API layer handles all external data integrations:
+
 - **OpenAIP** - Airspace and NOTAM data
 - **Weather** - Weather conditions and forecasts
 - **React Query** - State management, caching, synchronization
@@ -54,16 +55,16 @@ export const getAirspaceGeometry = async (
 #### Usage Example
 
 ```typescript
-import { getAirspace, getNOTAMs } from '@/api/openaip';
+import { getAirspace, getNOTAMs } from "@/api/openaip";
 
 // In a component
 const { data: airspaces } = useQuery({
-  queryKey: ['airspaces', lat, lng],
+  queryKey: ["airspaces", lat, lng],
   queryFn: () => getAirspace(lat, lng, 50),
 });
 
 const { data: notams } = useQuery({
-  queryKey: ['notams', lat, lng],
+  queryKey: ["notams", lat, lng],
   queryFn: () => getNOTAMs(lat, lng, 100),
 });
 ```
@@ -74,13 +75,13 @@ const { data: notams } = useQuery({
 interface AirspaceData {
   id: string;
   name: string;
-  type: 'restricted' | 'danger' | 'prohibited' | 'class' | 'other';
+  type: "restricted" | "danger" | "prohibited" | "class" | "other";
   altitude: {
     min: number;
     max: number;
   };
   geometry: {
-    type: 'Polygon' | 'MultiPolygon';
+    type: "Polygon" | "MultiPolygon";
     coordinates: number[][][];
   };
 }
@@ -127,16 +128,16 @@ export const getMetar = async (
 #### Usage Example
 
 ```typescript
-import { getCurrentWeather, getWeatherForecast } from '@/api/weather';
+import { getCurrentWeather, getWeatherForecast } from "@/api/weather";
 
 const { data: weather } = useQuery({
-  queryKey: ['weather', lat, lng],
+  queryKey: ["weather", lat, lng],
   queryFn: () => getCurrentWeather(lat, lng),
   staleTime: 10 * 60 * 1000, // 10 minutes
 });
 
 const { data: forecast } = useQuery({
-  queryKey: ['forecast', lat, lng],
+  queryKey: ["forecast", lat, lng],
   queryFn: () => getWeatherForecast(lat, lng, 24),
   staleTime: 30 * 60 * 1000, // 30 minutes
 });
@@ -179,14 +180,7 @@ interface METARData {
   ceiling?: number;
 }
 
-type WeatherCondition = 
-  | 'clear' 
-  | 'clouds' 
-  | 'rain' 
-  | 'snow' 
-  | 'thunderstorm' 
-  | 'mist' 
-  | 'fog';
+type WeatherCondition = "clear" | "clouds" | "rain" | "snow" | "thunderstorm" | "mist" | "fog";
 ```
 
 ---
@@ -200,13 +194,13 @@ Centralized React Query configuration.
 ### Query Client Setup
 
 ```typescript
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,        // 5 minutes
-      gcTime: 10 * 60 * 1000,          // 10 minutes (formerly cacheTime)
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
       retry: 1,
       retryDelay: 1000,
     },
@@ -219,12 +213,12 @@ export const queryClient = new QueryClient({
 #### Simple Query
 
 ```typescript
-import { useQuery } from '@tanstack/react-query';
-import { getCurrentWeather } from '@/api/weather';
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentWeather } from "@/api/weather";
 
 export const useWeather = (latitude: number, longitude: number) => {
   return useQuery({
-    queryKey: ['weather', latitude, longitude],
+    queryKey: ["weather", latitude, longitude],
     queryFn: () => getCurrentWeather(latitude, longitude),
     enabled: latitude !== undefined && longitude !== undefined,
   });
@@ -237,18 +231,14 @@ export const useWeather = (latitude: number, longitude: number) => {
 export const useAirspaceWeather = (id: string) => {
   // First query: fetch airspace
   const { data: airspace } = useQuery({
-    queryKey: ['airspace', id],
+    queryKey: ["airspace", id],
     queryFn: () => getAirspace(id),
   });
 
   // Second query: depends on first
   const { data: weather } = useQuery({
-    queryKey: ['weather', airspace?.latitude, airspace?.longitude],
-    queryFn: () => 
-      getCurrentWeather(
-        airspace!.latitude, 
-        airspace!.longitude
-      ),
+    queryKey: ["weather", airspace?.latitude, airspace?.longitude],
+    queryFn: () => getCurrentWeather(airspace!.latitude, airspace!.longitude),
     enabled: !!airspace, // Only run when airspace is available
   });
 
@@ -259,13 +249,9 @@ export const useAirspaceWeather = (id: string) => {
 #### Query with Variables
 
 ```typescript
-export const useAirspaces = (
-  latitude: number,
-  longitude: number,
-  radius: number = 50
-) => {
+export const useAirspaces = (latitude: number, longitude: number, radius: number = 50) => {
   return useQuery({
-    queryKey: ['airspaces', latitude, longitude, radius],
+    queryKey: ["airspaces", latitude, longitude, radius],
     queryFn: () => getAirspace(latitude, longitude, radius),
     staleTime: 60 * 60 * 1000, // 1 hour
   });
@@ -295,10 +281,11 @@ return <WeatherDisplay weather={data} />;
 #### 1. **Always Use React Query**
 
 ❌ **DON'T**:
+
 ```typescript
 useEffect(() => {
   const fetchData = async () => {
-    const res = await fetch('/api/weather');
+    const res = await fetch("/api/weather");
     setData(await res.json());
   };
   fetchData();
@@ -306,9 +293,10 @@ useEffect(() => {
 ```
 
 ✅ **DO**:
+
 ```typescript
 const { data } = useQuery({
-  queryKey: ['weather'],
+  queryKey: ["weather"],
   queryFn: () => getCurrentWeather(lat, lng),
 });
 ```
@@ -343,7 +331,7 @@ export const WeatherComponent = ({ lat, lng }: Props) => {
 ```typescript
 // Only fetch when coordinates are available
 const { data } = useQuery({
-  queryKey: ['weather', lat, lng],
+  queryKey: ["weather", lat, lng],
   queryFn: () => getCurrentWeather(lat, lng),
   enabled: lat !== undefined && lng !== undefined,
 });
@@ -355,13 +343,10 @@ Query keys should be arrays that identify the query uniquely:
 
 ```typescript
 // ✅ Good - includes all dependencies
-['weather', latitude, longitude]
-['airspace', id, radius]
-['forecast', lat, lng, hours]
-
-// ❌ Bad - doesn't include all parameters
-['weather']
-['airspace-data']
+["weather", latitude, longitude][("airspace", id, radius)][("forecast", lat, lng, hours)][
+  // ❌ Bad - doesn't include all parameters
+  "weather"
+]["airspace-data"];
 ```
 
 #### 5. **Set Appropriate Stale Times**
@@ -369,14 +354,14 @@ Query keys should be arrays that identify the query uniquely:
 ```typescript
 // Static data - can be cached longer
 useQuery({
-  queryKey: ['airspace', id],
+  queryKey: ["airspace", id],
   queryFn: () => getAirspace(id),
   staleTime: 60 * 60 * 1000, // 1 hour
 });
 
 // Real-time data - shorter cache
 useQuery({
-  queryKey: ['weather', lat, lng],
+  queryKey: ["weather", lat, lng],
   queryFn: () => getCurrentWeather(lat, lng),
   staleTime: 5 * 60 * 1000, // 5 minutes
 });
@@ -390,18 +375,11 @@ useQuery({
 
 ```typescript
 // In api/openaip.ts
-export const getAirspace = async (
-  latitude: number,
-  longitude: number
-): Promise<AirspaceData[]> => {
-  const response = await fetch(
-    `${API_URL}/airspace?lat=${latitude}&lng=${longitude}`
-  );
+export const getAirspace = async (latitude: number, longitude: number): Promise<AirspaceData[]> => {
+  const response = await fetch(`${API_URL}/airspace?lat=${latitude}&lng=${longitude}`);
 
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch airspace: ${response.status}`
-    );
+    throw new Error(`Failed to fetch airspace: ${response.status}`);
   }
 
   return response.json();
@@ -508,20 +486,20 @@ describe('WeatherPanel', () => {
 
 ## 📊 API Response Caching Strategy
 
-| Data Type | Stale Time | Cache Time | Reason |
-|-----------|-----------|-----------|--------|
-| Airspace boundaries | 1 hour | 2 hours | Static, rarely changes |
-| NOTAMs | 30 minutes | 1 hour | Important, updates occasionally |
-| Current weather | 5 minutes | 10 minutes | Changes frequently |
-| Weather forecast | 30 minutes | 1 hour | Relatively stable |
-| METAR | 10 minutes | 20 minutes | Updates frequently |
+| Data Type           | Stale Time | Cache Time | Reason                          |
+| ------------------- | ---------- | ---------- | ------------------------------- |
+| Airspace boundaries | 1 hour     | 2 hours    | Static, rarely changes          |
+| NOTAMs              | 30 minutes | 1 hour     | Important, updates occasionally |
+| Current weather     | 5 minutes  | 10 minutes | Changes frequently              |
+| Weather forecast    | 30 minutes | 1 hour     | Relatively stable               |
+| METAR               | 10 minutes | 20 minutes | Updates frequently              |
 
 ---
 
 ## 🔄 Data Flow
 
 ```
-Component 
+Component
   ↓
 useQuery Hook
   ↓
@@ -567,9 +545,8 @@ const WEATHER_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 ```typescript
 export const useAirspacesInfinite = (radius: number) => {
   return useInfiniteQuery({
-    queryKey: ['airspaces', radius],
-    queryFn: ({ pageParam = 0 }) =>
-      getAirspace(0, 0, radius, pageParam),
+    queryKey: ["airspaces", radius],
+    queryFn: ({ pageParam = 0 }) => getAirspace(0, 0, radius, pageParam),
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 };
@@ -580,7 +557,7 @@ export const useAirspacesInfinite = (radius: number) => {
 ```typescript
 export const prefetchWeather = async (lat: number, lng: number) => {
   await queryClient.prefetchQuery({
-    queryKey: ['weather', lat, lng],
+    queryKey: ["weather", lat, lng],
     queryFn: () => getCurrentWeather(lat, lng),
   });
 };
@@ -592,13 +569,13 @@ export const prefetchWeather = async (lat: number, lng: number) => {
 export const useSaveRoute = () => {
   return useMutation({
     mutationFn: (route: RouteData) =>
-      fetch('/api/routes', {
-        method: 'POST',
+      fetch("/api/routes", {
+        method: "POST",
         body: JSON.stringify(route),
-      }).then(r => r.json()),
+      }).then((r) => r.json()),
     onSuccess: () => {
       // Invalidate related queries
-      queryClient.invalidateQueries({ queryKey: ['routes'] });
+      queryClient.invalidateQueries({ queryKey: ["routes"] });
     },
   });
 };
@@ -627,4 +604,3 @@ export const useSaveRoute = () => {
 5. **Handle Network Errors**
    - Retry failed requests
    - Show retry UI to users
-

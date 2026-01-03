@@ -31,6 +31,7 @@ src/
 Handles all external API communication and data fetching.
 
 **Files**:
+
 - `index.ts` - API client setup and exports
 - `openaip.ts` - OpenAIP airspace & aircraft data
 - `weather.ts` - Weather API integration
@@ -38,12 +39,14 @@ Handles all external API communication and data fetching.
 - `weather.test.ts` - Weather API tests
 
 **Key Functions**:
+
 - `useAirspaceData()` - React Query hook for airspace info
 - `useCurrentWeather()` - Current weather data
 - `useWeatherForecast()` - Weather forecast data
 - `fetchFlightData()` - ICAO aircraft tracking
 
 **Best Practices**:
+
 - All API calls use React Query for caching
 - Errors are handled and normalized
 - TypeScript interfaces for all responses
@@ -72,15 +75,17 @@ atoms/
 ```
 
 **Characteristics**:
+
 - No dependencies on other components
 - Single responsibility
 - Fully reusable
 - Well-tested
 
 **Example**:
+
 ```typescript
 // StatDisplay - Shows a labeled value
-<StatDisplay 
+<StatDisplay
   icon={TrendingUp}
   label="Distance"
   value="50.5"
@@ -106,12 +111,14 @@ molecules/
 ```
 
 **Characteristics**:
+
 - Combines atoms
 - Can accept callbacks
 - Single purpose
 - Usually has some interactivity
 
 **Example**:
+
 ```typescript
 // StatGrid - Displays multiple stats
 <StatGrid stats={[
@@ -135,15 +142,17 @@ organisms/
 ```
 
 **Characteristics**:
+
 - Manage state and side effects
 - Handle data fetching
 - Coordinate multiple molecules
 - Often page-level sections
 
 **Example**:
+
 ```typescript
 // RouteControlPanel - Edit route properties
-<RouteControlPanel 
+<RouteControlPanel
   route={currentRoute}
   onSave={handleSave}
   onDelete={handleDelete}
@@ -181,6 +190,7 @@ flight/
 Reusable utilities and context providers.
 
 **Files**:
+
 - `theme-context.tsx` - Dark/Light mode management
 - `theme-context.test.tsx` - Theme tests
 - `i18n.ts` - Internationalization setup
@@ -191,6 +201,7 @@ Reusable utilities and context providers.
 - `utils.test.ts` - Utility tests
 
 **Key Exports**:
+
 - `useTheme()` - Access theme context
 - `ThemeProvider` - Theme context provider
 - `useTranslation()` - i18n hook
@@ -205,6 +216,7 @@ Reusable utilities and context providers.
 Translation files for multiple languages.
 
 **Structure**:
+
 ```
 locales/
 ├── en.ts              # English translations
@@ -215,20 +227,22 @@ locales/
 ```
 
 **Format**:
+
 ```typescript
 export const en = {
   common: {
-    save: 'Save',
-    cancel: 'Cancel',
+    save: "Save",
+    cancel: "Cancel",
   },
   planner: {
-    title: 'Flight Planner',
+    title: "Flight Planner",
     // ...
   },
 };
 ```
 
 **Usage**:
+
 ```typescript
 const { t } = useTranslation();
 <button>{t('common.save')}</button>
@@ -241,22 +255,25 @@ const { t } = useTranslation();
 Full-page components corresponding to routes.
 
 **Files**:
+
 - `planner.tsx` - Route planning page
 - `tracking.tsx` - Live tracking page
 - `home.tsx` - Home/landing page
 
 **Characteristics**:
+
 - Connected to routes
 - Manage page-level state
 - Compose multiple organisms
 - Handle page-specific logic
 
 **Example**:
+
 ```typescript
 export default function PlannerPage() {
   // Page-level state
   const [route, setRoute] = useState<RouteData>();
-  
+
   return (
     <div className="planner-layout">
       <MapView waypoints={route?.waypoints} />
@@ -271,17 +288,19 @@ export default function PlannerPage() {
 ### `styles/` - Global Styles
 
 **Files**:
+
 - `theme.css` - CSS variables for colors
 - `globals.css` - Global styles (in index.css)
 
 **Color Variables**:
+
 ```css
---app-primary: #0ea5e9;        /* Primary color */
---app-secondary: #64748b;      /* Secondary color */
---app-foreground: #1e293b;     /* Text color */
---app-background: #ffffff;     /* Background */
---input-app: #f1f5f9;          /* Input background */
---card-app: rgba(255,255,255,0.7);  /* Card background */
+--app-primary: #0ea5e9; /* Primary color */
+--app-secondary: #64748b; /* Secondary color */
+--app-foreground: #1e293b; /* Text color */
+--app-background: #ffffff; /* Background */
+--input-app: #f1f5f9; /* Input background */
+--card-app: rgba(255, 255, 255, 0.7); /* Card background */
 ```
 
 Automatically switch based on dark/light mode.
@@ -293,6 +312,7 @@ Automatically switch based on dark/light mode.
 Utility functions organized by domain.
 
 **Files**:
+
 - `constants.ts` - Application constants
 - `constants.test.ts` - Constant tests
 - `geo.ts` - Geospatial calculations
@@ -307,18 +327,21 @@ Utility functions organized by domain.
 **Key Functions**:
 
 **Geospatial** (`geo.ts`):
+
 - `calculateDistance(lat1, lng1, lat2, lng2)` - Great circle distance
 - `calculateBearing(lat1, lng1, lat2, lng2)` - Compass bearing
 - `calculateBbox(waypoints)` - Bounding box
 - `interpolatePosition(start, end, progress)` - Linear interpolation
 
 **Storage** (`storage.ts`):
+
 - `saveRoute(route)` - Save to localStorage
 - `getRoute(id)` - Retrieve from localStorage
 - `deleteRoute(id)` - Delete route
 - `getAllRoutes()` - List all routes
 
 **Point in Polygon** (`pointInPolygon.ts`):
+
 - `pointInPolygon(point, polygon)` - Check containment
 - `raycast()` - Geometric algorithm
 
@@ -329,13 +352,14 @@ Utility functions organized by domain.
 Core TypeScript interfaces used throughout the app.
 
 **Key Types**:
+
 ```typescript
 interface RouteData {
   id: string;
   name: string;
   waypoints: Waypoint[];
   cruiseSpeed: number;
-  speedUnit: 'knots' | 'kmh';
+  speedUnit: "knots" | "kmh";
 }
 
 interface Waypoint {
@@ -367,12 +391,14 @@ interface WeatherData {
 ### `App.jsx` - Root Component
 
 Entry point component that sets up:
+
 - Route providers (React Router)
 - Context providers (Theme, i18n, React Query)
 - Global error boundaries
 - Top-level layout
 
 **Structure**:
+
 ```
 QueryClientProvider
   └─ ThemeProvider
@@ -392,6 +418,7 @@ Mounts the React app to the DOM and imports styles.
 ### `setupTests.ts` - Test Configuration
 
 Configures testing environment:
+
 - React Testing Library defaults
 - Mock setup
 - Globals
@@ -413,6 +440,7 @@ UI Components (button, card, input)
 ```
 
 With data coming from:
+
 ```
 api/ (useQuery hooks)
   ↓
@@ -428,15 +456,16 @@ Components (display & interaction)
 ## 🔍 Import Patterns
 
 **Absolute imports** (configured in vite.config.mjs):
+
 ```typescript
 // ✅ Preferred
-import RouteCard from '@/components/molecules/route-card';
-import { calculateDistance } from '@/utils/geo';
-import { useTheme } from '@/lib/theme-context';
-import { RouteData } from '@/types';
+import RouteCard from "@/components/molecules/route-card";
+import { calculateDistance } from "@/utils/geo";
+import { useTheme } from "@/lib/theme-context";
+import { RouteData } from "@/types";
 
 // ❌ Avoid relative
-import RouteCard from '../../../components/molecules/route-card';
+import RouteCard from "../../../components/molecules/route-card";
 ```
 
 ---
@@ -464,6 +493,7 @@ MyComponent.test.tsx
 **Test Coverage Target**: 80%+
 
 **Test Types**:
+
 - Unit tests for utils and hooks
 - Component tests for rendering and interaction
 - Integration tests for multi-component flows
@@ -476,4 +506,3 @@ MyComponent.test.tsx
 - `src/components/README.md` - Component guidelines
 - `src/api/README.md` - API documentation
 - Component-level JSDoc comments for detailed documentation
-
