@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { MapPin, Clock, TrendingUp } from "lucide-react";
+import { MapPin, Clock, TrendingUp, CloudSun } from "lucide-react";
 import GradientIcon from "../atoms/gradient-icon";
 import GlassCard from "../atoms/glass-card";
 import StatDisplay from "../atoms/stat-display";
@@ -15,6 +15,7 @@ type NextWaypointPanelProps = {
   etaToNext: number;
   formatTime: (minutes: number) => string;
   headingToNext: number | null;
+  onSwitch?: () => void;
 };
 
 export default function NextWaypointPanel({
@@ -25,16 +26,28 @@ export default function NextWaypointPanel({
   etaToNext,
   formatTime,
   headingToNext,
+  onSwitch,
 }: NextWaypointPanelProps) {
   const { t } = useTranslation();
 
   return (
     <GlassCard className="p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <GradientIcon icon={MapPin} gradient="from-orange-500 to-red-500" />
-        <h2 className="text-lg font-bold text-app-primary">
-          {t("next_waypoint.title", "Next Waypoint")}
-        </h2>
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <div className="flex items-center gap-2">
+          <GradientIcon icon={MapPin} gradient="from-orange-500 to-red-500" />
+          <h2 className="text-lg font-bold text-app-primary">
+            {t("next_waypoint.title", "Next Waypoint")}
+          </h2>
+        </div>
+        {onSwitch && (
+          <button
+            onClick={onSwitch}
+            aria-label={t("next_waypoint.show_weather", "Show Weather")}
+            className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
+          >
+            <CloudSun className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       <div className="bg-card-app backdrop-blur-sm border border-app-secondary rounded-xl p-4">

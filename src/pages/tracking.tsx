@@ -12,8 +12,9 @@ import { Link } from "react-router-dom";
 import NextWaypointPanel from "../components/organisms/next-waypoint-panel";
 import GradientIcon from "../components/atoms/gradient-icon";
 import { routeStorage } from "../utils/storage";
-import TrackingControlPanel from "../components/organisms/tracking-control-panel";
 import GlassCard from "../components/atoms/glass-card";
+import WeatherPanel from "../components/organisms/weather-panel";
+import { CloudSun, MapPin } from "lucide-react";
 import {
   calculateDistance as geoCalculateDistance,
   calculateBearing as geoCalculateBearing,
@@ -79,8 +80,8 @@ export default function FlightTracking() {
   const [distanceToNext, setDistanceToNext] = useState(0);
   const [etaToNext, setEtaToNext] = useState(0);
   const [headingToNext, setHeadingToNext] = useState<number | null>(null);
-  const [showAirspace, setShowAirspace] = useState(true);
   const [weatherLocation, setWeatherLocation] = useState<LatLng | null>(null);
+  const [activePanel, setActivePanel] = useState<"next" | "weather">("next");
   const watchIdRef = useRef<number | null>(null);
   const lastPositionRef = useRef<LatLng | null>(null);
 
@@ -287,7 +288,7 @@ export default function FlightTracking() {
         waypoints={route.waypoints}
         currentPosition={currentPosition}
         currentHeading={currentHeading}
-        showAirspace={showAirspace}
+        showAirspace={true}
         showWaypoints={true}
         showAircraft={true}
         showPolyline={route.waypoints.length > 1}
@@ -330,34 +331,47 @@ export default function FlightTracking() {
       </motion.div>
 
       {/* Status / Panels */}
-      <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20 w-[min(820px,calc(100%-24px))]">
+      <div className="absolute bottom-6 left-6 z-20 w-[50vw] max-w-[520px] min-w-[280px]">
         {isAcquiring ? (
-          <GlassCard className="p-6 flex items-center justify-center gap-2 text-app-secondary text-sm">
+          <GlassCard className="p-5 flex items-center justify-center gap-2 text-app-secondary text-sm">
             <span className="inline-block h-5 w-5 rounded-full border-2 border-app-secondary border-t-transparent animate-spin"></span>
             {t("tracking.requesting_location", "Requesting location...")}
           </GlassCard>
         ) : (
           <GlassCard className="p-4">
-            <div className="grid gap-3 lg:grid-cols-2">
-              <TrackingControlPanel
-                currentHeading={currentHeading}
-                showAirspace={showAirspace}
-                setShowAirspace={setShowAirspace}
-                weatherLocation={weatherLocation}
+            {activePanel === "next" && currentWaypointIndex < route.waypoints.length && (
+              <NextWaypointPanel
+                waypoint={route.waypoints[currentWaypointIndex]!}
+                currentIndex={currentWaypointIndex}
+                totalWaypoints={route.waypoints.length}
+                distanceToNext={distanceToNext}
+                etaToNext={etaToNext}
+                formatTime={formatTime}
+                headingToNext={headingToNext}
+                onSwitch={() => setActivePanel("weather")}
               />
+            )}
 
-              {currentWaypointIndex < route.waypoints.length && (
-                <NextWaypointPanel
-                  waypoint={route.waypoints[currentWaypointIndex]!}
-                  currentIndex={currentWaypointIndex}
-                  totalWaypoints={route.waypoints.length}
-                  distanceToNext={distanceToNext}
-                  etaToNext={etaToNext}
-                  formatTime={formatTime}
-                  headingToNext={headingToNext}
-                />
-              )}
-            </div>
+            {activePanel === "weather" && weatherLocation && (
+              <GlassCard className="p-4">
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <div className="flex items-center gap-2">
+                    <GradientIcon icon={CloudSun} gradient="from-blue-400 to-cyan-400" />
+                    <h2 className="text-lg font-bold text-app-primary">
+                      {t("tracking.weather", "Weather")}
+                    </h2>
+                  </div>
+                  <button
+                    onClick={() => setActivePanel("next")}
+                    aria-label={t("tracking.show_next", "Show Next Waypoint")}
+                    className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-app-secondary bg-button-ghost hover:bg-button-ghost/80 text-app-secondary"
+                  >
+                    <MapPin className="w-4 h-4" />
+                  </button>
+                </div>
+                <WeatherPanel location={weatherLocation} forecastMode={false} compact={true} />
+              </GlassCard>
+            )}
           </GlassCard>
         )}
       </div>
