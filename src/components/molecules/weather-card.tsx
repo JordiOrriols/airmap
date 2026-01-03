@@ -47,7 +47,8 @@ export default function WeatherCard({ weather, compact = false }) {
       key: "wind",
       icon: Wind,
       label: t("weather.wind", "Wind"),
-      value: `${weather.windSpeed} kt`,
+      value: weather.windSpeed,
+      unitSymbol: "kt",
       iconColor: "text-cyan-300",
     },
     ...(weather.windGust > weather.windSpeed
@@ -56,7 +57,8 @@ export default function WeatherCard({ weather, compact = false }) {
             key: "gusts",
             icon: Wind,
             label: t("weather.gusts", "Gusts"),
-            value: `${weather.windGust} kt`,
+            value: weather.windGust,
+            unitSymbol: "kt",
             iconColor: "text-orange-300",
           },
         ]
@@ -65,16 +67,17 @@ export default function WeatherCard({ weather, compact = false }) {
       key: "clouds",
       icon: Cloud,
       label: t("weather.clouds", "Clouds"),
-      value: weather.cloudBase
-        ? `${weather.cloudCover}% (${weather.cloudBase} ft)`
-        : `${weather.cloudCover}%`,
+      value: weather.cloudCover,
+      unitSymbol: "%",
+      additionalInfo: weather.cloudBase ? `Cloud base: ${weather.cloudBase} ft` : undefined,
       iconColor: "text-gray-300",
     },
     {
       key: "visibility",
       icon: Eye,
       label: t("weather.visibility", "Visibility"),
-      value: `${weather.visibility} km`,
+      value: weather.visibility,
+      unitSymbol: "km",
       iconColor: "text-blue-300",
     },
     ...(weather.precipitation > 0
@@ -83,7 +86,8 @@ export default function WeatherCard({ weather, compact = false }) {
             key: "rain",
             icon: Droplets,
             label: t("weather.rain", "Precipitation"),
-            value: `${weather.precipitation} mm`,
+            value: weather.precipitation,
+            unitSymbol: "mm",
             iconColor: "text-blue-400",
           },
         ]
@@ -92,7 +96,8 @@ export default function WeatherCard({ weather, compact = false }) {
       key: "feelsLike",
       icon: Thermometer,
       label: t("weather.feels_like", "Feels Like"),
-      value: `${weather.feelsLike}°C`,
+      value: weather.feelsLike,
+      unitSymbol: "°C",
       iconColor: "text-red-300",
     },
   ];

@@ -6,7 +6,8 @@ type StatItem = {
   icon?: React.ComponentType<{ className?: string }>;
   label?: string;
   value?: React.ReactNode;
-  unit?: React.ReactNode;
+  unitSymbol?: React.ReactNode;
+  additionalInfo?: React.ReactNode;
   className?: string;
   iconColor?: string;
 };
@@ -42,7 +43,8 @@ export default function StatGrid({
           label={it.label}
           icon={it.icon ?? (() => null)}
           value={it.value}
-          unit={it.unit}
+          unitSymbol={it.unitSymbol}
+          additionalInfo={it.additionalInfo}
           className={it.className ?? ""}
           iconColor={it.iconColor ?? "text-cyan-300"}
           size={compact ? "compact" : "large"}

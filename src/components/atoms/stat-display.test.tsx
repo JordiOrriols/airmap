@@ -8,10 +8,10 @@ describe("StatDisplay Component", () => {
   const mockIcon = Gauge;
 
   it("should render stat display with label and value", () => {
-    render(<StatDisplay icon={mockIcon} label="Speed" value="120" unit="knots" />);
+    render(<StatDisplay icon={mockIcon} label="Speed" value="120" unitSymbol="kt" additionalInfo="cruise speed" />);
     expect(screen.getByText("Speed")).toBeInTheDocument();
     expect(screen.getByText("120")).toBeInTheDocument();
-    expect(screen.getByText("knots")).toBeInTheDocument();
+    expect(screen.getByText("kt")).toBeInTheDocument();
   });
 
   it.each([
@@ -84,12 +84,40 @@ describe("StatDisplay Component", () => {
   });
 
   it("should render with custom unit", () => {
-    render(<StatDisplay icon={mockIcon} label="Temperature" value="25" unit="°C" />);
+    render(<StatDisplay icon={mockIcon} label="Temperature" value="25" unitSymbol="°C" />);
     expect(screen.getByText("°C")).toBeInTheDocument();
   });
 
   it("should render with number value", () => {
-    render(<StatDisplay icon={mockIcon} label="Pressure" value={1013} unit="mb" />);
+    render(<StatDisplay icon={mockIcon} label="Pressure" value={1013} unitSymbol="mb" />);
     expect(screen.getByText("1013")).toBeInTheDocument();
+  });
+
+  it("should render additional info only in large mode", () => {
+    const { rerender } = render(
+      <StatDisplay
+        icon={mockIcon}
+        label="Cloud"
+        value="50"
+        unitSymbol="%"
+        additionalInfo="at 3000ft"
+        size="large"
+      />
+    );
+    expect(screen.getByText("at 3000ft")).toBeInTheDocument();
+
+    // Re-render in compact mode
+    rerender(
+      <StatDisplay
+        icon={mockIcon}
+        label="Cloud"
+        value="50"
+        unitSymbol="%"
+        additionalInfo="at 3000ft"
+        size="compact"
+      />
+    );
+    // Should not be visible in compact mode
+    expect(screen.queryByText("at 3000ft")).not.toBeInTheDocument();
   });
 });

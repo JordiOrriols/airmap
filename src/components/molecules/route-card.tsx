@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import MapView from "../organisms/map-view";
 import { getMapCenterAndZoom, calculateRouteStats } from "../../utils/geo";
 import RouteActionsMenu from "./route-actions-menu";
+import StatGrid from "./stat-grid";
 import type { RouteData } from "../../types";
 
 type RouteCardProps = {
@@ -108,29 +109,28 @@ export default function RouteCard({ route, onDelete, startHref, editHref }: Rout
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="bg-stat-card backdrop-blur-sm border border-stat-card rounded-xl p-3">
-            <div className="flex items-center gap-2 mb-1">
-              <Route className="w-3.5 h-3.5 text-stat-distance-icon" />
-              <span className="text-xs text-app-secondary">
-                {t("route_stats.total_distance", "Distance")}
-              </span>
-            </div>
-            <p className="text-lg font-bold text-stat-distance">{totalDistance.toFixed(1)}</p>
-            <p className="text-xs text-app-tertiary">{t("route_stats.nautical_miles", "NM")}</p>
-          </div>
-
-          <div className="bg-stat-card backdrop-blur-sm border border-stat-card rounded-xl p-3">
-            <div className="flex items-center gap-2 mb-1">
-              <Timer className="w-3.5 h-3.5 text-stat-time-icon" />
-              <span className="text-xs text-app-secondary">
-                {t("route_stats.flight_time", "Time")}
-              </span>
-            </div>
-            <p className="text-lg font-bold text-stat-time">{formatTime(totalTime)}</p>
-            <p className="text-xs text-app-tertiary">
-              {route.cruiseSpeed} {route.speedUnit}
-            </p>
-          </div>
+          <StatGrid
+            items={[
+              {
+                key: "distance",
+                icon: Route,
+                label: t("route_stats.total_distance", "Distance"),
+                value: totalDistance.toFixed(1),
+                unitSymbol: "NM",
+                iconColor: "text-stat-distance-icon",
+              },
+              {
+                key: "time",
+                icon: Timer,
+                label: t("route_stats.flight_time", "Time"),
+                value: formatTime(totalTime),
+                additionalInfo: `${route.cruiseSpeed} ${route.speedUnit}`,
+                iconColor: "text-stat-time-icon",
+              },
+            ]}
+            columns={2}
+            compact={true}
+          />
         </div>
 
         <div className="mt-4 pt-4 border-t border-app-primary space-y-2">

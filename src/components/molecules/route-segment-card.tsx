@@ -41,7 +41,8 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
                 key: "bearing",
                 icon: Navigation,
                 label: t("stat.heading", "Heading"),
-                value: `${segment.bearing}°`,
+                value: segment.bearing,
+                unitSymbol: "°",
                 iconColor: "text-cyan-300",
               },
               {
@@ -49,7 +50,7 @@ export default function RouteSegmentCard({ segment, index, formatTime }) {
                 icon: TrendingUp,
                 label: t("stat.distance", "Distance"),
                 value: segment.distance,
-                unit: t("unit.nm", "NM"),
+                unitSymbol: "NM",
                 iconColor: "text-emerald-300",
               },
               {

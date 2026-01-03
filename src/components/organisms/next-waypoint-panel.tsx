@@ -83,7 +83,7 @@ export default function NextWaypointPanel({
                 icon: TrendingUp,
                 label: t("next_waypoint.distance", "Distance"),
                 value: distanceToNext.toFixed(1),
-                unit: t("unit.nm", "NM"),
+                unitSymbol: "NM",
                 iconColor: "text-cyan-300",
               },
               {
@@ -97,7 +97,8 @@ export default function NextWaypointPanel({
                 key: "heading",
                 icon: Navigation,
                 label: t("next_waypoint.heading", "Heading"),
-                value: headingToNext !== null ? `${headingToNext.toFixed(0)}°` : "--",
+                value: headingToNext !== null ? headingToNext.toFixed(0) : "--",
+                unitSymbol: headingToNext !== null ? "°" : undefined,
                 iconColor: "text-emerald-300",
               },
             ]}

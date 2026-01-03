@@ -20,14 +20,14 @@ export default function RouteStatsCard({
           icon: TrendingUp,
           label: t("route_stats.total_distance", "Total Distance"),
           value: totalDistance.toFixed(1),
-          unit: t("route_stats.nautical_miles", "nautical miles"),
+          unitSymbol: "NM",
         },
         {
           key: "time",
           icon: Clock,
           label: t("route_stats.flight_time", "Flight Time"),
           value: formatTime(totalTime),
-          unit: t("route_stats.at_speed", "at {{speed}} {{unit}}", {
+          additionalInfo: t("route_stats.at_speed", "at {{speed}} {{unit}}", {
             speed: cruiseSpeed,
             unit: speedUnit,
           }),

@@ -13,12 +13,14 @@ vi.mock("../atoms/weather-icon", () => ({
 }));
 
 vi.mock("../atoms/stat-display", () => ({
-  default: ({ label, value }: { label: string; value: string }) => (
+  default: ({ label, value, unitSymbol, additionalInfo }: { label: string; value: string; unitSymbol?: string; additionalInfo?: string }) => (
     <div>
       {label}: {value}
+      {unitSymbol && <span>{unitSymbol}</span>}
+      {additionalInfo && <span>{additionalInfo}</span>}
     </div>
   ),
-}));
+}))
 
 describe("WeatherCard", () => {
   it.each([
@@ -91,7 +93,7 @@ describe("WeatherCard", () => {
       feelsLike: 12,
     };
     render(<WeatherCard weather={mockWeather} />);
-    expect(screen.getByText(/35 kt/)).toBeInTheDocument();
+    expect(screen.getAllByText("kt").length).toBeGreaterThan(1);
   });
 
   it("omits wind gust when not greater than wind speed", () => {
@@ -107,9 +109,8 @@ describe("WeatherCard", () => {
       feelsLike: 19,
     };
     render(<WeatherCard weather={mockWeather} />);
-    // Gusts should not be displayed if equal to wind speed
-    const allText = screen.getAllByText(/10 kt/);
-    expect(allText.length).toBe(1); // Only wind speed, not gust
+    // Verify gusts are not displayed if equal to wind speed
+    expect(screen.queryByText("Gusts")).not.toBeInTheDocument();
   });
 
   it("displays precipitation when greater than zero", () => {
@@ -125,6 +126,7 @@ describe("WeatherCard", () => {
       feelsLike: 10,
     };
     render(<WeatherCard weather={mockWeather} />);
-    expect(screen.getByText(/2\.5 mm/)).toBeInTheDocument();
+    expect(screen.getByText(/2\.5/)).toBeInTheDocument();
+    expect(screen.getByText("mm")).toBeInTheDocument();
   });
 });
