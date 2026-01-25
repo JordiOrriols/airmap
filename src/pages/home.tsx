@@ -9,6 +9,7 @@ import MapView from "../components/organisms/map-view";
 import { useTranslation } from "react-i18next";
 import { MAP_CENTER } from "@/utils/constants";
 import ThemeToggle from "../components/atoms/theme-toggle";
+import { LanguageSelector } from "../components/ui/language-selector";
 import type { RouteData } from "../types";
 
 export default function Home() {
@@ -91,28 +92,12 @@ export default function Home() {
                 </p>
               </div>
               <ThemeToggle />
-              <div className="ml-4 flex items-center gap-1.5">
-                {[
-                  { code: "en", label: "EN" },
-                  { code: "es", label: "ES" },
-                  { code: "ca", label: "CA" },
-                ].map((lng) => {
-                  const active = (i18n.language || "").startsWith(lng.code);
-                  return (
-                    <Button
-                      key={lng.code}
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => i18n.changeLanguage(lng.code)}
-                      className={`text-header rounded-lg px-2 py-1 text-xs ${
-                        active ? "opacity-100 bg-white/20" : "opacity-70 hover:bg-white/10"
-                      }`}
-                    >
-                      {lng.label}
-                    </Button>
-                  );
-                })}
-              </div>
+              <LanguageSelector
+                value={i18n.language?.split("-")[0]}
+                onChange={(lng) => i18n.changeLanguage(lng)}
+                position="static"
+                className="ml-4 text-header"
+              />
             </div>
           </motion.div>
         </div>
