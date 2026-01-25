@@ -40,7 +40,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden" data-testid="main-content">
       {/* Static Map Background */}
       <div className="absolute inset-0 z-0">
         <MapView
@@ -78,12 +78,15 @@ export default function Home() {
             animate={{ y: 0, opacity: 1 }}
             className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center"
           >
-            <div className="flex items-center justify-center bg-header backdrop-blur-xl border border-app-secondary rounded-2xl px-5 py-3 shadow-lg w-full">
+            <div
+              className="flex items-center justify-center bg-header backdrop-blur-xl border border-app-secondary rounded-2xl px-5 py-3 shadow-lg w-full"
+              data-testid="header"
+            >
               <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-2 rounded-xl mr-3">
                 <Plane className="w-5 h-5 text-white" />
               </div>
               <div className="text-left flex-1">
-                <h1 className="text-xl font-semibold text-header">
+                <h1 className="text-xl font-semibold text-header" data-testid="header-title">
                   {t("home.title", "Flight Route Planner")}
                 </h1>
                 <p className="text-sm mt-0.5 text-header-secondary">
@@ -91,7 +94,11 @@ export default function Home() {
                 </p>
               </div>
               <ThemeToggle />
-              <div className="ml-4 flex items-center gap-1.5">
+              <nav
+                className="ml-4 flex items-center gap-1.5"
+                data-testid="language-selector"
+                aria-label="Language selector"
+              >
                 {[
                   { code: "en", label: "EN" },
                   { code: "es", label: "ES" },
@@ -104,6 +111,7 @@ export default function Home() {
                       variant="ghost"
                       size="sm"
                       onClick={() => i18n.changeLanguage(lng.code)}
+                      data-testid={`language-button-${lng.code}`}
                       className={`text-header rounded-lg px-2 py-1 text-xs ${
                         active ? "opacity-100 bg-white/20" : "opacity-70 hover:bg-white/10"
                       }`}
@@ -112,13 +120,16 @@ export default function Home() {
                     </Button>
                   );
                 })}
-              </div>
+              </nav>
             </div>
           </motion.div>
         </div>
 
         {/* Routes Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          data-testid="routes-grid"
+        >
           <AnimatePresence>
             {routes.map((route, index) => (
               <motion.div
@@ -144,6 +155,7 @@ export default function Home() {
               transition={{ delay: routes.length * 0.05 }}
               onClick={createNewRoute}
               className="bg-create-card hover:bg-create-card-hover backdrop-blur-xl border-2 border-dashed border-app-secondary rounded-3xl overflow-hidden hover:scale-105 hover:border-emerald-500/50 transition-all duration-300 shadow-xl cursor-pointer group flex items-center justify-center min-h-full"
+              data-testid="create-route-card"
             >
               <div className="p-6 text-center">
                 <div className="bg-gradient-to-r from-emerald-500 to-teal-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
