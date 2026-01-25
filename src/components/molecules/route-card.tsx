@@ -75,7 +75,7 @@ export default function RouteCard({ route, onDelete, startHref, editHref }: Rout
   ];
 
   return (
-    <Card className="bg-card-app hover:bg-card-hover backdrop-blur-md border border-app-secondary rounded-3xl overflow-hidden hover:scale-[1.02] transition-all duration-300 shadow-card group">
+    <Card className="bg-card-app hover:bg-card-hover backdrop-blur-md border border-app-secondary rounded-3xl overflow-hidden hover:scale-[1.02] transition-all duration-300 shadow-card group" data-testid="route-card">
       {/* Map Preview */}
       <div className="h-40 relative">
         <MapView

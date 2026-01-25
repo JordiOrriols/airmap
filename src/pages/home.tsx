@@ -41,7 +41,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden" data-testid="main-content">
       {/* Static Map Background */}
       <div className="absolute inset-0 z-0">
         <MapView
@@ -79,12 +79,12 @@ export default function Home() {
             animate={{ y: 0, opacity: 1 }}
             className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center"
           >
-            <div className="flex items-center justify-center bg-header backdrop-blur-xl border border-app-secondary rounded-2xl px-5 py-3 shadow-lg w-full">
+            <div className="flex items-center justify-center bg-header backdrop-blur-xl border border-app-secondary rounded-2xl px-5 py-3 shadow-lg w-full" data-testid="header">
               <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-2 rounded-xl mr-3">
                 <Plane className="w-5 h-5 text-white" />
               </div>
-              <div className="text-left flex-1">
-                <h1 className="text-xl font-semibold text-header">
+              <div className="text-left flex-1" data-testid="header-content">
+                <h1 className="text-xl font-semibold text-header" data-testid="header-title">
                   {t("home.title", "Flight Route Planner")}
                 </h1>
                 <p className="text-sm mt-0.5 text-header-secondary">
@@ -103,7 +103,7 @@ export default function Home() {
         </div>
 
         {/* Routes Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="routes-grid">
           <AnimatePresence>
             {routes.map((route, index) => (
               <motion.div
@@ -128,6 +128,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: routes.length * 0.05 }}
               onClick={createNewRoute}
+              data-testid="create-route-card"
               className="bg-create-card hover:bg-create-card-hover backdrop-blur-xl border-2 border-dashed border-app-secondary rounded-3xl overflow-hidden hover:scale-105 hover:border-emerald-500/50 transition-all duration-300 shadow-xl cursor-pointer group flex items-center justify-center min-h-full"
             >
               <div className="p-6 text-center">
