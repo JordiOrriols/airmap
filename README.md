@@ -24,6 +24,11 @@ That's it!
 
 ## Usage instructions
 
+GitHub Pages builds run with read-only repository access. A separate deployment
+job receives Pages/OIDC permissions and deploys only from `main`. Actions are
+pinned to commit SHAs; Dependabot proposes weekly updates.
+
+
 - `npm start` — This will spawn a development server with a default port of `5173`.
 - `npm run build` — This will output a production build in the `dist` directory.
 - `npm run preview` — This will run the production build locally with a default port of `5173` (this will not work if you haven't generated the production build yet).
